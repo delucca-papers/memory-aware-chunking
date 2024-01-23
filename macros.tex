@@ -1,0 +1,16 @@
+\usepackage{xcolor} % More color options.
+\usepackage{soulutf8} % \hl
+
+\newcommand{\TODO}[1]{{\textcolor{black}{(TODO: #1)}}}
+\newcommand{\EB}[1]{{\textcolor{black}{(EB: #1)}}}
+\newcommand{\EBH}[1]{{\hl{#1}}}
+\newcommand{\EBC}[2]{\EBH{#1}{\color{black}(EB: #2)}}
+\newcommand{\EBADD}[1]{{\textcolor{black}{#1}}}
+\newcommand{\EBRM}[1]{{\textcolor{lightgray}{(#1)}}}
+\newcommand{\EBRP}[2]{\EBRM{#1}\EBADD{#2}}
+\newcommand{\EBRPD}[2]{#1 \EB{#1 $\rightarrow$ #2?}}
+
+% Latin expressions
+\newcommand{\etal}{\emph{et al.}}
+\newcommand{\ie}{\emph{i.e.}}
+\newcommand{\eg}{\emph{e.g.}}
