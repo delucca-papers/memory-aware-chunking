@@ -1,0 +1,22 @@
+\subsection{Seismic Data Iteration Design}
+
+The primary objective of this research was to gather a comprehensive profile of each seismic attribute's memory consumption.
+To achieve this, it was essential to execute the same attribute on different shapes of seismic datasets.
+
+Understanding the nature of seismic datasets is crucial in this context and, typically, seismic data is three-dimensional, encompassing dimensions like inline, crossline, and time or depth slices.
+These dimensions represent different aspects of the seismic survey grid, with inline and crossline denoting horizontal measurements and the third dimension representing vertical depth or time.
+
+For the purpose of this research, we adopted a strategic approach to vary the dimensions of the seismic datasets while keeping a consistent structure.
+Specifically, the latter two dimensions of the dataset, often corresponding to crossline and time/depth, were fixed at a size of 200.
+This decision was made to maintain a level of consistency across different iterations, allowing for a more focused analysis on the impact of varying the first dimension - typically the inline dimension.
+
+The variation in the first dimension was systematically implemented in steps of 200.
+This approach enabled to explore a range of dataset sizes, starting from a relatively small dataset and progressively moving towards larger and more complex ones.
+By incrementing the size in a controlled manner, it was possible to meticulously observe the changes in memory consumption and understand how scalability and dataset dimensions affect the memory footprint of seismic data processing.
+
+Each iteration of the experiment, therefore, involved executing the same seismic attribute processing task on a dataset whose first dimension varied in size, while the other two dimensions remained constant.
+This iterative process provided a detailed and nuanced profile of memory consumption across various dataset sizes, offering valuable insights into the efficiency and scalability of seismic data processing algorithms in high-performance computing environments.
+Through this detailed iteration design, the study aimed to establish a clear understanding of how different dataset shapes influence memory usage, which is a critical consideration in optimizing seismic data processing tasks for large-scale geological explorations.
+
+\DF{Aqui talvez seja bom uma imagem simples, mostrando de uma visão geral a questão das iterações}
+\DF{Um ponto de dúvida aqui é: não fizemos um experimento formal que mostre que variando a D2 e D3 não muda. Eu rodei isso mas não tem o experimento desenhado. Vale ter isso? No caso pra mostrar que variar a inline da na mesma que variiar crossline our tempo do ponto de vista de memória}

@@ -1,0 +1,25 @@
+\subsection{Experiment Design}
+\label{subsec:experiment-design}
+
+The foundational structure for all experiments in this study follows a standardized and replicable process, designed to ensure consistency and accuracy in the data collection.
+This structure is centered around the use of a shell script that initiates a Docker\footurl{https://www.docker.com/} container for each iteration of the experiment.
+An iteration here refers to a single execution of the seismic data processing task with a specific input data shape.
+
+This process is divided into four distinct phases:
+(i) on the first phase, a shell script initializes the Docker container to execute an iteration for a given data shape and seismic attribute;
+(ii) the second phase happens within the Docker container itself, where a synthetic dataset is tailored to the specific iteration based on the expected input data shape;
+(iii) the third phase involves the execution of the seismic attribute processing task on the synthetic dataset; and
+(iv) the fourth and final phase is getting a summary of the result after all iterations are executed.
+\DF{Aqui acho que vale colocar uma imagem ilustrando o processo}
+
+It is important to notice that this containerized approach ensures a controlled and isolated environment for each experiment, minimizing external influences on the memory consumption data.
+Also, the analysis of various memory management techniques conducted in the initial stages of this research made it clear that utilizing the /proc filesystem, specifically the smaps\_rollup file, offered a more accurate and detailed understanding of memory consumption.
+Based on this, the containerized execution of each iteration is designed to pause and wait for a \textit{CONT} signal\footurl{https://man7.org/linux/man-pages/man7/signal.7.html} on three specific phases: before phase (ii), before phase (iii), and after phase (iii).
+The shell script watches the execution of the experiment, and fetches the memory consumption data from the /proc filesystem at each pause, sending the \textit{CONT} signal to the container to continue the execution.
+With this approach it is possible to get a detailed memory consumption profile for each iteration, including the memory consumption of the data generation phase and the seismic attribute execution phase.
+
+This structured approach to executing each iteration of the experiment allows for a systematic and detailed collection of memory usage data.
+Controlling the execution flow and precisely timing the memory measurements ensures that the data accurately reflects the memory consumption patterns at each stage of the seismic data processing task.
+This methodology is critical in enabling a deep understanding of how different input data shapes and processing tasks influence overall memory usage in a high-performance computing environment.
+
+\DF{Em algum lugar preciso colocar um link pro repositório com os experimentos}
