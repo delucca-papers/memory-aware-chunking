@@ -6,7 +6,7 @@ To achieve this, it was essential to execute the same attribute on different sha
 Understanding the nature of seismic datasets is crucial in this context and, typically, seismic data is three-dimensional, encompassing dimensions like inline, crossline, and time or depth slices.
 These dimensions represent different aspects of the seismic survey grid, with inline and crossline denoting horizontal measurements and the third dimension representing vertical depth or time.
 
-For the purpose of this research, we adopted a strategic approach to vary the dimensions of the seismic datasets while keeping a consistent structure.
+For the purpose of this research, we adopted a strategic approach to vary the dimensions of the seismic datasets while keeping a consistent structure as described in table \ref{table:iteration-design}.
 Specifically, the latter two dimensions of the dataset, often corresponding to crossline and time/depth, were fixed at a size of 200.
 This decision was made to maintain a level of consistency across different iterations, allowing for a more focused analysis on the impact of varying the first dimension - typically the inline dimension.
 
@@ -18,5 +18,34 @@ Each iteration of the experiment, therefore, involved executing the same seismic
 This iterative process provided a detailed and nuanced profile of memory consumption across various dataset sizes, offering valuable insights into the efficiency and scalability of seismic data processing algorithms in high-performance computing environments.
 Through this detailed iteration design, the study aimed to establish a clear understanding of how different dataset shapes influence memory usage, which is a critical consideration in optimizing seismic data processing tasks for large-scale geological explorations.
 
-\DF{Aqui talvez seja bom uma imagem simples, mostrando de uma visão geral a questão das iterações}
+\begin{table}[htbp]
+    \centering
+    \begin{threeparttable}
+        \caption{Iteration Design for Synthetic Data}
+        \label{table:iteration-design}
+        \begin{tabular}{|c|c|c|c|}
+            \hline
+            \textbf{Iteration} & \textbf{Inline} & \textbf{Crossline} & \textbf{Time/Depth} \\
+            \hline
+            1                  & 200             & 200                & 200                 \\
+            \hline
+            2                  & 400             & 200                & 200                 \\
+            \hline
+            3                  & 600             & 200                & 200                 \\
+            \hline
+            \vdots             & \vdots          & \vdots             & \vdots              \\
+            \hline
+            n-1                & (n-1) * 200     & 200                & 200                 \\
+            \hline
+            n                  & n * 200         & 200                & 200                 \\
+            \hline
+        \end{tabular}
+        \begin{tablenotes}
+            \small
+            \item In each iteration, the dimensions of the synthetic seismic dataset are specified.
+            The "Inline" dimension increases by steps of 200, while the "Crossline" and "Time/Depth" dimensions remain constant at 200.
+        \end{tablenotes}
+    \end{threeparttable}
+\end{table}
+
 \DF{Um ponto de dúvida aqui é: não fizemos um experimento formal que mostre que variando a D2 e D3 não muda. Eu rodei isso mas não tem o experimento desenhado. Vale ter isso? No caso pra mostrar que variar a inline da na mesma que variiar crossline our tempo do ponto de vista de memória}
