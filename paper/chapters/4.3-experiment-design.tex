@@ -1,16 +1,32 @@
 \subsection{Experiment Design}
 \label{subsec:experiment-design}
 
+\begin{algorithm}
+    \caption{Memory Consumption Experiment}\label{alg:experiment}
+    \begin{algorithmic}[1]
+        \Procedure{RunExperiment}{}
+        \For{\texttt{$i,S$} \textbf{in} \texttt{zip(inlines,attributes)}}
+        \State \textbf{sleep} \texttt{until CONT signal}
+        \State \texttt{$d_{i} \gets D(i, 200, 200)$}
+        \State \textbf{sleep} \texttt{until CONT signal}
+        \State \texttt{$S(d_{i})$}
+        \State \textbf{sleep} \texttt{until CONT signal}
+        \EndFor
+        \EndProcedure
+    \end{algorithmic}
+\end{algorithm}
+
 The foundational structure for all experiments in this study follows a standardized and replicable process, designed to ensure consistency and accuracy in the data collection.
 This structure is centered around the use of a shell script that initiates a Docker\footurl{https://www.docker.com/} container for each iteration of the experiment.
 An iteration here refers to a single execution of the seismic data processing task with a specific input data shape.
 
-This process is divided into four distinct phases:
-(i) on the first phase, a shell script initializes the Docker container to execute an iteration for a given data shape and seismic attribute;
-(ii) the second phase happens within the Docker container itself, where a synthetic dataset is tailored to the specific iteration based on the expected input data shape;
-(iii) the third phase involves the execution of the seismic attribute processing task on the synthetic dataset; and
+This process is divided into four distinct phases.
+You can see the algorithm \ref{alg:experiment} that describes the experiment execution flow.
+Each phase is designed to capture a specific aspect of the memory consumption profile, ensuring a comprehensive understanding of the memory usage patterns across different seismic data shapes and processing tasks:
+(i) on the first phase, a shell script initializes the Docker container to execute an iteration for a given inline $(i)$ and seismic attribute $(S)$;
+(ii) the second phase happens within the Docker container itself, where a synthetic dataset $(d_{i})$ is tailored to the specific iteration based on the expected inline $(i)$ data shape;
+(iii) the third phase involves the execution of the seismic attribute $(S)$ processing task on the synthetic dataset; and
 (iv) the fourth and final phase is getting a summary of the result after all iterations are executed.
-\DF{Aqui acho que vale colocar uma imagem ilustrando o processo}
 
 It is important to notice that this containerized approach ensures a controlled and isolated environment for each experiment, minimizing external influences on the memory consumption data.
 Also, the analysis of various memory management techniques conducted in the initial stages of this research made it clear that utilizing the /proc filesystem, specifically the smaps\_rollup file, offered a more accurate and detailed understanding of memory consumption.
