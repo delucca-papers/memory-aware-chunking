@@ -1,1 +1,1 @@
-# Optimizing Large Seismic Data Processing: Evaluating Seismic Atttributes Memory Profile
+# Evaluating the Memory Usage and Pressure of Seismic Attributes
