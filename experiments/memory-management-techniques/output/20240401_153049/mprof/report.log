@@ -1,0 +1,9 @@
+Filename: /home/delucca/src/msc/seismic-attributes-memory-profile/experiments/memory-management-techniques/experiment/memory_consuming_task.py
+
+Line #    Mem usage    Increment  Occurrences   Line Contents
+=============================================================
+     4     20.5 MiB     20.5 MiB           1   def consume_large_memory(num_elements):
+     5     58.9 MiB     38.4 MiB     1000003       large_list = [random.random() for _ in range(num_elements)]
+     6     58.9 MiB      0.0 MiB           1       print(f"Created a list with {len(large_list)} elements")
+
+
