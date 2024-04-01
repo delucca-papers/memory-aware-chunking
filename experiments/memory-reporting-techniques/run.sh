@@ -7,12 +7,23 @@ TIMESTAMP=$(date "+%Y%m%d_%H%M%S")
 OUTPUT_DIR="${SCRIPT_DIR}/output/${TIMESTAMP}"
 
 function main {
+    save_input
+
     run_tool "mprof"
     run_tool "psutil"
     run_tool "resource"
     run_tool "proc"
 
     summarize_experiment
+}
+
+function save_input {
+    mkdir -p "${OUTPUT_DIR}"
+
+    echo "Saving experiment input..."
+    echo "num_elements" >"${OUTPUT_DIR}/input.csv"
+    echo "${NUM_ELEMENTS}" >>"${OUTPUT_DIR}/input.csv"
+    echo
 }
 
 function run_tool {

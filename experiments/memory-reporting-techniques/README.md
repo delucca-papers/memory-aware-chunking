@@ -82,6 +82,12 @@ Inside that folder you will find:
 After running your experiment, you should find a result similar to this:
 
 ![](./output/20240401_153049/summary.jpg)
+<center>Figure 1: Memory reporting comparisson while using the input paratemeter <code>num_elements=1_000_000</code></center>
+<br/>
+
+![](./output/20240401_195942/summary.jpg)
+<center>Figure 2: Memory reporting comparisson while using the input paratemeter <code>num_elements=100_000_000</code></center>
+<br/>
 
 Upon examining the memory usage reported by mprof, psutil, resource, and direct querying from /proc during a memory-intensive task, we can draw the following conclusions:
 
@@ -97,6 +103,8 @@ Despite this limitation, psutil displayed a memory usage pattern with proper rel
 This tool reported a continuous increase from initial to final memory usage.
 However, with /proc as the source of truth, the peak memory usage reported by mprof must be viewed critically, especially since mprof may include additional overhead in its measurements.
 
+Based on the results from *figure 1*, we can see the difference between the memory reporting techniques.
+If we scale the input parameter, like in *figure 2*, this difference becomess less evident.
 Considering the source of truth and the limitations of psutil and resource, the direct measurements from /proc are recommended for evaluating memory usage of a given algorithm.
 This method reflects the most accurate memory usage pattern from the kernel's perspective, ensuring the highest fidelity in reporting actual memory usage, including the peak memory, which is often the most critical aspect when assessing the memory efficiency of an algorithm.
 

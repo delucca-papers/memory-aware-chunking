@@ -1,0 +1,9 @@
+Filename: /experiments/memory-reporting-techniques/experiment/memory_consuming_task.py
+
+Line #    Mem usage    Increment  Occurrences   Line Contents
+=============================================================
+     4     21.3 MiB     21.3 MiB           1   def consume_large_memory(num_elements):
+     5   3860.9 MiB   3839.5 MiB   100000003       large_list = [random.random() for _ in range(num_elements)]
+     6   3860.9 MiB      0.0 MiB           1       print(f"Created a list with {len(large_list)} elements")
+
+
