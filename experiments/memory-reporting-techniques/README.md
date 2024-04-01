@@ -1,8 +1,8 @@
-# Memory Management Techniques Experiment
+# Memory Reporting Techniques Experiment
 
 ## Overview
 
-This experiment aims to compare different memory management tools in Python by monitoring the memory usage of a specific task.
+This experiment aims to compare different memory usage reporting tools in Python by monitoring the memory usage of a specific task.
 The tools we're evaluating are:
 
 - **mprof**:
@@ -30,12 +30,21 @@ This experiment runs inside a Docker container to standardize the environment ac
 
 ## Setup and Execution
 
-1. **Build the Docker Container**:
-Build the Docker container for the experiment.
+1. **Build the base Docker image**:
+
+All experiments share a base Docker image that contains some common dependencies and setup.
+So, the first step is to go on the parent directory (`/experiments`) and run the following command:
+
+```bash
+docker build --build-arg USER_ID=$(id -u) --build-arg GROUP_ID=$(id -g) -t memory-profile/experiment .
+```
+
+2. **Build the Docker Container**:
+With the base image built, get back to this directory (`/experiments/memory-reporting-techniques`) and build the Docker container for the experiment.
 This process includes installing Python and the necessary packages.
 
 ```bash
-docker build -t memory-management-experiment .
+docker build -t memory-profile/experiment/memory-reporting-techniques .
 ```
 
 2. **Run the Experiment**:
@@ -43,8 +52,13 @@ After building the container, run the experiment.
 This step will execute the memory-intensive task within the Docker environment and log the memory usage data for each tool.
 
 ```bash
-docker run --rm memory-management-experiment
+docker run --mount type=bind,source="$(pwd)"/output,target=/experiments/memory-reporting-techniques/output --rm memory-profile/experiment/memory-reporting-techniques
 ```
+
+> [!TIP]
+> The default array size is 1.000.000.
+> If you want to run the experiment with a larger array (to consume more memory) you can pass it as an argument.
+> Like this: `docker run ... memory-profile/experiment/memory-reporting-techniques <array-size>
 
 ## How It Works
 
@@ -55,7 +69,7 @@ The experiment script inside the container is designed to measure and log memory
 ## Analyzing the Results
 
 The experiment outputs the memory usage data for each tool.
-Compare these results to assess the accuracy and efficiency of each memory management technique.
+Compare these results to assess the accuracy and efficiency of each memory reporting technique.
 The analysis can help understand how each tool performs under the same conditions and which might be most suitable for your needs.
 
 After the experiment is executed, a new timestamped folder will be created inside the `output` folder.
