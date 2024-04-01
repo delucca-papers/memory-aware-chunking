@@ -81,13 +81,16 @@ Inside that folder you will find:
 
 After running your experiment, you should find a result similar to this:
 
-![](./output/20240401_153049/summary.jpg)
-<center>Figure 1: Memory reporting comparisson while using the input paratemeter <code>num_elements=1_000_000</code></center>
-<br/>
-
-![](./output/20240401_195942/summary.jpg)
-<center>Figure 2: Memory reporting comparisson while using the input paratemeter <code>num_elements=100_000_000</code></center>
-<br/>
+<table>
+  <tr>
+    <td><img src="./output/20240401_153049/summary.jpg" /></td>
+    <td><img src="./output/20240401_195942/summary.jpg" /></td>
+  </tr>
+  <tr>
+    <td align="center"><sub><strong>Figure 1:</strong> Memory reporting comparisson while using the input paratemeter <code>num_elements=1_000_000</code></sub><br/></td>
+    <td align="center"><sub><strong>Figure 2:</strong> Memory reporting comparisson while using the input paratemeter <code>num_elements=100_000_000</code></sub></td>
+  </tr>
+</table>
 
 Upon examining the memory usage reported by mprof, psutil, resource, and direct querying from /proc during a memory-intensive task, we can draw the following conclusions:
 
