@@ -3,65 +3,7 @@
 In developing an effective methodology for analyzing memory consumption in seismic data processing using Python on Linux-based supercomputers, our approach focused on addressing the inherent complexities of Python as a high-level language.
 Python's management of memory is not straightforward due to its layered architecture involving memory allocation, garbage collection, and potential interactions with C-based libraries and the operating system's memory management system.
 
-\input{chapters/4.1-memory-management-techniques.tex}
+\input{chapters/4.1-memory-reporting-techniques.tex}
 \input{chapters/4.2-seismic-data-iteration-design.tex}
 \input{chapters/4.3-experiment-design.tex}
 \input{chapters/4.4-validation-with-real-seismic-data.tex}
-
-% Falta
-% - Falar do primeiro experimento, pra avaliar o consumo de memória dos atributos
-% - Falar do segundo, que foi pra avaliar a pressão de memória
-% - Falar do terceiro, que foi pra avaliar a diferença usando dados reais
-
-% - O que fizemos:
-%   - REFAZER Avaliamos a diferença na forma de medir o consumo de memória
-%       - Esse aqui a gente não fez formalmente, sinto que falta um breve experimento
-%       - Medir as seguintes formas:
-%         - Usando o mprof
-%         - Usando o psutil
-%         - Usando a biblioteca resource
-%         - Usando o proc do Linux direto
-%       - Nesse ponto, falar sobre a dificuldade de medir quando estamos falando de múltiplos processos
-%   - Medimos o perfil do consumo de memória para todos os atributos usando um único processo
-%   - Avaliamos o perfil do consumo de memória para alguns atributos quando colocamos pressão de memória
-%   - Testamos a diferença no consumo de memória quando usamos dados sintéticos e descobrimos uma grande discrepância
-%   - FALTA FAZER Testar se essa diferença continua acontecendo se salvamos os dados em disco
-% 
-% - Section structure
-%   - In order to create an accurate model for a given algorithm we need an accurate way of measuring memory consumption
-%   - Seismic data is large, and usually we use Python to process it
-%   - We also use supercomputers due to the size of the data, and those supercomputers uses Linux
-%   - Since Python is a high level language, we have many layers of optimization and abstraction between the actual code and allocating the memory itself
-%   - Give a few examples of those layers, like: how Python handles memory allocation and garbage collection, the possibility of libraries using C, and the OS itself
-%   - Explain the different ways that we can evaluate memory consumption using Python. Examples: mprof, psutil and resource
-%   - Besides every way Python supports measuring memory consumption, we also can measure it using the values from the /proc filesystem
-%   - Explain the way we organized all experiments
-%     - We split into two separate components: one for executing the code, and another one for measuring the memory consumption
-%   - Start giving details about the first experiment we did to evaluate the difference in the ways we can measure memory consumption
-%     - For such expeeriment, we started by using a single process
-%     - We evaluated what was the memory usage reported for each method
-%     - We used Envelope as our seismic attribute, using a randomly genereated input data of size 1000x1000x100
-%   - Based on the results of the first experiment, we decided to use the /proc filesystem to measure memory consumption
-%     - Not only because it was the most accurate, but also because it was easier to handle multiprocessing
-%     - Also, considering the way we created the experiment, using the /proc is far easier to handle
-%   - The complex part of using /proc is that we don't have a consolidated value for memory consumption
-%   - To solve this, we used the smaps_rollup file and we executed an experiment to evaluate
-%   - After this, we executed an experiment to get the memory consumption profile for all attributes
-%     - We call iteration a combination of a given algorithm and an input shape
-%     - For each iteration, we generate a new random data. We start with a shape of 200x200x200 and we increase the first dimension by 200 on every iteration
-%     - Each shape is executed 5 times
-%     - We do this until we reach the shape 10000x200x200
-%     - Each iteration is executed in a separate Docker container
-%     - The execution of an iteration is divided into the following steps:
-%       - We first generate the random data
-%       - Then we execute the attribute
-%     - On each step, the experiment waits for a signal to continue. We have a shell script that is listening to the outputs of the experiment and everytime the experiment is waiting for a signal that script measures the memory consumption and sends the signal for the experiment to continue
-%   - After we executed that experiment, we tried to evaluate manually if the values we collected were correct. While doing so we found out that the algorithm for a given shape was capable of executing even with less memory than it consumed
-%   - We assume this happens due to the way Python garbage collection strategy
-%   - Because of that, we executed the same experiment, but now trying to add memory pressure
-%     - The structure is pretty similar, but for every iteration (a combination of shape and algorithm) we try adding memory pressure
-%     - Adding memory pressure is basically reducing the amount of available memory on the container by a given percentage
-%     - We did this with a step of 5% until the algorithm breaks and it isn't able to execute
-%   - After all experiments, we evaluated the results against a real dataset
-%   - We used F3 as our real dataset
-%   - For this experiment, we executed both F3 and a synthetic dataset with the same shape to understand how much memory both of those consume

@@ -1,0 +1,7 @@
+\subsection{Memory Reporting Techniques}
+
+The first phase of the research centered around establishing a reliable framework for measuring memory consumption.
+Evaluating various tools and techniques was necessary to achieve this, including: \texttt{mprof}\footurl{https://github.com/pythonprofilers/memory\_profiler}, \texttt{psutil}\footurl{https://github.com/giampaolo/psutil}, and \texttt{resource}\footurl{https://docs.python.org/3/library/resource.html} modules.
+These tools are particularly suited for Python environments, offering insights into dynamic memory allocation and real-time memory utilization.
+However, considering the high-level nature of Python and its abstraction from direct memory management, it was necessary to supplement these tools with direct measurements from the Linux \texttt{/proc}\footurl{https://man7.org/linux/man-pages/man5/proc.5.html} filesystem, specifically using \texttt{/proc/pid/status}\footurl{https://man7.org/linux/man-pages/man5/proc.5.html} interfaces.
+This approach allowed to obtain a more granular understanding of memory usage, which is essential when dealing with large datasets typically encountered in seismic data processing.
