@@ -1,5 +1,9 @@
 def get_self_status():
-    with open("/proc/self/status", "r") as status_file:
+    return get_pid_status("self")
+
+
+def get_pid_status(pid: int):
+    with open(f"/proc/{pid}/status", "r") as status_file:
         return status_file.read()
 
 

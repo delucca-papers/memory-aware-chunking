@@ -8,3 +8,7 @@ Below is a list of all the experiments with links to their respective directorie
 ## Experiment 1: Memory Reporting Techniques
 - **Link**: [Experiment 1](./memory-reporting-techniques/)
 - **Description**: Compares and evaluate different techniques to report the memory usage of a specific task.
+
+## Experiment 2: Memory Profile
+- **Link**: [Experiment 2](./memory-profile/)
+- **Description**: Profiles the memory usage of the most relevant seismic attributes.

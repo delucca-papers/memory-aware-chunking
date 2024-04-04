@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 
-NUM_ELEMENTS=${1:-1000000}
-
 SCRIPT_DIR=$(dirname "$(realpath "${BASH_SOURCE[0]}")")
 TIMESTAMP=$(date "+%Y%m%d_%H%M%S")
 OUTPUT_DIR="${SCRIPT_DIR}/output/${TIMESTAMP}"
+
+NUM_ELEMENTS=${1:-1000000}
 
 function main {
     save_input

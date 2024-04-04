@@ -36,7 +36,7 @@ All experiments share a base Docker image that contains some common dependencies
 So, the first step is to go on the parent directory (`/experiments`) and run the following command:
 
 ```bash
-docker build --build-arg USER_ID=$(id -u) --build-arg GROUP_ID=$(id -g) -t memory-profile/experiment .
+docker build --build-arg USER_ID=$(id -u) --build-arg GROUP_ID=$(id -g) -t discovery/experiments .
 ```
 
 2. **Build the Docker Container**:
@@ -44,7 +44,7 @@ With the base image built, get back to this directory (`/experiments/memory-repo
 This process includes installing Python and the necessary packages.
 
 ```bash
-docker build -t memory-profile/experiment/memory-reporting-techniques .
+docker build -t discovery/experiments/memory-reporting-techniques .
 ```
 
 2. **Run the Experiment**:
@@ -52,13 +52,13 @@ After building the container, run the experiment.
 This step will execute the memory-intensive task within the Docker environment and log the memory usage data for each tool.
 
 ```bash
-docker run --mount type=bind,source="$(pwd)"/output,target=/experiments/memory-reporting-techniques/output --rm memory-profile/experiment/memory-reporting-techniques
+docker run --mount type=bind,source="$(pwd)"/output,target=/experiments/memory-reporting-techniques/output --rm discovery/experiments/memory-reporting-techniques
 ```
 
 > [!TIP]
 > The default array size is 1.000.000.
 > If you want to run the experiment with a larger array (to consume more memory) you can pass it as an argument.
-> Like this: `docker run ... memory-profile/experiment/memory-reporting-techniques <array-size>`
+> Like this: `docker run ... discovery/experiments/memory-reporting-techniques <array-size>`
 
 ## How It Works
 
