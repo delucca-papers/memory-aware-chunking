@@ -38,7 +38,7 @@ def generate_and_save_synthetic_data(
     output_dir: str = "/tmp/synthetic_seismic_data",
     filename: str = "synthetic_seismic.segy",
 ) -> str:
-    logging.debug(f"Generating synthetic data for {num_inlines} inlines")
+    logging.info(f"Generating synthetic data for {num_inlines} inlines")
 
     reflectivity = np.random.rand(num_samples) * 2 - 1
     wavelet = __ricker_wavelet(frequency, length, dt)

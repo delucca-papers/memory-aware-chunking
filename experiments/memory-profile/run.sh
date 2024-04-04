@@ -6,7 +6,8 @@ OUTPUT_DIR="${SCRIPT_DIR}/output/${TIMESTAMP}"
 
 NUM_INLINES_STEP=${1:-500}
 NUM_INLINES_RANGE_SIZE=${2:-2}
-ATTRIBUTES=${3:-$(find "${SCRIPT_DIR}/experiment/common/attributes" -type f -name "*.py" -exec basename {} .py \; | paste -sd ',' -)}
+ATTRIBUTES="envelope"
+#ATTRIBUTES=${3:-$(find "${SCRIPT_DIR}/experiment/common/attributes" -type f -name "*.py" -exec basename {} .py \; | paste -sd ',' -)}
 NUM_CROSSLINES_AND_SAMPLES=${4:-200}
 
 function main {
