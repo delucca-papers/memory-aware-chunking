@@ -18,6 +18,7 @@ def main(
     attributes: list[str],
     num_crosslines_and_samples: int,
     output_dir: str,
+    num_iterations_per_inline: int,
 ):
     logging.info("Starting experiment")
 
@@ -36,14 +37,16 @@ def main(
         logging.info(f"Executing experiment for attribute: {attribute}")
         for dataset_path in dataset_paths:
             dataset_name = dataset_path_to_name(dataset_path)
-            worker_pid = __launch_worker(dispatch_event, dataset_path, attribute)
-            watch_memory_usage(
-                worker_pid,
-                supervisor_conn,
-                attribute,
-                dataset_name,
-                output_dir,
-            )
+            for iteration_num in range(num_iterations_per_inline):
+                worker_pid = __launch_worker(dispatch_event, dataset_path, attribute)
+                watch_memory_usage(
+                    worker_pid,
+                    supervisor_conn,
+                    attribute,
+                    dataset_name,
+                    output_dir,
+                    iteration_num + 1,  # Since it starts at 0
+                )
 
 
 def __launch_worker(
@@ -61,6 +64,7 @@ if __name__ == "__main__":
     attributes = sys.argv[3].split(",")
     num_crosslines_and_samples = int(sys.argv[4])
     output_dir = sys.argv[5]
+    num_iterations_per_inline = int(sys.argv[6])
 
     setup_logger()
     main(
@@ -69,4 +73,5 @@ if __name__ == "__main__":
         attributes,
         num_crosslines_and_samples,
         output_dir,
+        num_iterations_per_inline,
     )

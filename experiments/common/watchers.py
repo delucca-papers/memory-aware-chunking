@@ -55,6 +55,7 @@ def watch_memory_usage(
     attribute_name: str,
     dataset_name: str,
     output_dir: str,
+    iteration_num: int = 1,
 ) -> None:
     event = conn.recv()
     logging.debug(f"Received event: {event}")
@@ -70,6 +71,7 @@ def watch_memory_usage(
             dataset_name,
             output_dir,
             conn,
+            iteration_num,
         )
 
 
@@ -80,6 +82,7 @@ def __measure_memory_usage(
     dataset_name: str,
     output_dir: str,
     conn: connection.Connection,
+    iteration_num: int,
 ) -> None:
     memory_handlers = {
         STARTED_EXPERIMENT: __measure_current_memory_usage,
@@ -91,7 +94,14 @@ def __measure_memory_usage(
     memory_usage = memory_handler(pid)
     logging.debug(f"Memory usage: {memory_usage} for pid: {pid}")
 
-    __save_report(memory_usage, event, attribute_name, dataset_name, output_dir)
+    __save_report(
+        memory_usage,
+        event,
+        attribute_name,
+        dataset_name,
+        output_dir,
+        iteration_num,
+    )
 
     conn.send(SUPERVISOR_RESPONSE)
     watch_memory_usage(
@@ -100,6 +110,7 @@ def __measure_memory_usage(
         attribute_name,
         dataset_name,
         output_dir,
+        iteration_num,
     )
 
 
@@ -123,12 +134,15 @@ def __save_report(
     attribute_name: str,
     dataset_name: str,
     output_dir: str,
+    iteration_num: int,
     filename: str = "memory_usage_report.csv",
 ) -> None:
     report_filepath = os.path.join(output_dir, filename)
     if not os.path.exists(report_filepath):
         with open(report_filepath, "w") as f:
-            f.write("Attribute,Dataset Shape,Event,Memory Usage (kB)\n")
+            f.write("Attribute,Dataset Shape,Iteration,Event,Memory Usage (kB)\n")
 
     with open(report_filepath, "a") as f:
-        f.write(f"{attribute_name},{dataset_name},{event},{memory_usage}\n")
+        f.write(
+            f"{attribute_name},{dataset_name},{iteration_num},{event},{memory_usage}\n"
+        )
