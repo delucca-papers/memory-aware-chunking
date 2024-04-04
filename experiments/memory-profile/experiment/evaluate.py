@@ -3,11 +3,15 @@ import logging
 
 from multiprocessing import Process, Pipe, connection
 from common.logging import setup_logger
-from common.data.synthetic import generate_and_save_for_range
-from common.profilers.proc import (
-    get_pid_status,
-    get_peak_memory_usage_from_status,
+from common.constants import (
+    STARTED_EXPERIMENT,
+    LOADED_DATASET,
+    EXECUTED_ATTRIBUTE,
+    FINISHED_EXPERIMENT,
 )
+from common.watchers import watch_memory_usage
+from common.data.synthetic import generate_and_save_for_range
+from common.data.loaders import load_segy
 
 
 def main(
@@ -33,11 +37,11 @@ def main(
         logging.info(f"Executing experiment for attribute: {attribute}")
         for dataset_path in dataset_paths:
             worker_pid = __launch_worker(worker_conn, dataset_path, attribute)
-            print(worker_pid)
-    # For each attribute
-    # Executes a new worker
-    # The worker loads the dataset
-    # Executes the attribute
+            watch_memory_usage(
+                worker_pid,
+                supervisor_conn,
+                output_dir,
+            )
 
 
 def __launch_worker(
@@ -54,7 +58,14 @@ def __execute_experiment(
     dataset_path: str,
     attribute: str,
 ) -> None:
-    print("ok")
+    conn.send(STARTED_EXPERIMENT)
+    conn.recv()
+
+    data = load_segy(dataset_path)
+    conn.send(LOADED_DATASET)
+    conn.recv()
+
+    conn.send(FINISHED_EXPERIMENT)
 
 
 if __name__ == "__main__":
