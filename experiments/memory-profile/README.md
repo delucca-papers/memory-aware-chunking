@@ -41,8 +41,7 @@ docker run --mount type=bind,source="$(pwd)"/output,target=/experiments/memory-p
 
 > [!TIP]
 > You can customize the experiment input parameters.
-> To do so, simply provide those in the run command.
-> Like this: `docker run ... discovery/experiments/memory-profile <inline step size> <inline range size> <comma separated list of attributes> <crossline and time size>`
+> To do so, simply change the section "Input paramenters" on the `./run.sh` script.
 
 ## How It Works
 

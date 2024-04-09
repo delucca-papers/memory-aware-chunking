@@ -2,18 +2,32 @@
 
 SCRIPT_DIR=$(dirname "$(realpath "${BASH_SOURCE[0]}")")
 TIMESTAMP=$(date "+%Y%m%d_%H%M%S")
-OUTPUT_DIR="${SCRIPT_DIR}/output/${TIMESTAMP}"
 
-NUM_INLINES_STEP=${1:-500}
-NUM_INLINES_RANGE_SIZE=${2:-20}
-ATTRIBUTES=${3:-$(find "${SCRIPT_DIR}/experiment/common/attributes" -type f -name "*.py" -exec basename {} .py \; | paste -sd ',' -)}
-NUM_CROSSLINES_AND_SAMPLES=${4:-200}
-NUM_ITERATIONS_PER_INLINE=${5:-5}
-
-# For dev
-# ATTRIBUTES="envelope,chaos"
-# NUM_INLINES_RANGE_SIZE=${2:-2}
-# NUM_ITERATIONS_PER_INLINE=${5:-2}
+################################################################################
+#
+# Input Parameters
+export NUM_INLINES="10"
+export NUM_CROSSLINES="10"
+export NUM_SAMPLES="10"
+export STEP_SIZE="10"
+export RANGE_SIZE="1"
+export NUM_ITERATIONS="1"
+export ATTRIBUTES="chaos"
+export OUTPUT_DIR="${SCRIPT_DIR}/output/${TIMESTAMP}"
+export LOG_LEVEL="DEBUG"
+#
+# For production
+# export NUM_INLINES="500"
+# export NUM_CROSSLINES="500"
+# export NUM_SAMPLES="1000"
+# export STEP_SIZE="200"
+# export RANGE_SIZE="20"
+# export NUM_ITERATIONS="5"
+# export ATTRIBUTES=$(find "${SCRIPT_DIR}/experiment/common/attributes" -type f -name "*.py" -exec basename {} .py \; | paste -sd ',' -)
+# export OUTPUT_DIR="${SCRIPT_DIR}/output/${TIMESTAMP}"
+# export LOG_LEVEL="DEBUG"
+#
+################################################################################
 
 function main {
     save_input
@@ -32,13 +46,13 @@ function save_input {
 
 function run_experiment {
     echo "Running experiment..."
-    python experiment/evaluate.py "${NUM_INLINES_STEP}" "${NUM_INLINES_RANGE_SIZE}" "${ATTRIBUTES}" "${NUM_CROSSLINES_AND_SAMPLES}" "${OUTPUT_DIR}" "${NUM_ITERATIONS_PER_INLINE}"
+    python experiment/evaluate.py
     echo
 }
 
 function summarize_experiment {
     echo "Summarizing experiment..."
-    python experiment/summarize.py "${OUTPUT_DIR}"
+    python experiment/summarize.py
 }
 
 main

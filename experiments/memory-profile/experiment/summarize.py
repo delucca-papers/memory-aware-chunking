@@ -1,8 +1,7 @@
+import os
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
-import sys
-import os
 
 
 def read_data(file_path):
@@ -83,7 +82,7 @@ def generate_scatter_plot(data, directory_path):
 
 
 if __name__ == "__main__":
-    directory_path = sys.argv[1]
+    directory_path = os.environ.get("OUTPUT_DIR")
     file_path = os.path.join(directory_path, "memory_usage_report.csv")
 
     data = read_data(file_path)

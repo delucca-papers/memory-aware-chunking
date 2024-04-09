@@ -1,77 +1,245 @@
-import sys
-import logging
+import os
 
-from multiprocessing import Process, Pipe, connection
+from multiprocessing import Process, Manager
 from common.transformers import dataset_path_to_name
-from common.logging import setup_logger
-from common.watchers import (
-    watch_memory_usage,
-    build_event_dispatcher,
-    monitor_attribute,
-)
+from common.logging import setup_logger, get_module_logger
+from common.events import EventName, EventDispatcher
+from common.watchers.memory_usage import watch_memory_usage
+from common.watchers.execution_time import watch_execution_time
+from common.executors import execute_attribute
 from common.data.synthetic import generate_and_save_for_range
+
+module_logger = get_module_logger()
 
 
 def main(
-    num_inlines_step: int,
-    num_inlines_range_size: int,
+    num_inlines: int,
+    num_crosslines: int,
+    num_samples: int,
+    step_size: int,
+    range_size: int,
+    num_iterations: int,
     attributes: list[str],
-    num_crosslines_and_samples: int,
     output_dir: str,
-    num_iterations_per_inline: int,
 ):
-    logging.info("Starting experiment")
+    module_logger.info("Starting experiment")
 
-    datasets_dir = f"{output_dir}/data"
-    dataset_paths = generate_and_save_for_range(
-        num_inlines_step,
-        num_inlines_range_size,
-        num_crosslines_and_samples,
-        num_crosslines_and_samples,
-        datasets_dir,
+    dataset_path_list, event_dispatcher, watcher_results = __initialize(
+        num_inlines,
+        num_crosslines,
+        num_samples,
+        step_size,
+        range_size,
+        output_dir,
     )
-    supervisor_conn, worker_conn = Pipe()
-    dispatch_event = build_event_dispatcher(worker_conn)
 
     for attribute in attributes:
-        logging.info(f"Executing experiment for attribute: {attribute}")
-        for dataset_path in dataset_paths:
-            dataset_name = dataset_path_to_name(dataset_path)
-            for iteration_num in range(num_iterations_per_inline):
-                worker_pid = __launch_worker(dispatch_event, dataset_path, attribute)
-                watch_memory_usage(
-                    worker_pid,
-                    supervisor_conn,
+        module_logger.info(f"Executing experiment for attribute: {attribute}")
+        for dataset_path in dataset_path_list:
+            for iteration_num in range(num_iterations):
+                worker_id = __build_worker(
                     attribute,
-                    dataset_name,
-                    output_dir,
-                    iteration_num + 1,  # Since it starts at 0
+                    dataset_path,
+                    event_dispatcher,
+                )
+                watchers = __build_watchers(
+                    worker_id,
+                    watcher_results,
+                    event_dispatcher,
                 )
 
+                for watcher in watchers:
+                    watcher.join()
 
-def __launch_worker(
-    conn: connection.Connection, dataset_path: str, attribute: str
+                __save_reports(
+                    watcher_results,
+                    dataset_path,
+                    attribute,
+                    output_dir,
+                    iteration_num + 1,  # Since iteration_num starts from 0
+                )
+
+                __reset(watcher_results, event_dispatcher)
+
+
+def __build_watchers(
+    worker_pid: str,
+    watcher_results: dict,
+    event_dispatcher: EventDispatcher,
+) -> list[Process]:
+    mem_usage_watcher = Process(
+        target=watch_memory_usage,
+        args=(
+            event_dispatcher,
+            worker_pid,
+            watcher_results,
+        ),
+    )
+    execution_time_watcher = Process(
+        target=watch_execution_time,
+        args=(
+            event_dispatcher,
+            watcher_results,
+        ),
+    )
+
+    mem_usage_watcher.start()
+    execution_time_watcher.start()
+
+    return [mem_usage_watcher, execution_time_watcher]
+
+
+def __build_worker(
+    attribute: str,
+    dataset_path: str,
+    event_dispatcher: EventDispatcher,
 ) -> str:
-    p = Process(target=monitor_attribute, args=(conn, dataset_path, attribute))
-    p.start()
+    worker = Process(
+        target=execute_attribute,
+        args=(
+            attribute,
+            dataset_path,
+            event_dispatcher,
+        ),
+    )
 
-    return p.pid
+    worker.start()
+
+    return worker.pid
+
+
+def __initialize(
+    num_inlines: int,
+    num_crosslines: int,
+    num_samples: int,
+    step_size: int,
+    range_size: int,
+    output_dir: str,
+) -> tuple[list[str], EventDispatcher, dict]:
+    manager = Manager()
+    watcher_results = manager.dict()
+    watcher_results["memory_usage"] = []
+
+    event_dispatcher = EventDispatcher(
+        barrier_event_names=[
+            EventName.MEASURED_MEMORY_USAGE,
+            EventName.MEASURED_EXECUTION_TIME,
+        ]
+    )
+
+    data_dir = f"{output_dir}/data"
+    dataset_paths = generate_and_save_for_range(
+        num_inlines,
+        num_crosslines,
+        num_samples,
+        step_size,
+        range_size,
+        data_dir,
+    )
+
+    return dataset_paths, event_dispatcher, watcher_results
+
+
+def __reset(watcher_results: dict, event_dispatcher: EventDispatcher) -> None:
+    event_dispatcher.reset()
+    watcher_results["memory_usage"] = []
+
+
+def __save_reports(
+    watcher_results: dict,
+    dataset_path: str,
+    attribute_name: str,
+    output_dir: str,
+    iteration_num: int,
+) -> None:
+    dataset_name = dataset_path_to_name(dataset_path)
+    reports_dir = os.path.join(output_dir, "reports")
+    os.makedirs(reports_dir, exist_ok=True)
+
+    __save_memory_usage_report(
+        watcher_results,
+        attribute_name,
+        iteration_num,
+        dataset_name,
+        reports_dir,
+    )
+
+    __save_execution_time_report(
+        watcher_results,
+        attribute_name,
+        iteration_num,
+        dataset_name,
+        reports_dir,
+    )
+
+
+def __save_memory_usage_report(
+    watcher_results: dict,
+    attribute_name: str,
+    iteration_num: int,
+    dataset_name: str,
+    output_dir: str,
+    filename: str = "memory_usage_report.csv",
+) -> None:
+    report_filepath = os.path.join(output_dir, filename)
+    if not os.path.exists(report_filepath):
+        with open(report_filepath, "w") as f:
+            f.write("Attribute,Dataset Shape,Iteration,Event,Memory Usage (kB)\n")
+
+    module_logger.debug(f"Saving memory usage report for {dataset_name}")
+    module_logger.debug(f"Memory usage: {watcher_results['memory_usage']}")
+
+    with open(report_filepath, "a") as f:
+        for event, memory_usage in watcher_results["memory_usage"]:
+            f.write(
+                f"{attribute_name},{dataset_name},{iteration_num},{event},{memory_usage}\n"
+            )
+
+
+def __save_execution_time_report(
+    watcher_results: dict,
+    attribute_name: str,
+    iteration_num: int,
+    dataset_name: str,
+    output_dir: str,
+    filename: str = "execution_time_report.csv",
+) -> None:
+    report_filepath = os.path.join(output_dir, filename)
+    if not os.path.exists(report_filepath):
+        with open(report_filepath, "w") as f:
+            f.write(
+                "Attribute,Dataset Shape,Iteration,Event,Time Since Epoch (in seconds)\n"
+            )
+
+    module_logger.debug(f"Saving execution time report for {dataset_name}")
+    module_logger.debug(f"Execution time: {watcher_results['execution_time']}")
+
+    with open(report_filepath, "a") as f:
+        for event, execution_time in watcher_results["execution_time"]:
+            f.write(
+                f"{attribute_name},{dataset_name},{iteration_num},{event},{execution_time}\n"
+            )
 
 
 if __name__ == "__main__":
-    num_inlines_step = int(sys.argv[1])
-    num_inlines_range_size = int(sys.argv[2])
-    attributes = sys.argv[3].split(",")
-    num_crosslines_and_samples = int(sys.argv[4])
-    output_dir = sys.argv[5]
-    num_iterations_per_inline = int(sys.argv[6])
+    num_inlines = int(os.environ.get("NUM_INLINES"))
+    num_crosslines = int(os.environ.get("NUM_CROSSLINES"))
+    num_samples = int(os.environ.get("NUM_SAMPLES"))
+    step_size = int(os.environ.get("STEP_SIZE"))
+    range_size = int(os.environ.get("RANGE_SIZE"))
+    num_iterations = int(os.environ.get("NUM_ITERATIONS"))
+    attributes = os.environ.get("ATTRIBUTES").split(",")
+    output_dir = os.environ.get("OUTPUT_DIR")
+    log_level = os.environ.get("LOG_LEVEL", "INFO")
 
-    setup_logger()
+    setup_logger(log_level)
     main(
-        num_inlines_step,
-        num_inlines_range_size,
+        num_inlines,
+        num_crosslines,
+        num_samples,
+        step_size,
+        range_size,
+        num_iterations,
         attributes,
-        num_crosslines_and_samples,
         output_dir,
-        num_iterations_per_inline,
     )

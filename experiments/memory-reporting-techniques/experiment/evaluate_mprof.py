@@ -1,5 +1,5 @@
-import sys
 import io
+import os
 
 from memory_consuming_task import consume_large_memory
 from common.profilers.mprof import (
@@ -37,8 +37,8 @@ def __save_experiment_data(report: io.StringIO, output_dir: str) -> None:
 
 
 if __name__ == "__main__":
-    output_dir = sys.argv[1]
-    num_elements = int(sys.argv[2] if len(sys.argv) > 2 else DEFAULT_NUM_ELEMENTS)
+    output_dir = os.environ.get("TOOL_OUTPUT_DIR")
+    num_elements = int(os.environ.get("NUM_ELEMENTS", DEFAULT_NUM_ELEMENTS))
 
     report = run_profiled(consume_large_memory, num_elements)
     __save_report(report, output_dir)

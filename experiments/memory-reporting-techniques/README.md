@@ -57,8 +57,7 @@ docker run --mount type=bind,source="$(pwd)"/output,target=/experiments/memory-r
 
 > [!TIP]
 > The default array size is 1.000.000.
-> If you want to run the experiment with a larger array (to consume more memory) you can pass it as an argument.
-> Like this: `docker run ... discovery/experiments/memory-reporting-techniques <array-size>`
+> You can change it by changing the section "Input paramenters" on the `./run.sh` script.
 
 ## How It Works
 

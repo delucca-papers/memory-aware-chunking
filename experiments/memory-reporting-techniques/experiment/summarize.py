@@ -1,4 +1,3 @@
-import sys
 import os
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -44,5 +43,5 @@ def plot_memory_usage_by_experiment(directory: str):
 
 
 if __name__ == "__main__":
-    directory_path = sys.argv[1]
+    directory_path = os.environ.get("OUTPUT_DIR")
     plot_memory_usage_by_experiment(directory_path)

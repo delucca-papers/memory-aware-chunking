@@ -1,47 +1,122 @@
 import numpy as np
 import segyio
 import os
-import logging
 
 from scipy.signal import convolve
+from typing import Literal
+from ..logging import get_module_logger
+
+
+module_logger = get_module_logger()
+
+
+def build_dataset_paths(
+    num_inlines: int,
+    num_crosslines: int,
+    num_samples: int,
+    step_size: int,
+    range_size: int,
+    output_dir: str,
+    datasets_path: str = None,
+) -> str:
+    dataset_paths = []
+    datasets_dir = f"{output_dir}/data"
+
+    if datasets_path:
+        dataset_paths = get_sorted_dataset_paths_from_dir(datasets_path)
+
+    if not dataset_paths:
+        dataset_paths = generate_and_save_for_range(
+            num_inlines,
+            num_crosslines,
+            num_samples,
+            step_size,
+            range_size,
+            datasets_dir,
+        )
+
+    module_logger.debug(f"Dataset paths: {dataset_paths}")
+    return dataset_paths
+
+
+def get_sorted_dataset_paths_from_dir(datasets_path: str) -> list[str]:
+    return [
+        os.path.join(datasets_path, filename)
+        for filename in sorted(os.listdir(datasets_path))
+        if filename.endswith(".segy")
+    ]
 
 
 def generate_and_save_for_range(
-    num_inlines_step: int,
-    num_inlines_range_size: int,
+    num_inlines: int,
     num_crosslines: int,
     num_samples: int,
+    step_size: int,
+    range_size: int,
     output_dir: str,
 ) -> list[str]:
-    logging.info(f"Generating synthetic data for range: {num_inlines_range_size}")
-    logging.info(f"Using num_inlines step of {num_inlines_step}")
+    module_logger.info(f"Generating synthetic data for range: {range_size}")
+    module_logger.info(f"Using step of {step_size}")
 
+    varying_inlines = generate_varying_dimension(
+        0,
+        num_inlines,
+        num_crosslines,
+        num_samples,
+        step_size,
+        range_size,
+        output_dir,
+    )
+
+    varying_crosslines = generate_varying_dimension(
+        1,
+        num_inlines,
+        num_crosslines,
+        num_samples,
+        step_size,
+        range_size,
+        output_dir,
+    )
+
+    return varying_inlines + varying_crosslines
+
+
+def generate_varying_dimension(
+    dimension: Literal[0, 1, 2],
+    num_inlines: int,
+    num_crosslines: int,
+    num_samples: int,
+    step_size: int,
+    range_size: int,
+    output_dir: str,
+) -> list[str]:
     return [
         generate_and_save_synthetic_data(
-            step_num * num_inlines_step,
-            num_crosslines,
-            num_samples,
+            step_num * step_size if dimension == 0 else num_inlines,
+            step_num * step_size if dimension == 1 else num_crosslines,
+            step_num * step_size if dimension == 2 else num_samples,
             output_dir=output_dir,
-            filename=f"{step_num*num_inlines_step}-{num_crosslines}-{num_samples}.segy",
         )
-        for step_num in range(1, num_inlines_range_size + 1)
+        for step_num in range(1, range_size + 1)
     ]
 
 
 def generate_and_save_synthetic_data(
     num_inlines: int,
-    num_crosslines: int = 200,
-    num_samples: int = 200,
+    num_crosslines: int,
+    num_samples: int,
     dt: float = 0.004,
     frequency: int = 25,
     length: int = 250,
     output_dir: str = "/tmp/synthetic_seismic_data",
-    filename: str = "synthetic_seismic.segy",
 ) -> str:
-    logging.info(f"Generating synthetic data for {num_inlines} inlines")
+    module_logger.info(
+        f"Generating synthetic data for shape ({num_inlines}, {num_crosslines}, {num_samples})"
+    )
 
     reflectivity = np.random.rand(num_samples) * 2 - 1
     wavelet = __ricker_wavelet(frequency, length, dt)
+    filename = f"{num_inlines}-{num_crosslines}-{num_samples}.segy"
 
     seismic_data = np.array(
         [

@@ -1,4 +1,4 @@
-import sys
+import os
 
 from resource import struct_rusage
 from memory_consuming_task import consume_large_memory
@@ -48,8 +48,8 @@ def __save_experiment_data(
 
 
 if __name__ == "__main__":
-    output_dir = sys.argv[1]
-    num_elements = int(sys.argv[2] if len(sys.argv) > 2 else DEFAULT_NUM_ELEMENTS)
+    output_dir = os.environ.get("TOOL_OUTPUT_DIR")
+    num_elements = int(os.environ.get("NUM_ELEMENTS", DEFAULT_NUM_ELEMENTS))
 
     initial_memory_usage = get_current_memory_usage()
     consume_large_memory(num_elements)
