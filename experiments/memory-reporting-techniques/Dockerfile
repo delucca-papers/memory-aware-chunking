@@ -1,4 +1,4 @@
-FROM memory-profile/experiment
+FROM discovery/experiments
 
 WORKDIR /experiments/memory-reporting-techniques
 
