@@ -16,8 +16,8 @@ def main(
     num_inlines: int,
     num_crosslines: int,
     num_samples: int,
+    starting_pressure: int,
     step_size: int,
-    range_size: int,
     num_iterations: int,
     attributes: list[str],
     output_dir: str,
@@ -28,8 +28,6 @@ def main(
         num_inlines,
         num_crosslines,
         num_samples,
-        step_size,
-        range_size,
         output_dir,
     )
 
@@ -112,8 +110,6 @@ def __initialize(
     num_inlines: int,
     num_crosslines: int,
     num_samples: int,
-    step_size: int,
-    range_size: int,
     output_dir: str,
 ) -> tuple[list[str], EventDispatcher, dict]:
     manager = Manager()
@@ -227,8 +223,8 @@ if __name__ == "__main__":
     num_inlines = int(os.environ.get("NUM_INLINES"))
     num_crosslines = int(os.environ.get("NUM_CROSSLINES"))
     num_samples = int(os.environ.get("NUM_SAMPLES"))
+    starting_pressure = int(os.environ.get("STARTING_PRESSURE"))
     step_size = int(os.environ.get("STEP_SIZE"))
-    range_size = int(os.environ.get("RANGE_SIZE"))
     num_iterations = int(os.environ.get("NUM_ITERATIONS"))
     attributes = os.environ.get("ATTRIBUTES").split(",")
     output_dir = os.environ.get("OUTPUT_DIR")
@@ -239,8 +235,8 @@ if __name__ == "__main__":
         num_inlines,
         num_crosslines,
         num_samples,
+        starting_pressure,
         step_size,
-        range_size,
         num_iterations,
         attributes,
         output_dir,
