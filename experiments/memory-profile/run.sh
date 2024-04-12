@@ -6,26 +6,37 @@ TIMESTAMP=$(date "+%Y%m%d_%H%M%S")
 ################################################################################
 #
 # Input Parameters
-export NUM_INLINES="10"
-export NUM_CROSSLINES="10"
-export NUM_SAMPLES="10"
-export STEP_SIZE="10"
-export RANGE_SIZE="2"
-export NUM_ITERATIONS="2"
-export ATTRIBUTES="chaos"
-export OUTPUT_DIR="${SCRIPT_DIR}/output/${TIMESTAMP}"
-export LOG_LEVEL="DEBUG"
+export NUM_INLINES
+export NUM_CROSSLINES
+export NUM_SAMPLES
+export STEP_SIZE
+export RANGE_SIZE
+export NUM_ITERATIONS
+export ATTRIBUTES
+export OUTPUT_DIR
+export LOG_LEVEL
+#
+# For development
+# NUM_INLINES="10"
+# NUM_CROSSLINES="10"
+# NUM_SAMPLES="10"
+# STEP_SIZE="10"
+# RANGE_SIZE="2"
+# NUM_ITERATIONS="2"
+# ATTRIBUTES="chaos"
+# OUTPUT_DIR="${SCRIPT_DIR}/output/${TIMESTAMP}"
+# LOG_LEVEL="DEBUG"
 #
 # For production
-# export NUM_INLINES="500"
-# export NUM_CROSSLINES="500"
-# export NUM_SAMPLES="1000"
-# export STEP_SIZE="200"
-# export RANGE_SIZE="20"
-# export NUM_ITERATIONS="5"
-# export ATTRIBUTES=$(find "${SCRIPT_DIR}/experiment/common/attributes" -type f -name "*.py" -exec basename {} .py \; | paste -sd ',' -)
-# export OUTPUT_DIR="${SCRIPT_DIR}/output/${TIMESTAMP}"
-# export LOG_LEVEL="DEBUG"
+NUM_INLINES="200"
+NUM_CROSSLINES="200"
+NUM_SAMPLES="1000"
+STEP_SIZE="100"
+RANGE_SIZE="20"
+NUM_ITERATIONS="5"
+ATTRIBUTES=$(find "${SCRIPT_DIR}/experiment/common/attributes" -type f -name "*.py" -exec basename {} .py \; | paste -sd ',' -)
+OUTPUT_DIR="${SCRIPT_DIR}/output/${TIMESTAMP}"
+LOG_LEVEL="DEBUG"
 #
 ################################################################################
 
