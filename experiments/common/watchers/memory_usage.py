@@ -1,3 +1,5 @@
+import os
+
 from ..logging import get_module_logger
 from ..events import EventName, EventDispatcher
 from ..profilers.proc import (
@@ -5,15 +7,39 @@ from ..profilers.proc import (
     get_peak_memory_usage_from_status,
     get_current_memory_usage_from_status,
 )
+from .constants import MEMORY_USAGE_RESULTS_NAME
 
 module_logger = get_module_logger()
+
+
+def save_memory_usage_report(
+    watcher_results: dict,
+    attribute_name: str,
+    iteration_num: int,
+    dataset_name: str,
+    output_dir: str,
+    filename: str = "memory_usage_report.csv",
+) -> None:
+    report_filepath = os.path.join(output_dir, filename)
+    if not os.path.exists(report_filepath):
+        with open(report_filepath, "w") as f:
+            f.write("Attribute,Dataset Shape,Iteration,Event,Memory Usage (kB)\n")
+
+    module_logger.debug(f"Saving memory usage report for {dataset_name}")
+    module_logger.debug(f"Memory usage: {watcher_results[MEMORY_USAGE_RESULTS_NAME]}")
+
+    with open(report_filepath, "a") as f:
+        for event, memory_usage in watcher_results[MEMORY_USAGE_RESULTS_NAME]:
+            f.write(
+                f"{attribute_name},{dataset_name},{iteration_num},{event},{memory_usage}\n"
+            )
 
 
 def watch_memory_usage(
     event_dispatcher: EventDispatcher,
     pid: str,
     watcher_results: dict,
-    key: str = "memory_usage",
+    key: str = MEMORY_USAGE_RESULTS_NAME,
 ) -> None:
     next_event = event_dispatcher.get_next(
         [

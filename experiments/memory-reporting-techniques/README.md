@@ -40,12 +40,7 @@ docker build --build-arg USER_ID=$(id -u) --build-arg GROUP_ID=$(id -g) -t disco
 ```
 
 2. **Build the Docker Container**:
-With the base image built, get back to this directory (`/experiments/memory-reporting-techniques`) and build the Docker container for the experiment.
-This process includes installing Python and the necessary packages.
-
-```bash
-docker build -t discovery/experiments/memory-reporting-techniques .
-```
+First, go to the [root experiments direcotry](../) and build the base image. [Click here](../README.md#building-the-base-docker-image) to see how to do it.
 
 2. **Run the Experiment**:
 After building the container, run the experiment.

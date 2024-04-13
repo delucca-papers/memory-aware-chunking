@@ -15,13 +15,7 @@ This experiment runs inside a Docker container to standardize the environment ac
 ## Setup and Execution
 
 1. **Build the base Docker image**:
-
-All experiments share a base Docker image that contains some common dependencies and setup.
-So, the first step is to go on the parent directory (`/experiments`) and run the following command:
-
-```bash
-docker build --build-arg USER_ID=$(id -u) --build-arg GROUP_ID=$(id -g) -t discovery/experiments .
-```
+First, go to the [root experiments direcotry](../) and build the base image. [Click here](../README.md#building-the-base-docker-image) to see how to do it.
 
 2. **Build the Docker Container**:
 With the base image built, get back to this directory (`/experiments/memory-profile`) and build the Docker container for the experiment.
