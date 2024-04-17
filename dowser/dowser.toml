@@ -1,0 +1,19 @@
+# This is a sample configuration file for Dowser
+
+[dowser]
+execution_id = ""
+output_dir = "./"
+
+[dowser.logging]
+filename = "dowser.log"
+level = "info"
+
+[dowser.metrics]
+input_metadata = ""
+
+[dowser.metrics.memory_usage]
+backend = "kernel"
+precision = "4"
+output_dir = "memory_usage"
+filename_prefix = ""
+filename_suffix = ""
