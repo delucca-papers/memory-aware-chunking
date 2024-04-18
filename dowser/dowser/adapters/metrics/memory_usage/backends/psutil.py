@@ -14,21 +14,15 @@ class PsutilBackend(MemoryUsageBackend):
     _logger: Logger = Logger("PsutilBackend")
     _config: ConfigManager = ConfigManager()
     __pid: int
-    __memory_history: list[int] = []
+    __process: Process
 
     def __init__(self, pid: int = os.getpid()):
         super().__init__()
         self.__pid = pid
+        self.__process = Process(pid=self.__pid)
 
     def get_current_memory_usage(self) -> float:
-        memory_usage = self.__get_memory_info().rss
-        self.__memory_history.append(memory_usage)
-
-        return memory_usage
-
-    def get_peak_memory_usage(self) -> float:
-        return max(self.__memory_history)
+        return self.__get_memory_info().rss
 
     def __get_memory_info(self) -> NamedTuple:
-        process = Process(pid=self.__pid)
-        return process.memory_info()
+        return self.__process.memory_info()

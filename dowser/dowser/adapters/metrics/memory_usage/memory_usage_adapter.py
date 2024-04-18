@@ -25,7 +25,7 @@ class MemoryUsageAdapter:
     @classmethod
     def from_backend_name(
         cls,
-        backend_name: MemoryUsageBackendName | str | None,
+        backend_name: MemoryUsageBackendName | str | None = None,
     ) -> "MemoryUsageAdapter":
         backend_name = backend_name or cls.__config.get_config(
             "dowser.metrics.memory_usage.backend"
@@ -39,11 +39,8 @@ class MemoryUsageAdapter:
         if Backend is None:
             raise ValueError(f"Unknown backend name: {backend_name}")
 
-        return cls.from_backend(Backend)
-
-    @classmethod
-    def from_backend(cls, Backend: type[MemoryUsageBackend]) -> "MemoryUsageAdapter":
         backend = Backend()
+
         return cls(backend)
 
     def __init__(self, backend: MemoryUsageBackend):
