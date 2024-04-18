@@ -1,3 +1,0 @@
-2024-04-18 00:46:48,057 - ResourcePsutil - INFO - Starting resource backend experiment
-2024-04-18 00:46:48,057 - ResourcePsutil - INFO - Running experiment with 10000000 elements
-2024-04-18 00:46:48,878 - ConsumeLargeMemory - INFO - Created a list with 10000000 elements

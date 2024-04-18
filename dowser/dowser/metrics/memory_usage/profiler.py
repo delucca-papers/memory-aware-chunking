@@ -12,8 +12,8 @@ from ...logging import Logger
 from ...config import ConfigManager
 
 
-class MemoryUsageAdapter:
-    __logger: Logger = Logger("MemoryUsageAdapter")
+class MemoryUsageProfiler:
+    __logger: Logger = Logger("MemoryUsageProfiler")
     __config: ConfigManager = ConfigManager()
     __backend: MemoryUsageBackend
     __available_backends: dict[MemoryUsageBackendName, type[MemoryUsageBackend]] = {

@@ -1,6 +1,6 @@
 from typing import Callable
 from functools import wraps
-from .adapters.metrics import MemoryUsageAdapter, MemoryUsageBackendName
+from .metrics import MemoryUsageProfiler, MemoryUsageBackendName
 
 
 def profile(
@@ -9,7 +9,7 @@ def profile(
     input_metadata: str | None = None,
 ) -> Callable:
     metrics_config = {"input_metadata": input_metadata}
-    memory_usage = MemoryUsageAdapter.from_backend_name(
+    memory_usage = MemoryUsageProfiler.from_backend_name(
         memory_usage_backend
     ).update_backend_config(metrics_config)
 

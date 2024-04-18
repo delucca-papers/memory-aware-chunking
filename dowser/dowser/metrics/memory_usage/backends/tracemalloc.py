@@ -1,7 +1,6 @@
 import tracemalloc
 import os
 
-from typing import Callable
 from .base import MemoryUsageBackend
 from ..enums import MemoryUsageBackendName
 from ....config import ConfigManager

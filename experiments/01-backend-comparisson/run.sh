@@ -55,7 +55,7 @@ function run_with_backend {
     export EXPERIMENT_NUM_ELEMENTS="${NUM_ELEMENTS}"
 
     echo "Running with ${backend_name} backend..."
-    python experiment/profile.py
+    python experiment/profile_backend.py
     echo
 }
 

@@ -1,7 +1,7 @@
 import os
 
 from dowser import profile
-from dowser.adapters import Logger
+from dowser.logging import Logger
 from consume_large_memory import consume_large_memory
 
 

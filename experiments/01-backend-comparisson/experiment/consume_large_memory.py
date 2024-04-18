@@ -1,6 +1,6 @@
 import random
 
-from dowser.adapters import Logger
+from dowser.logging import Logger
 
 logger = Logger("ConsumeLargeMemory")
 
