@@ -1,7 +1,6 @@
 from typing import Callable, Any
 from .backends import (
     KernelBackend,
-    MprofBackend,
     PsutilBackend,
     ResourceBackend,
     MemoryUsageBackend,
@@ -17,7 +16,6 @@ class MemoryUsageAdapter:
     __backend: MemoryUsageBackend
     __available_backends: dict[MemoryUsageBackendName, type[MemoryUsageBackend]] = {
         MemoryUsageBackendName.KERNEL: KernelBackend,
-        MemoryUsageBackendName.MPROF: MprofBackend,
         MemoryUsageBackendName.PSUTIL: PsutilBackend,
         MemoryUsageBackendName.RESOURCE: ResourceBackend,
     }

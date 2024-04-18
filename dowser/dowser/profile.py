@@ -5,7 +5,7 @@ from .adapters.metrics import MemoryUsageAdapter, MemoryUsageBackendName
 
 def profile(
     func: Callable | None = None,
-    memory_usage_backend: MemoryUsageBackendName | None = None,
+    memory_usage_backend: MemoryUsageBackendName | str | None = None,
     input_metadata: str | None = None,
 ) -> Callable:
     metrics_config = {"input_metadata": input_metadata}
