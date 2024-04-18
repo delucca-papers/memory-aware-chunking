@@ -5,4 +5,5 @@ class MemoryUsageBackendName(Enum):
     PSUTIL = "psutil"
     RESOURCE = "resource"
     MPROF = "mprof"
+    TRACEMALLOC = "tracemalloc"
     KERNEL = "kernel"

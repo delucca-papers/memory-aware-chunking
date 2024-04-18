@@ -12,6 +12,7 @@ def plot_memory_usage_by_experiment(directory: str, unit: str):
         "psutil": __get_results(directory, "psutil"),
         "resource": __get_results(directory, "resource"),
         "mprof": __get_results(directory, "mprof"),
+        "tracemalloc": __get_results(directory, "tracemalloc"),
         "kernel": __get_results(directory, "kernel"),
     }
 

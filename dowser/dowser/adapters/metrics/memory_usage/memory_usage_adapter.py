@@ -4,6 +4,7 @@ from .backends import (
     PsutilBackend,
     ResourceBackend,
     MprofBackend,
+    TraceMallocBackend,
     MemoryUsageBackend,
 )
 from .enums import MemoryUsageBackendName
@@ -20,6 +21,7 @@ class MemoryUsageAdapter:
         MemoryUsageBackendName.PSUTIL: PsutilBackend,
         MemoryUsageBackendName.MPROF: MprofBackend,
         MemoryUsageBackendName.RESOURCE: ResourceBackend,
+        MemoryUsageBackendName.TRACEMALLOC: TraceMallocBackend,
     }
 
     @classmethod

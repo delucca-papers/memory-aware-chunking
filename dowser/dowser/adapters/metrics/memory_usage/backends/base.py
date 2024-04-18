@@ -41,7 +41,7 @@ class MemoryUsageBackend(ABC):
 
         return func
 
-    def stop_profiling(self) -> Event:
+    def stop_profiling(self) -> None:
         self._logger.debug("Stopping memory usage profiler")
 
         self._finished_execution.set()
