@@ -20,13 +20,13 @@ class PsutilBackend(MemoryUsageBackend):
         super().__init__()
         self.__pid = pid
 
-    def get_current_memory_usage(self) -> int:
+    def get_current_memory_usage(self) -> float:
         memory_usage = self.__get_memory_info().rss
         self.__memory_history.append(memory_usage)
 
         return memory_usage
 
-    def get_peak_memory_usage(self) -> int:
+    def get_peak_memory_usage(self) -> float:
         return max(self.__memory_history)
 
     def __get_memory_info(self) -> NamedTuple:

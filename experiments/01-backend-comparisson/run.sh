@@ -9,16 +9,19 @@ TIMESTAMP=$(date "+%Y%m%d_%H%M%S")
 export NUM_ELEMENTS
 export OUTPUT_DIR
 export LOGGING_LEVEL
+export UNIT
 #
 # For development
-# NUM_ELEMENTS="100"
-# OUTPUT_DIR="${SCRIPT_DIR}/output/${TIMESTAMP}"
-# LOGGING_LEVEL="DEBUG"
+#NUM_ELEMENTS="100000"
+#OUTPUT_DIR="${SCRIPT_DIR}/output/${TIMESTAMP}"
+#LOGGING_LEVEL="DEBUG"
+#UNIT="kb"
 #
 # For production
-NUM_ELEMENTS="1000000"
+NUM_ELEMENTS="10_000_000"
 OUTPUT_DIR="${SCRIPT_DIR}/output/${TIMESTAMP}"
 LOGGING_LEVEL="INFO"
+UNIT="mb"
 #
 ################################################################################
 
@@ -46,7 +49,9 @@ function run_with_backend {
     local backend_name=$1
 
     export DOWSER_OUTPUT_DIR="${OUTPUT_DIR}/${backend_name}"
+    export DOWSER_METRICS_MEMORY_USAGE_UNIT="${UNIT}"
     export EXPERIMENT_BACKEND="${backend_name}"
+    export EXPERIMENT_NUM_ELEMENTS="${NUM_ELEMENTS}"
 
     echo "Running with ${backend_name} backend..."
     python experiment/profile.py
@@ -55,7 +60,7 @@ function run_with_backend {
 
 function summarize_experiment {
     echo "Summarizing experiment..."
-    #python experiment/summarize.py
+    python experiment/summarize.py
 }
 
 main

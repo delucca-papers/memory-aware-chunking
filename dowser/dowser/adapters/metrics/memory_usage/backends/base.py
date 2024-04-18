@@ -19,11 +19,11 @@ class MemoryUsageBackend(ABC):
     _profiling_thread: Thread
 
     @abstractmethod
-    def get_current_memory_usage(self) -> int:
+    def get_current_memory_usage(self) -> float:
         pass
 
     @abstractmethod
-    def get_peak_memory_usage(self) -> int:
+    def get_peak_memory_usage(self) -> float:
         pass
 
     def __init__(self):
@@ -35,7 +35,7 @@ class MemoryUsageBackend(ABC):
         output = self._build_output_file(func.__name__)
 
         self._profiling_thread = Thread(
-            target=self.__monitor_memory_usage,
+            target=self._monitor_memory_usage,
             args=(output,),
         )
         self._profiling_thread.start()
@@ -122,7 +122,7 @@ class MemoryUsageBackend(ABC):
 
         return tabs_per_unit[unit]
 
-    def __monitor_memory_usage(self, output: str) -> None:
+    def _monitor_memory_usage(self, output: str) -> None:
         while not self._finished_execution.is_set():
             unit = self._config.get_config("dowser.metrics.memory_usage.unit")
             precision = self._get_precision()

@@ -1,3 +1,4 @@
+import os
 import resource
 
 from resource import struct_rusage
@@ -14,13 +15,13 @@ class ResourceBackend(MemoryUsageBackend):
     _config: ConfigManager = ConfigManager()
     __memory_history: list[int] = []
 
-    def get_current_memory_usage(self) -> int:
+    def get_current_memory_usage(self) -> float:
         memory_usage = self.__get_memory_usage().ru_maxrss
         self.__memory_history.append(memory_usage)
 
         return memory_usage
 
-    def get_peak_memory_usage(self) -> int:
+    def get_peak_memory_usage(self) -> float:
         return max(self.__memory_history)
 
     def __get_memory_usage(self) -> struct_rusage:
