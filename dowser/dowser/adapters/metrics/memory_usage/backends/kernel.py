@@ -14,8 +14,8 @@ class KernelBackend(MemoryUsageBackend):
     __pid: str
 
     def __init__(self, pid: int = os.getpid()):
-        self.__pid = str(pid)
         super().__init__()
+        self.__pid = str(pid)
 
     def get_current_memory_usage(self) -> int:
         return self.__get_memory_value("VmSize")

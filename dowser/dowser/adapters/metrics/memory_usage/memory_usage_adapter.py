@@ -3,6 +3,7 @@ from .backends import (
     KernelBackend,
     PsutilBackend,
     ResourceBackend,
+    MprofBackend,
     MemoryUsageBackend,
 )
 from .enums import MemoryUsageBackendName
@@ -17,6 +18,7 @@ class MemoryUsageAdapter:
     __available_backends: dict[MemoryUsageBackendName, type[MemoryUsageBackend]] = {
         MemoryUsageBackendName.KERNEL: KernelBackend,
         MemoryUsageBackendName.PSUTIL: PsutilBackend,
+        MemoryUsageBackendName.MPROF: MprofBackend,
         MemoryUsageBackendName.RESOURCE: ResourceBackend,
     }
 
@@ -55,8 +57,8 @@ class MemoryUsageAdapter:
     ) -> Any:
         self.__logger.debug(f"Capturing memory usage for function: {func.__name__}")
 
-        self.__backend.start_profiling(func.__name__)
-        result = func(*func_args, **func_kwargs)
+        profiled_function = self.__backend.start_profiling(func)
+        result = profiled_function(*func_args, **func_kwargs)
         self.__backend.stop_profiling()
 
         return result

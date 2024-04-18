@@ -17,8 +17,8 @@ class PsutilBackend(MemoryUsageBackend):
     __memory_history: list[int] = []
 
     def __init__(self, pid: int = os.getpid()):
-        self.__pid = pid
         super().__init__()
+        self.__pid = pid
 
     def get_current_memory_usage(self) -> int:
         memory_usage = self.__get_memory_info().rss

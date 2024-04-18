@@ -25,9 +25,10 @@ LOGGING_LEVEL="INFO"
 function main {
     save_input
 
-    run_backend "psutil"
-    run_backend "resource"
-    run_backend "kernel"
+    run_with_backend "psutil"
+    run_with_backend "resource"
+    run_with_backend "mprof"
+    run_with_backend "kernel"
 
     summarize_experiment
 }
@@ -41,13 +42,14 @@ function save_input {
     echo
 }
 
-function run_backend {
+function run_with_backend {
     local backend_name=$1
 
     export DOWSER_OUTPUT_DIR="${OUTPUT_DIR}/${backend_name}"
+    export EXPERIMENT_BACKEND="${backend_name}"
 
     echo "Running with ${backend_name} backend..."
-    python experiment/profile_"${backend_name}".py
+    python experiment/profile.py
     echo
 }
 
