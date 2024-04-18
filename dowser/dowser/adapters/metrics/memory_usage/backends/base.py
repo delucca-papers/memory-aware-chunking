@@ -99,7 +99,7 @@ class MemoryUsageBackend(ABC):
 
         return filepath
 
-    def __normalize_unit(self, value: int) -> int:
+    def __normalize_unit(self, value: int) -> float:
         conversion = {
             "b_to_kb": 1024,
             "b_to_mb": 1024**2,
@@ -117,7 +117,7 @@ class MemoryUsageBackend(ABC):
 
         conversion_key = f"{self.unit}_to_{self._config.get_config('dowser.metrics.memory_usage.unit')}"
         if conversion_key in conversion:
-            return int(value / conversion[conversion_key])
+            return float(value / conversion[conversion_key])
 
         return value
 
