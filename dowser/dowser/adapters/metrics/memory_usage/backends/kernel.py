@@ -1,6 +1,5 @@
 import os
 
-from threading import Event, Thread
 from .base import MemoryUsageBackend
 from ..enums import MemoryUsageBackendName
 from ....config import ConfigManager
@@ -8,7 +7,7 @@ from ....logging import Logger
 
 
 class KernelBackend(MemoryUsageBackend):
-    unit: str = "kB"
+    unit: str = "kb"
     name: MemoryUsageBackendName = MemoryUsageBackendName.KERNEL
     _logger: Logger = Logger("KernelBackend")
     _config: ConfigManager = ConfigManager()
@@ -16,7 +15,7 @@ class KernelBackend(MemoryUsageBackend):
 
     def __init__(self, pid: int = os.getpid()):
         self.__pid = str(pid)
-        self._finished_execution = Event()
+        super().__init__()
 
     def get_current_memory_usage(self) -> int:
         return self.__get_memory_value("VmSize")

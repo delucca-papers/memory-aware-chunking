@@ -14,6 +14,7 @@ DEFAULT_CONFIG = {
                 "output_dir": "memory_usage",
                 "filename_prefix": "",
                 "filename_suffix": "",
+                "unit": "kb",
             },
         },
         "logging": {
