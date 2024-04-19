@@ -17,13 +17,13 @@ def profile(function: Callable, config: dict = {}):
 
     with_profilers = compose(
         (
-            execution_time.profile(config=config)
-            if "execution_time" in enabled_profilers
+            memory_usage.profile(config=config)
+            if "memory_usage" in enabled_profilers
             else identity
         ),
         (
-            memory_usage.profile(config=config)
-            if "memory_usage" in enabled_profilers
+            execution_time.profile(config=config)
+            if "execution_time" in enabled_profilers
             else identity
         ),
     )

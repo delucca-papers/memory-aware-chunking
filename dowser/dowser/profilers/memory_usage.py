@@ -48,7 +48,7 @@ def with_backend(function: Callable, config: dict = config) -> Any:
 
 def profile(config: dict = config) -> Callable:
     logger = get_logger()
-    def decorator(function: Callable):
+    def decorator(function: Callable) -> Callable:
         logger.info(
             f'Setting up memory usage profiler for function "{function.__name__}"'
         )
@@ -56,7 +56,7 @@ def profile(config: dict = config) -> Callable:
         profiled_function = with_backend(function, config=config)
 
         @wraps(profiled_function)
-        def wrapper(*args, **kwargs):
+        def wrapper(*args, **kwargs) -> Any:
             profiler_results, function_results = profiled_function(*args, **kwargs)
 
             logger.debug(f"Profiler results: {profiler_results}")
