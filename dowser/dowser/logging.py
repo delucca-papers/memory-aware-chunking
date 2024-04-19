@@ -1,5 +1,6 @@
 import logging
 import os
+import inspect
 
 from logging import StreamHandler
 from logging.handlers import RotatingFileHandler
@@ -14,6 +15,23 @@ transports = logging_config.get("transports").split(",")
 
 
 ###
+
+
+def get_named_logger(name: str | None = None) -> logging.Logger:
+    name = name or get_function_path()
+
+    return logging.getLogger(name)
+
+
+def get_function_path() -> str:
+    stack = inspect.stack()
+    caller_frame = stack[3]
+    module = inspect.getmodule(caller_frame[0])
+    module_name = module.__name__
+    filtered_module_name = ".".join(module_name.split(".")[1:])
+    function_name = caller_frame[3]
+
+    return f"{filtered_module_name}.{function_name}"
 
 
 @curry
@@ -64,7 +82,7 @@ get_logger = compose(
     ),
     set_console_transport(formatter) if "console" in transports else identity,
     set_level(log_level),
-    logging.getLogger,
+    get_named_logger,
 )
 
 

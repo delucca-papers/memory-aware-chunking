@@ -6,12 +6,9 @@ from .logging import get_logger
 from .profilers import execution_time, memory_usage
 
 
-def profile(
-    function: Callable,
-    config: dict = {},
-    logger: Logger = get_logger("profile"),
-):
-    logger.debug(f'Setting up profilers for function "{function.__name__}"')
+def profile(function: Callable, config: dict = {}):
+    logger = get_logger()
+    logger.info(f'Setting up profilers for function "{function.__name__}"')
     logger.debug(f"Custom config: {config}")
 
     config = extend_config(config)
