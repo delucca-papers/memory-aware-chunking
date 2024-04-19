@@ -8,12 +8,15 @@ from toolz import compose, curry, merge_with
 DEFAULT_CONFIG_FILE = os.environ.get(f"DOWSER_CONFIG_FILE", "dowser.toml")
 DEFAULT_CONFIG = {
     "execution_id": str(uuid.uuid4()),
-    "output_dir": "./",
+    "output_dir": "./dowser",
     "logging": {
         "level": "info",
         "filename": "dowser.log",
         "transports": "console,file",
         "format": "%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+    },
+    "report": {
+        "prepend_timestamp": "true",
     },
     "input": {
         "metadata": "",
@@ -22,15 +25,24 @@ DEFAULT_CONFIG = {
         "output_dir": "profiler",
         "enabled_profilers": "execution_time,memory_usage",
         "execution_time": {
-            "output_dir": "execution_time",
+            "report": {
+                "filename": "execution-time",
+                "prefix": "",
+                "suffix": "",
+            },
         },
         "memory_usage": {
-            "output_dir": "memory_usage",
             "backend": "kernel",
             "precision": "4",
-            "filename_prefix": "",
-            "filename_suffix": "",
-            "unit": "kb",
+            "report": {
+                "unit": "mb",
+                "filename": "memory-usage",
+                "prefix": "",
+                "suffix": "",
+                "decimal_places": "2",
+                "zfill": "6",
+                "zfill_character": " ",
+            },
         },
     },
 }
@@ -64,13 +76,13 @@ def override_with_env(config: dict, parent_key: str = "") -> dict:
 
 
 @curry
-def deep_merge(dict1, dict2):
-    merged = dict(dict1)
+def deep_merge(old_dict: dict, new_dict: dict) -> dict:
+    merged = dict(old_dict)
 
-    for key, value in dict2.items():
-        if key in dict1 and isinstance(dict1[key], dict) and isinstance(value, dict):
-            merged[key] = deep_merge(dict1[key], value)
-        else:
+    for key, value in new_dict.items():
+        if key in old_dict and isinstance(value, dict):
+            merged[key] = deep_merge(old_dict[key], value)
+        elif value:
             merged[key] = value
 
     return merged
@@ -124,7 +136,8 @@ def get_config(path: str, config: dict = config) -> Any:
     )(path)
 
 
-extend_config = deep_merge(config)
+def extend_config(new_config: dict) -> dict:
+    return deep_merge(config, new_config)
 
 
 __all__ = ["get_full_config", "config", "get_namespace", "get_config", "extend_config"]

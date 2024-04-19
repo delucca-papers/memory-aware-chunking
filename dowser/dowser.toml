@@ -1,7 +1,7 @@
 # This is a sample configuration file for Dowser
 
 execution_id = ""
-output_dir = "./"
+output_dir = "./dowser"
 
 [logging]
 filename = "dowser.log"
@@ -12,17 +12,27 @@ format = "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
 [input]
 metadata = ""
 
+[report]
+prepend_timestamp = "true"
+
 [profiler]
 output_dir = "profiler"
 enabled_profilers = "execution_time,memory_usage"
 
-[profiler.execution_time]
-output_dir = "execution_time"
+[profiler.execution_time.report]
+filename = "execution-time"
+prefix = ""
+suffix = ""
 
 [profiler.memory_usage]
-output_dir = "memory_usage"
 backend = "kernel"
 precision = "4"
-filename_prefix = ""
-filename_suffix = ""
-unit = "kb"
+
+[profiler.memory_usage.report]
+unit = "mb"
+filename = "memory-usage"
+prefix = ""
+suffix = ""
+decimal_places = "2"
+zfill = "6"
+zfill_character = " "

@@ -1,7 +1,8 @@
 from typing import Callable
 
-MemoryUsageLog = tuple[float, str]
+MemoryUsage = tuple[float, str]
+MemoryUsageLog = list[MemoryUsage]
 MemoryUsageWrappedResult = tuple[MemoryUsageLog, ...]
 MemoryUsageWrapper = Callable[..., MemoryUsageWrappedResult]
 
-__all__ = ["MemoryUsageWrapper"]
+__all__ = ["MemoryUsageWrapper", "MemoryUsageLog", "MemoryUsage"]

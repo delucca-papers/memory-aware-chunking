@@ -5,13 +5,25 @@ import inspect
 from logging import StreamHandler
 from logging.handlers import RotatingFileHandler
 from toolz import compose, curry, identity
-from .config import get_namespace, get_config
+from .config import get_namespace, get_config, config
 
-logging_config = get_namespace("logging")
-output_dir = get_config("output_dir")
-formatter = logging.Formatter(logging_config.get("format"))
-log_level = logging_config.get("level")
-transports = logging_config.get("transports").split(",")
+get_logging_config = lambda c: get_namespace("logging", c)
+get_output_dir = lambda c: get_config("output_dir", c)
+
+get_filename = lambda c: compose(
+    lambda c: get_config("filename", c), get_logging_config
+)(c)
+get_formatter = lambda c: compose(
+    logging.Formatter, lambda c: get_config("level", c), get_logging_config
+)(c)
+get_log_level = lambda c: compose(
+    lambda c: get_config("level", c),
+    get_logging_config,
+)(c)
+get_transports = lambda c: compose(
+    lambda c: get_config("transports", c),
+    get_logging_config,
+)(c)
 
 
 ###
@@ -35,7 +47,8 @@ def get_function_path() -> str:
 
 
 @curry
-def set_level(level: str, logger: logging.Logger) -> logging.Logger:
+def set_level(logger: logging.Logger, config: dict = config) -> logging.Logger:
+    level = get_log_level(config)
     logger.setLevel(level.upper())
     return logger
 
@@ -71,19 +84,30 @@ def set_file_transport(
     return logger
 
 
+def set_transports(logger: logging.Logger, config: dict = config) -> logging.Logger:
+    transports = get_transports(config)
+    formatter = get_formatter(config)
+    output_dir = get_output_dir(config)
+    filename = get_filename(config)
+
+    return compose(
+        (
+            set_file_transport(formatter, output_dir, filename)
+            if "file" in transports
+            else identity
+        ),
+        set_console_transport(formatter) if "console" in transports else identity,
+    )
+
+
 ###
 
 
-get_logger = compose(
-    (
-        set_file_transport(formatter, output_dir, logging_config.get("filename"))
-        if "file" in transports
-        else identity
-    ),
-    set_console_transport(formatter) if "console" in transports else identity,
-    set_level(log_level),
+get_logger = lambda c, n=None: compose(
+    set_transports(config=c),
+    set_level(config=c),
     get_named_logger,
-)
+)(n)
 
 
 __all__ = ["get_logger"]

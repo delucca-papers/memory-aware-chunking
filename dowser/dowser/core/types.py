@@ -1,6 +1,23 @@
-from typing import Callable
+from typing import Callable, TypedDict
 
 ThreadWrappedResult = tuple[list, ...]
 ThreadWrapper = Callable[..., ThreadWrappedResult]
 
-__all__ = ["ThreadWrapper", "ThreadWrappedResult"]
+ReportHeader = tuple[str, str]
+ReportHeaderList = tuple[ReportHeader]
+ReportColumn = tuple[str, str]
+ReportLine = tuple[ReportColumn]
+
+
+class Report(TypedDict):
+    headers: ReportHeaderList
+    data: list[ReportLine]
+
+
+__all__ = [
+    "ThreadWrapper",
+    "ThreadWrappedResult",
+    "ReportHeaderList",
+    "Report",
+    "ReportLine",
+]
