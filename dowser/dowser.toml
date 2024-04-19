@@ -1,20 +1,28 @@
 # This is a sample configuration file for Dowser
 
-[dowser]
 execution_id = ""
 output_dir = "./"
 
-[dowser.logging]
+[logging]
 filename = "dowser.log"
 level = "info"
+transports = "console,file"
+format = "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
 
-[dowser.metrics]
-input_metadata = ""
+[input]
+metadata = ""
 
-[dowser.metrics.memory_usage]
+[profiler]
+output_dir = "profiler"
+enabled_profilers = "execution_time,memory_usage"
+
+[profiler.execution_time]
+output_dir = "execution_time"
+
+[profiler.memory_usage]
+output_dir = "memory_usage"
 backend = "kernel"
 precision = "4"
-output_dir = "memory_usage"
 filename_prefix = ""
 filename_suffix = ""
 unit = "kb"

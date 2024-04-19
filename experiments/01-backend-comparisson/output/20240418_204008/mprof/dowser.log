@@ -1,3 +1,0 @@
-2024-04-18 20:40:11,361 - MprofPsutil - INFO - Starting mprof backend experiment
-2024-04-18 20:40:11,361 - MprofPsutil - INFO - Running experiment with 10000000 elements
-2024-04-18 20:40:12,188 - ConsumeLargeMemory - INFO - Created a list with 10000000 elements

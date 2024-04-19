@@ -1,27 +1,37 @@
 from typing import Callable
-from functools import wraps
-from .metrics import MemoryUsageProfiler, MemoryUsageBackendName
+from logging import Logger
+from toolz import compose, identity
+from .config import extend_config, get_namespace
+from .logging import get_logger
+from .profilers import execution_time, memory_usage
 
 
 def profile(
-    func: Callable | None = None,
-    memory_usage_backend: MemoryUsageBackendName | str | None = None,
-    input_metadata: str | None = None,
-) -> Callable:
-    metrics_config = {"input_metadata": input_metadata}
-    memory_usage = MemoryUsageProfiler.from_backend_name(
-        memory_usage_backend
-    ).update_backend_config(metrics_config)
+    function: Callable,
+    config: dict = {},
+    logger: Logger = get_logger("profile"),
+):
+    logger.debug(f'Setting up profilers for function "{function.__name__}"')
+    logger.debug(f"Custom config: {config}")
 
-    def decorator(inner_func: Callable) -> Callable:
-        @wraps(inner_func)
-        def wrapper(*func_args, **func_kwargs):
-            return memory_usage.profile(
-                inner_func,
-                *func_args,
-                **func_kwargs,
-            )
+    config = extend_config(config)
+    profiler_config = get_namespace("profiler", config)
+    enabled_profilers = profiler_config.get("enabled_profilers").split(",")
 
-        return wrapper
+    with_profilers = compose(
+        (
+            execution_time.profile(config=config)
+            if "execution_time" in enabled_profilers
+            else identity
+        ),
+        (
+            memory_usage.profile(config=config)
+            if "memory_usage" in enabled_profilers
+            else identity
+        ),
+    )
 
-    return decorator(func) if func else decorator
+    return with_profilers(function)
+
+
+__all__ = ["profile"]
