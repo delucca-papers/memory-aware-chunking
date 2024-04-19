@@ -1,6 +1,6 @@
 from typing import Callable
 from toolz import curry, identity
-from ..config import config
+from ..core.config import config
 
 
 @curry

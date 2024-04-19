@@ -13,7 +13,7 @@ if __name__ == "__main__":
         "input": {
             "metadata": input_metadata,
         },
-        "metrics": {
+        "profiler": {
             "memory_usage": {
                 "backend": backend_name,
             },

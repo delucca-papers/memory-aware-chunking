@@ -1,8 +1,8 @@
 from typing import Callable
 from logging import Logger
 from toolz import compose, identity
-from .config import extend_config, get_namespace
-from .logging import get_logger
+from .core.config import extend_config, get_namespace
+from .core.logging import get_logger
 from .profilers import execution_time, memory_usage
 
 

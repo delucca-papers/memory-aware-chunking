@@ -3,7 +3,7 @@ import uuid
 import toml
 
 from typing import Any
-from toolz import compose, merge, curry
+from toolz import compose, curry, merge_with
 
 DEFAULT_CONFIG_FILE = os.environ.get(f"DOWSER_CONFIG_FILE", "dowser.toml")
 DEFAULT_CONFIG = {
@@ -46,10 +46,7 @@ def load_config_file(config_file: str = DEFAULT_CONFIG_FILE) -> dict:
     except Exception as e:
         config = DEFAULT_CONFIG
 
-    return {
-        **DEFAULT_CONFIG,
-        **config,
-    }
+    return deep_merge(DEFAULT_CONFIG, config)
 
 
 def override_with_env(config: dict, parent_key: str = "") -> dict:
@@ -67,8 +64,16 @@ def override_with_env(config: dict, parent_key: str = "") -> dict:
 
 
 @curry
-def merge_configs(config_a: dict, config_b: dict) -> dict:
-    return merge(config_a, config_b)
+def deep_merge(dict1, dict2):
+    merged = dict(dict1)
+
+    for key, value in dict2.items():
+        if key in dict1 and isinstance(dict1[key], dict) and isinstance(value, dict):
+            merged[key] = deep_merge(dict1[key], value)
+        else:
+            merged[key] = value
+
+    return merged
 
 
 def parts_from_path(path: str) -> list[str]:
@@ -119,7 +124,7 @@ def get_config(path: str, config: dict = config) -> Any:
     )(path)
 
 
-extend_config = merge_configs(config)
+extend_config = deep_merge(config)
 
 
 __all__ = ["get_full_config", "config", "get_namespace", "get_config", "extend_config"]
