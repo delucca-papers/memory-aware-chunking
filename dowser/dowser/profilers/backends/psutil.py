@@ -8,7 +8,6 @@ from toolz import compose
 from psutil import Process
 from ...core.threading import threaded_wrapper
 from ...core.logging import get_logger
-from ...core.config import config
 from ..types import MemoryUsageWrapper
 
 

@@ -7,7 +7,6 @@ from queue import Queue
 from toolz import compose, first
 from ...core.threading import threaded_wrapper
 from ...core.logging import get_logger
-from ...core.config import config
 from ..types import MemoryUsageWrapper
 
 
@@ -37,11 +36,7 @@ get_memory_usage = compose(
 ###
 
 
-def wrapper(
-    function: Callable,
-    precision: float,
-    config: dict = config,
-) -> MemoryUsageWrapper:
+def wrapper(function: Callable, precision: float) -> MemoryUsageWrapper:
     return threaded_wrapper(function, profile_memory_usage, precision)
 
 

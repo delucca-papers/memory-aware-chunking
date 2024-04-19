@@ -8,7 +8,6 @@ from toolz import compose
 from ...core.threading import threaded_wrapper
 from ...core.file_handling import go_to_pointer, get_line_with_keyword
 from ...core.logging import get_logger
-from ...core.config import config
 from ..types import MemoryUsageWrapper
 
 
