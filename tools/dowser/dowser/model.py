@@ -29,13 +29,15 @@ def collect_profile(
     )
 
     report_context.update({"group": group_name})
-    profiled_function = profile(function)
+
+    @profile
+    def profiled_function(input_data: Any):
+        input_data = input_handler(input_data) if input_handler else input_data
+        return function(input_data)
 
     for i in range(num_iterations):
         logger.debug(f"Iteration: {i + 1}")
         for input_data in inputs:
-            if input_handler:
-                input_data = input_handler(input_data)
             profiled_function(input_data)
 
     logger.info(f'Profile collection for "{group_name}" completed')

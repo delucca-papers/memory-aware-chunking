@@ -4,3 +4,4 @@ from .report import *
 from .threading import *
 from .transformers import *
 from .types import *
+from .multiprocessing import *

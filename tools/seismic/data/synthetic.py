@@ -118,13 +118,21 @@ def generate_and_save_synthetic_data(
     output_dir: str = "/tmp/synthetic_seismic_data",
 ) -> str:
     logger = get_logger()
+
+    filename = f"{num_inlines}-{num_crosslines}-{num_samples}.segy"
+    filepath = os.path.join(output_dir, filename)
+    if os.path.exists(filepath):
+        logger.debug(
+            f"Skipping generation of synthetic data for shape ({num_inlines}, {num_crosslines}, {num_samples}) as it already exists"
+        )
+        return filepath
+
     logger.debug(
         f"Generating synthetic data for shape ({num_inlines}, {num_crosslines}, {num_samples})"
     )
 
     reflectivity = np.random.rand(num_samples) * 2 - 1
     wavelet = __ricker_wavelet(frequency, length, dt)
-    filename = f"{num_inlines}-{num_crosslines}-{num_samples}.segy"
 
     seismic_data = np.array(
         [
@@ -138,7 +146,6 @@ def generate_and_save_synthetic_data(
         ]
     ).astype(np.float32)
 
-    filepath = os.path.join(output_dir, filename)
     __save_seismic_to_segy(seismic_data, filepath, dt)
 
     return filepath
