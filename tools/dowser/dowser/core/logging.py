@@ -29,10 +29,9 @@ def get_function_path() -> str:
     caller_frame = stack[3]
     module = inspect.getmodule(caller_frame[0])
     module_name = module.__name__
-    filtered_module_name = ".".join(module_name.split(".")[1:])
     function_name = caller_frame[3]
 
-    return f"{filtered_module_name}.{function_name}"
+    return f"{module_name}.{function_name}"
 
 
 @curry

@@ -22,12 +22,11 @@ RUN chown -R ${USER_ID}:${GROUP_ID} ${HOME}
 USER ${USER_ID}
 
 COPY requirements.txt .
-COPY experiment/consume_large_memory.py experiment/
-COPY experiment/profile_backend.py experiment/
-COPY experiment/summarize.py experiment/
-
 RUN pip install -r requirements.txt
 
+COPY experiment/tasks.py experiment/
+COPY experiment/profile_backend.py experiment/
+COPY experiment/summarize.py experiment/
 COPY run.sh .
 
 ENTRYPOINT ["./run.sh"]

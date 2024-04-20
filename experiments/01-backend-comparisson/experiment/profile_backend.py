@@ -1,7 +1,18 @@
 import os
 
 from dowser import profile, config
-from consume_large_memory import consume_large_memory
+from dowser.core.logging import get_logger
+from tasks import consume_large_memory
+
+
+def run_experiment(experiment_execution_id: str, experiment_config: dict) -> None:
+    config.update(experiment_config)
+
+    logger = get_logger()
+    logger.info(f"Starting experiment with Execution ID: {experiment_execution_id}")
+    logger.debug(f"Experiment config: {experiment_config}")
+
+    profile(consume_large_memory)(experiment_num_elements)
 
 
 if __name__ == "__main__":
@@ -44,5 +55,4 @@ if __name__ == "__main__":
             'You must provide a backend name on the "EXPERIMENT_BACKEND" environment variable'
         )
 
-    config.update(experiment_config)
-    profile(consume_large_memory)(experiment_num_elements)
+    run_experiment(experiment_execution_id, experiment_config)
