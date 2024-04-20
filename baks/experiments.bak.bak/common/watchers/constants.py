@@ -1,0 +1,2 @@
+MEMORY_USAGE_RESULTS_NAME = "memory_usage"
+EXECUTION_TIME_RESULTS_NAME = "execution_time"
