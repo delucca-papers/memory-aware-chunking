@@ -1,7 +1,7 @@
 from typing import Callable
 from memory_profiler import memory_usage
 from functools import wraps
-from ...core.logging import get_logger
+from ...core import get_logger
 from ..types import MemoryUsageWrapper, MemoryUsageWrappedResult
 
 

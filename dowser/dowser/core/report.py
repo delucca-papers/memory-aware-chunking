@@ -2,25 +2,23 @@ import time
 import os
 
 from .types import Report, ReportHeaderList, ReportLine
-from .config import config, get_config
+from .config import config
 from .file_handling import add_prefix_to_file_in_path, add_ext, join_path
 from .transformers import align_tuples
 from .logging import get_logger
 
-get_execution_id = lambda c: get_config("execution_id", c)
-get_input_metadata = lambda c: get_config("input.metadata", c)
-get_prepend_timestamp = (
-    lambda c: get_config("report.prepend_timestamp", c).lower() == "true"
-)
-get_output_dir = lambda c: get_config("output_dir", c)
+get_execution_id = config.lazy_get("execution_id")
+get_output_dir = config.lazy_get("output_dir")
+get_input_metadata = config.lazy_get("input.metadata")
+get_prepend_timestamp = lambda: config.get("report.prepend_timestamp").lower() == "true"
 
 
 ###
 
 
-def build_headers(config: dict = config) -> ReportHeaderList:
-    execution_id = get_execution_id(config)
-    input_metadata = get_input_metadata(config)
+def build_headers() -> ReportHeaderList:
+    execution_id = get_execution_id()
+    input_metadata = get_input_metadata()
 
     return [("Execution ID", execution_id), ("Input Metadata", input_metadata)]
 
@@ -35,9 +33,9 @@ def build_data_text(data: list[ReportLine]) -> str:
     return "\n".join(["\t".join([first, second]) for first, second in data])
 
 
-def get_execution_output_dir(config: dict = config) -> str:
-    output_dir = get_output_dir(config)
-    execution_id = get_execution_id(config)
+def get_execution_output_dir() -> str:
+    output_dir = get_output_dir()
+    execution_id = get_execution_id()
 
     return join_path(execution_id, output_dir)
 
@@ -45,15 +43,11 @@ def get_execution_output_dir(config: dict = config) -> str:
 ###
 
 
-def build_report(
-    custom_headers: ReportHeaderList,
-    data: ReportLine,
-    config: dict = config,
-) -> Report:
-    logger = get_logger(config)
+def build_report(custom_headers: ReportHeaderList, data: ReportLine) -> Report:
+    logger = get_logger()
     logger.info(f"Building report for {len(data)} data points")
 
-    headers = build_headers(config)
+    headers = build_headers()
     headers.extend(custom_headers)
 
     return {
@@ -62,14 +56,10 @@ def build_report(
     }
 
 
-def save_report(
-    report: Report,
-    relative_path: str,
-    config: dict = config,
-) -> None:
-    logger = get_logger(config)
-    should_prepend_timestamp = get_prepend_timestamp(config)
-    execution_output_dir = get_execution_output_dir(config)
+def save_report(report: Report, relative_path: str) -> None:
+    logger = get_logger()
+    should_prepend_timestamp = get_prepend_timestamp()
+    execution_output_dir = get_execution_output_dir()
 
     if should_prepend_timestamp:
         timestamp = time.strftime("%Y%m%d%H%M%S")

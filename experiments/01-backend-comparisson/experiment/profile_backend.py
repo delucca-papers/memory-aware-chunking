@@ -1,6 +1,6 @@
 import os
 
-from dowser import profile
+from dowser import profile, config
 from consume_large_memory import consume_large_memory
 
 
@@ -39,7 +39,5 @@ if __name__ == "__main__":
             'You must provide a backend name on the "EXPERIMENT_BACKEND" environment variable'
         )
 
-    profile(
-        consume_large_memory,
-        config=experiment_config,
-    )(experiment_num_elements)
+    config.update(experiment_config)
+    profile(consume_large_memory)(experiment_num_elements)

@@ -1,5 +1,4 @@
 from toolz import curry
-from .logging import get_logger
 
 
 def convert_to(unit_to: str, unit_from: str, value: float) -> float:
@@ -26,9 +25,7 @@ def convert_to(unit_to: str, unit_from: str, value: float) -> float:
 
     conversion_key = f"{normalized_unit_from}_to_{normalized_unit_to}"
     if conversion_key not in conversion:
-        logger = get_logger()
-        logger.error(f"Conversion from {unit_from} to {unit_to} is not supported")
-        return value
+        raise ValueError(f"Conversion from {unit_from} to {unit_to} is not supported")
 
     return float(value / conversion[conversion_key])
 
@@ -56,4 +53,17 @@ def align_tuples(tuples: list[tuple]) -> list[tuple]:
     return formatted_tuples
 
 
-__all__ = ["convert_to", "format_float", "align_tuples"]
+@curry
+def deep_merge(old_dict: dict, new_dict: dict) -> dict:
+    merged = dict(old_dict)
+
+    for key, value in new_dict.items():
+        if key in old_dict and isinstance(value, dict):
+            merged[key] = deep_merge(old_dict[key], value)
+        elif value:
+            merged[key] = value
+
+    return merged
+
+
+__all__ = ["convert_to", "format_float", "align_tuples", "deep_merge"]

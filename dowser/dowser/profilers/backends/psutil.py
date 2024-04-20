@@ -6,8 +6,7 @@ from threading import Event
 from queue import Queue
 from toolz import compose
 from psutil import Process
-from ...core.threading import threaded_wrapper
-from ...core.logging import get_logger
+from ...core import threaded_wrapper, get_logger
 from ..types import MemoryUsageWrapper
 
 
