@@ -11,6 +11,7 @@ from ..core import (
     build_report,
     save_report,
     join_path,
+    full_function_name,
     ReportLine,
 )
 from ..contexts import config
@@ -62,8 +63,9 @@ def with_backend(function: Callable) -> Any:
 
 
 @curry
-def report_memory_usage(function_name: str, profiler_results: MemoryUsageLog) -> str:
+def report_memory_usage(function: Callable, profiler_results: MemoryUsageLog) -> str:
     logger = get_logger()
+    function_name = full_function_name(function)
     logger.debug(f"Building report for function {function_name}")
 
     precision = get_precision()
@@ -127,7 +129,7 @@ def profile(function: Callable) -> Callable:
     logger.info(f'Setting up memory usage profiler for function "{function.__name__}"')
 
     profiled_function = with_backend(function)
-    report_function_results = report_memory_usage(function.__name__)
+    report_function_results = report_memory_usage(function)
 
     @wraps(profiled_function)
     def wrapper(*args, **kwargs) -> Any:

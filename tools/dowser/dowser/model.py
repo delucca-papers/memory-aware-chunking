@@ -1,5 +1,6 @@
 from typing import Callable, Any
-from .core import get_logger
+from functools import wraps
+from .core import get_logger, run_in_process
 from .profile import profile
 from .contexts import config, report_context
 
@@ -12,6 +13,7 @@ get_num_iterations = config.lazy_get("model.collect.num_iterations", type=int)
 def collect_profile(
     function: Callable,
     inputs: list[Any],
+    input_metadata: dict[str, str],
     input_handler: Callable | None = None,
     group_name: str | None = None,
 ):
@@ -31,6 +33,7 @@ def collect_profile(
     report_context.update({"group": group_name})
 
     @profile
+    @wraps(function)
     def profiled_function(input_data: Any):
         input_data = input_handler(input_data) if input_handler else input_data
         return function(input_data)
@@ -38,7 +41,11 @@ def collect_profile(
     for i in range(num_iterations):
         logger.debug(f"Iteration: {i + 1}")
         for input_data in inputs:
-            profiled_function(input_data)
+            metadata = input_metadata.get(input_data)
+            if metadata:
+                logger.debug(f"Metadata: {metadata}")
+                config.update({"input": {"metadata": metadata}})
+            run_in_process(profiled_function, input_data)
 
     logger.info(f'Profile collection for "{group_name}" completed')
 

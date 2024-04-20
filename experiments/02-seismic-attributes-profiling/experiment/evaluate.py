@@ -20,6 +20,7 @@ def run_experiment(experiment_config: dict, experiment_attributes: list[str]) ->
     logger.debug(f"Data directory: {experiment_data}")
 
     inputs = __list_inputs(experiment_data)
+    input_metadata = __get_input_metadata(inputs)
 
     for attribute in experiment_attributes:
         logger.info(f"Starting experiment for attribute {attribute}")
@@ -33,6 +34,7 @@ def run_experiment(experiment_config: dict, experiment_attributes: list[str]) ->
             attribute_module.run,
             inputs,
             input_handler=load_segy,
+            input_metadata=input_metadata,
             group_name=attribute,
         )
 
@@ -45,11 +47,24 @@ def __list_inputs(data_dir: str) -> list[str]:
     return [os.path.join(data_dir, filename) for filename in os.listdir(data_dir)]
 
 
+def __get_input_metadata(inputs: list[str]) -> dict[str, str]:
+    return {input_path: __shape_metadata_from_path(input_path) for input_path in inputs}
+
+
+def __shape_metadata_from_path(path: str) -> str:
+    basename = os.path.basename(path)
+    filename = basename.split(".")[0]
+    inlines, crosslines, samples = filename.split("-")
+
+    return f"inlines={inlines},crosslines={crosslines},samples={samples}"
+
+
 if __name__ == "__main__":
     experiment_execution_id = os.environ.get("EXPERIMENT_EXECUTION_ID")
     experiment_output_dir = os.environ.get("EXPERIMENT_OUTPUT_DIR", "./output")
     experiment_logging_level = os.environ.get("EXPERIMENT_LOGGING_LEVEL", "DEBUG")
     experiment_num_iterations = int(os.environ.get("EXPERIMENT_NUM_ITERATIONS"))
+    experiment_precision = int(os.environ.get("EXPERIMENT_PRECISION"))
     experiment_attributes = os.environ.get("EXPERIMENT_ATTRIBUTES").split(",")
 
     experiment_config = {
@@ -61,6 +76,11 @@ if __name__ == "__main__":
         "model": {
             "collect": {
                 "num_iterations": experiment_num_iterations,
+            }
+        },
+        "profiler": {
+            "memory_usage": {
+                "precision": experiment_precision,
             }
         },
     }

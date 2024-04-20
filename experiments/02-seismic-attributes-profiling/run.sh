@@ -15,18 +15,20 @@ export NUM_ITERATIONS
 export ATTRIBUTES
 export OUTPUT_DIR
 export EXECUTION_ID
+export PRECISION
 export LOG_LEVEL
 #
 # For development
-NUM_INLINES="10"
-NUM_CROSSLINES="10"
-NUM_SAMPLES="10"
+NUM_INLINES="100"
+NUM_CROSSLINES="100"
+NUM_SAMPLES="100"
 STEP_SIZE="10"
 RANGE_SIZE="2"
 NUM_ITERATIONS="5"
 ATTRIBUTES="envelope"
 OUTPUT_DIR="${SCRIPT_DIR}/output"
 EXECUTION_ID="${TIMESTAMP}"
+PRECISION="2"
 LOG_LEVEL="DEBUG"
 #
 # For production
@@ -39,6 +41,7 @@ LOG_LEVEL="DEBUG"
 # ATTRIBUTES=$(find "${SCRIPT_DIR}/experiment/common/attributes" -type f -name "*.py" -exec basename {} .py \; | paste -sd ',' -)
 # OUTPUT_DIR="${SCRIPT_DIR}/output"
 # EXECUTION_ID="${TIMESTAMP}"
+# PRECISION="2"
 # LOG_LEVEL="DEBUG"
 #
 ################################################################################
@@ -58,8 +61,8 @@ function save_input {
     mkdir -p "${expected_output_dir}"
 
     echo "Saving experiment input..."
-    echo "Number of Inlines, Number of Crosslines, Number of Samples, Step Size, Range Size, Number of Iterations, Attributes" >"${expected_output_dir}/input.csv"
-    echo "\"${NUM_INLINES}\",\"${NUM_CROSSLINES}\",\"${NUM_SAMPLES}\",\"${STEP_SIZE}\",\"${RANGE_SIZE}\",\"${NUM_ITERATIONS}\",\"${ATTRIBUTES}\"" >>"${expected_output_dir}/input.csv"
+    echo "Number of Inlines, Number of Crosslines, Number of Samples, Step Size, Range Size, Number of Iterations, Precision, Attributes" >"${expected_output_dir}/input.csv"
+    echo "\"${NUM_INLINES}\",\"${NUM_CROSSLINES}\",\"${NUM_SAMPLES}\",\"${STEP_SIZE}\",\"${RANGE_SIZE}\",\"${NUM_ITERATIONS}\",\"${PRECISION}\",\"${ATTRIBUTES}\"" >>"${expected_output_dir}/input.csv"
     echo
 }
 
@@ -83,6 +86,7 @@ function run_experiment {
         EXPERIMENT_OUTPUT_DIR="${OUTPUT_DIR}" \
         EXPERIMENT_NUM_ITERATIONS="${NUM_ITERATIONS}" \
         EXPERIMENT_ATTRIBUTES="${ATTRIBUTES}" \
+        EXPERIMENT_PRECISION="${PRECISION}" \
         EXPERIMENT_LOGGING_LEVEL="${LOG_LEVEL}" \
         python experiment/evaluate.py
     echo

@@ -9,7 +9,7 @@ from ..core import (
     build_report,
     save_report,
     join_path,
-    align_tuples,
+    full_function_name,
     ReportLine,
 )
 from ..contexts import config
@@ -25,8 +25,9 @@ get_report_suffix = config.lazy_get("profiler.time.report.suffix")
 
 
 @curry
-def report_time(function_name: str, time_log: TimeLog) -> str:
+def report_time(function: Callable, time_log: TimeLog) -> str:
     logger = get_logger()
+    function_name = full_function_name(function)
     logger.debug(f"Building report for function {function_name}")
 
     custom_headers = [
@@ -75,7 +76,7 @@ def profile(function: Callable) -> Callable:
         f'Setting up execution time profiler for function "{function.__name__}"'
     )
 
-    report_function_results = report_time(function.__name__)
+    report_function_results = report_time(function)
 
     @wraps(function)
     def wrapper(*args, **kwargs) -> Any:

@@ -1,4 +1,5 @@
 from toolz import curry
+from typing import Callable
 
 
 def convert_to(unit_to: str, unit_from: str, value: float) -> float:
@@ -66,4 +67,14 @@ def deep_merge(old_dict: dict, new_dict: dict) -> dict:
     return merged
 
 
-__all__ = ["convert_to", "format_float", "align_tuples", "deep_merge"]
+def full_function_name(function: Callable) -> str:
+    return f"{function.__module__}.{function.__name__}"
+
+
+__all__ = [
+    "convert_to",
+    "format_float",
+    "align_tuples",
+    "deep_merge",
+    "full_function_name",
+]
