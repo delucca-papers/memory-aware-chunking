@@ -1,5 +1,6 @@
 from typing import Any
 from dasf_seismic.transforms.transforms import Transform
+from dowser.core import get_logger
 
 
 def run_attribute(
@@ -8,6 +9,9 @@ def run_attribute(
     n_workers: int = 1,
     single_threaded: bool = True,
 ):
+    logger = get_logger()
+    logger.debug(f"Running attribute {attribute.__qualname__}")
+
     if single_threaded:
         return __run_single_threaded(attribute, input)
     else:

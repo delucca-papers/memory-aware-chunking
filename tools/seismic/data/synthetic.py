@@ -4,6 +4,7 @@ import os
 
 from scipy.signal import convolve
 from typing import Literal
+from dowser.core import get_logger
 
 
 def build_dataset_paths(
@@ -15,6 +16,8 @@ def build_dataset_paths(
     output_dir: str,
     datasets_path: str = None,
 ) -> str:
+    logger = get_logger()
+
     dataset_paths = []
     datasets_dir = f"{output_dir}/data"
 
@@ -30,6 +33,8 @@ def build_dataset_paths(
             range_size,
             datasets_dir,
         )
+
+    logger.debug(f"Dataset paths: {dataset_paths}")
 
     return dataset_paths
 
@@ -50,6 +55,16 @@ def generate_and_save_for_range(
     range_size: int,
     output_dir: str,
 ) -> list[str]:
+    logger = get_logger()
+
+    logger.info(f"Generating synthetic data with the following parameters:")
+    logger.info(f"Number of inlines: {num_inlines}")
+    logger.info(f"Number of crosslines: {num_crosslines}")
+    logger.info(f"Number of samples: {num_samples}")
+    logger.info(f"Step size: {step_size}")
+    logger.info(f"Range size: {range_size}")
+    logger.info(f"Output directory: {output_dir}")
+
     varying_inlines = generate_varying_dimension(
         0,
         num_inlines,
@@ -102,6 +117,11 @@ def generate_and_save_synthetic_data(
     length: int = 250,
     output_dir: str = "/tmp/synthetic_seismic_data",
 ) -> str:
+    logger = get_logger()
+    logger.debug(
+        f"Generating synthetic data for shape ({num_inlines}, {num_crosslines}, {num_samples})"
+    )
+
     reflectivity = np.random.rand(num_samples) * 2 - 1
     wavelet = __ricker_wavelet(frequency, length, dt)
     filename = f"{num_inlines}-{num_crosslines}-{num_samples}.segy"

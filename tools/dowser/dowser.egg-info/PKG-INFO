@@ -1,0 +1,31 @@
+Metadata-Version: 2.1
+Name: dowser
+Version: 0.1.0
+Summary: Dowser simplifies profiling and modeling the memory usage of Python programs.
+Home-page: http://github.com/delucca/dowser
+Author: Daniel De Lucca Fonseca
+Author-email: daniel@delucca.dev
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: GNU General Public License v3 (GPLv3)
+Classifier: Operating System :: OS Independent
+Requires-Python: >=3.10
+Description-Content-Type: text/markdown
+License-File: LICENSE
+
+# Dowser
+
+TODO
+
+## Installation
+
+TODO
+
+### With Docker
+
+To run the Dowser in a Docker container, you can use the following command:
+
+```bash
+docker build -t dowser .
+```
+
+After this, you can extend or run the `dowser` container with the `dowser` Python library already installed.
