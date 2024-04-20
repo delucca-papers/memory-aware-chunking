@@ -37,7 +37,7 @@ function main {
     run_with_backend "tracemalloc"
     run_with_backend "kernel"
 
-    #summarize_experiment
+    summarize_experiment
 }
 
 function save_input {
@@ -67,7 +67,9 @@ function run_with_backend {
 
 function summarize_experiment {
     echo "Summarizing experiment..."
-    python experiment/summarize.py
+    EXPERIMENT_OUTPUT_DIR="${OUTPUT_DIR}/${TIMESTAMP}" \
+        EXPERIMENT_UNIT="${UNIT}" \
+        python experiment/summarize.py
 }
 
 main

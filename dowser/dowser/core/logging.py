@@ -78,8 +78,6 @@ def set_transports(logger: logging.Logger) -> logging.Logger:
     output_dir = get_output_dir()
     filename = get_filename()
 
-    print(output_dir)
-
     return compose(
         (
             set_file_transport(formatter, output_dir, filename)
