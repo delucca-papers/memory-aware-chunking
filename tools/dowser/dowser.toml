@@ -36,3 +36,6 @@ suffix = ""
 decimal_places = "2"
 zfill = "6"
 zfill_character = " "
+
+[model.collect]
+num_iterations = "5"

@@ -1,14 +1,12 @@
 import os
+import importlib
 
-from dowser import config
+from dowser import config, collect_profile
 from dowser.core.logging import get_logger
+from seismic.data.loaders import load_segy
 
 
-def run_experiment(
-    experiment_config: dict,
-    experiment_num_iterations: int,
-    experiment_attributes: list[str],
-) -> None:
+def run_experiment(experiment_config: dict, experiment_attributes: list[str]) -> None:
     config.update(experiment_config)
     logger = get_logger()
 
@@ -19,8 +17,27 @@ def run_experiment(
     logger.info(f"Running experiment with Execution ID: {execution_id}")
     logger.debug(f"Experiment configuration: {experiment_config}")
     logger.debug(f"Experiment attributes: {experiment_attributes}")
-    logger.debug(f"Number of iterations: {experiment_num_iterations}")
     logger.debug(f"Data directory: {experiment_data}")
+
+    inputs = __list_inputs(experiment_data)
+
+    for attribute in experiment_attributes:
+        logger.info(f"Starting experiment for attribute {attribute}")
+
+        attribute_module = importlib.import_module(f"seismic.attributes.{attribute}")
+        if not attribute_module or not hasattr(attribute_module, "run"):
+            logger.error(f"Attribute {attribute} does not exist")
+            continue
+
+        collect_profile(attribute_module.run, inputs, input_handler=load_segy)
+
+        logger.info(f"Finished experiment with attribute {attribute}")
+
+    logger.info("Finished executing experiment")
+
+
+def __list_inputs(data_dir: str) -> list[str]:
+    return [os.path.join(data_dir, filename) for filename in os.listdir(data_dir)]
 
 
 if __name__ == "__main__":
@@ -36,10 +53,11 @@ if __name__ == "__main__":
         "logging": {
             "level": experiment_logging_level,
         },
+        "model": {
+            "collect": {
+                "num_iterations": experiment_num_iterations,
+            }
+        },
     }
 
-    run_experiment(
-        experiment_config,
-        experiment_num_iterations,
-        experiment_attributes,
-    )
+    run_experiment(experiment_config, experiment_attributes)

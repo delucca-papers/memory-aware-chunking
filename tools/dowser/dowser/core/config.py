@@ -46,6 +46,11 @@ class Config:
                 },
             },
         },
+        "model": {
+            "collect": {
+                "num_iterations": "5",
+            }
+        },
     }
 
     def __init__(
