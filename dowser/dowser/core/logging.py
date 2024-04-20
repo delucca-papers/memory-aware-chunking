@@ -7,6 +7,7 @@ from logging.handlers import RotatingFileHandler
 from toolz import compose, curry, identity
 from .config import config
 
+get_execution_id = config.lazy_get("execution_id")
 get_output_dir = config.lazy_get("output_dir")
 get_filename = config.lazy_get("logging.filename")
 get_transports = config.lazy_get("logging.transports")
@@ -57,10 +58,11 @@ def set_console_transport(
 def set_file_transport(
     formatter: logging.Formatter,
     output_dir: str,
+    execution_id: str,
     filename: str,
     logger: logging.Logger,
 ) -> logging.Logger:
-    log_filepath = os.path.join(output_dir, filename)
+    log_filepath = os.path.join(output_dir, execution_id, filename)
     file_handler = RotatingFileHandler(
         log_filepath,
         maxBytes=10485760,
@@ -75,12 +77,13 @@ def set_file_transport(
 def set_transports(logger: logging.Logger) -> logging.Logger:
     transports = get_transports()
     formatter = get_formatter()
+    execution_id = get_execution_id()
     output_dir = get_output_dir()
     filename = get_filename()
 
     return compose(
         (
-            set_file_transport(formatter, output_dir, filename)
+            set_file_transport(formatter, output_dir, execution_id, filename)
             if "file" in transports
             else identity
         ),
