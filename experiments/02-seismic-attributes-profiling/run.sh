@@ -22,7 +22,7 @@ NUM_INLINES="10"
 NUM_CROSSLINES="10"
 NUM_SAMPLES="10"
 STEP_SIZE="10"
-RANGE_SIZE="4"
+RANGE_SIZE="2"
 NUM_ITERATIONS="2"
 ATTRIBUTES="envelope"
 OUTPUT_DIR="${SCRIPT_DIR}/output"
@@ -47,7 +47,7 @@ function main {
     save_input
 
     generate_synthetic_data
-    #run_experiment
+    run_experiment
 
     #summarize_experiment
 }
@@ -79,7 +79,12 @@ function generate_synthetic_data {
 
 function run_experiment {
     echo "Running experiment..."
-    python experiment/evaluate.py
+    EXPERIMENT_EXECUTION_ID="${EXECUTION_ID}" \
+        EXPERIMENT_OUTPUT_DIR="${OUTPUT_DIR}" \
+        EXPERIMENT_NUM_ITERATIONS="${NUM_ITERATIONS}" \
+        EXPERIMENT_ATTRIBUTES="${ATTRIBUTES}" \
+        EXPERIMENT_LOGGING_LEVEL="${LOG_LEVEL}" \
+        python experiment/evaluate.py
     echo
 }
 

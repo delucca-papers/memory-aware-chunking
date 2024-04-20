@@ -33,6 +33,8 @@ def generate_data(
         data_dir,
     )
 
+    logger.info(f"Finished generating synthetic data. Data stored on: {data_dir}")
+
 
 if __name__ == "__main__":
     experiment_execution_id = os.environ.get("EXPERIMENT_EXECUTION_ID")
