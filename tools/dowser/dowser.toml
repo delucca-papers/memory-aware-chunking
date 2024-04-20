@@ -25,7 +25,7 @@ prefix = ""
 suffix = ""
 
 [profiler.memory_usage]
-backend = "kernel"
+backend = "mprof"
 precision = "4"
 
 [profiler.memory_usage.report]

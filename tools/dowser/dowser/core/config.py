@@ -33,7 +33,7 @@ class Config:
                 },
             },
             "memory_usage": {
-                "backend": "kernel",
+                "backend": "mprof",
                 "precision": "4",
                 "report": {
                     "unit": "mb",
