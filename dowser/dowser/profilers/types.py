@@ -5,4 +5,7 @@ MemoryUsageLog = list[MemoryUsage]
 MemoryUsageWrappedResult = tuple[MemoryUsageLog, ...]
 MemoryUsageWrapper = Callable[..., MemoryUsageWrappedResult]
 
-__all__ = ["MemoryUsageWrapper", "MemoryUsageLog", "MemoryUsage"]
+Time = tuple[str, float]
+TimeLog = list[Time]
+
+__all__ = ["MemoryUsageWrapper", "MemoryUsageLog", "MemoryUsage", "TimeLog", "Time"]

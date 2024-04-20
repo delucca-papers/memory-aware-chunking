@@ -3,7 +3,7 @@ import os
 
 from .types import Report, ReportHeaderList, ReportLine
 from .config import config
-from .file_handling import add_prefix_to_file_in_path, add_ext, join_path
+from .file_handling import add_ext, join_path
 from .transformers import align_tuples
 from .logging import get_logger
 
@@ -63,7 +63,7 @@ def save_report(report: Report, relative_path: str) -> None:
 
     if should_prepend_timestamp:
         timestamp = time.strftime("%Y%m%d%H%M%S")
-        relative_path = add_prefix_to_file_in_path(timestamp, relative_path)
+        relative_path = f"{relative_path}-{timestamp}"
 
     relative_path = add_ext("dat", relative_path)
     absolute_path = join_path(relative_path, execution_output_dir)

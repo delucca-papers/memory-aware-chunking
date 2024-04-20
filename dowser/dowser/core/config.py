@@ -24,10 +24,10 @@ class Config:
         },
         "profiler": {
             "output_dir": "profiler",
-            "enabled_profilers": "execution_time,memory_usage",
-            "execution_time": {
+            "enabled_profilers": "time,memory_usage",
+            "time": {
                 "report": {
-                    "filename": "execution-time",
+                    "filename": "time",
                     "prefix": "",
                     "suffix": "",
                 },

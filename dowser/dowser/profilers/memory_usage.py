@@ -11,8 +11,8 @@ from ..core import (
     build_report,
     save_report,
     join_path,
-    ReportLine,
     config,
+    ReportLine,
 )
 from .types import MemoryUsageLog, MemoryUsage
 
@@ -136,7 +136,7 @@ def profile(function: Callable) -> Callable:
         logger.debug(f"Profiler results: {profiler_results}")
         report_function_results(profiler_results)
 
-        logger.info(f"Finished memory profiler for function {function.__name__}")
+        logger.info(f"Finished memory usage profiler for function {function.__name__}")
 
         return function_results
 

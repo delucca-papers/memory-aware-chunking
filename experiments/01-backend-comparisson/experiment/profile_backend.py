@@ -24,6 +24,11 @@ if __name__ == "__main__":
             "metadata": input_metadata,
         },
         "profiler": {
+            "time": {
+                "report": {
+                    "suffix": f"-{experiment_backend_name}",
+                },
+            },
             "memory_usage": {
                 "backend": experiment_backend_name,
                 "report": {

@@ -17,10 +17,10 @@ prepend_timestamp = "true"
 
 [profiler]
 output_dir = "profiler"
-enabled_profilers = "execution_time,memory_usage"
+enabled_profilers = "time,memory_usage"
 
-[profiler.execution_time.report]
-filename = "execution-time"
+[profiler.time.report]
+filename = "time"
 prefix = ""
 suffix = ""
 
