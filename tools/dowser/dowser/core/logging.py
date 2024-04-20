@@ -4,8 +4,8 @@ import inspect
 
 from logging import StreamHandler
 from logging.handlers import RotatingFileHandler
-from toolz import compose, curry, identity
-from .config import config
+from toolz import compose, curry, identity, memoize
+from ..contexts import config
 
 get_execution_id = config.lazy_get("execution_id")
 get_output_dir = config.lazy_get("output_dir")
@@ -93,10 +93,12 @@ def set_transports(logger: logging.Logger) -> logging.Logger:
 ###
 
 
-get_logger = compose(
-    set_transports,
-    set_level,
-    get_named_logger,
+get_logger = memoize(
+    compose(
+        set_transports,
+        set_level,
+        get_named_logger,
+    )
 )
 
 

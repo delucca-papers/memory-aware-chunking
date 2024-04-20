@@ -1,4 +1,3 @@
-from .config import *
 from .file_handling import *
 from .logging import *
 from .report import *

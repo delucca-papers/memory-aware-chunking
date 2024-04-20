@@ -3,11 +3,12 @@ import uuid
 import toml
 
 from typing import Any
-from .transformers import deep_merge
+from ..core.transformers import deep_merge
+from .base import Context
 
 
-class Config:
-    __data: dict = {
+class Config(Context):
+    _data: dict = {
         "execution_id": str(uuid.uuid4()),
         "output_dir": "./dowser",
         "logging": {
@@ -58,30 +59,9 @@ class Config:
         config: dict = {},
         config_file: str = os.environ.get("DOWSER_CONFIG_FILE", "dowser.toml"),
     ):
-        self.__data = deep_merge(self.__data, config)
+        super().__init__(config)
         self.__load_config_file(config_file)
         self.__override_with_env()
-
-    def get(self, path: str, type: Any = None) -> Any:
-        path_parts = path.split(".")
-        value = self.__data
-
-        for key in path_parts:
-            if key in value:
-                value = value[key]
-            else:
-                return None
-
-        if type:
-            value = type(value)
-
-        return value
-
-    def lazy_get(self, path: str, *args, **kwargs):
-        return lambda: self.get(path, *args, **kwargs)
-
-    def update(self, new_config: dict) -> None:
-        self.__data = deep_merge(self.__data, new_config)
 
     def __load_config_file(self, config_file: str) -> None:
         try:
@@ -93,7 +73,7 @@ class Config:
         self.update(loaded_config)
 
     def __override_with_env(self, config: dict | None = None, parent_key: str = ""):
-        config = config or self.__data
+        config = config or self._data
 
         for key, value in config.items():
             env_var = (parent_key + "_" + key if parent_key else key).upper()

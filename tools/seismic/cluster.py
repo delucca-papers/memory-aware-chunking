@@ -10,7 +10,7 @@ def run_attribute(
     single_threaded: bool = True,
 ):
     logger = get_logger()
-    logger.debug(f"Running attribute {attribute.__qualname__}")
+    logger.debug(f"Running attribute {attribute.__class__.__name__}")
 
     if single_threaded:
         return __run_single_threaded(attribute, input)

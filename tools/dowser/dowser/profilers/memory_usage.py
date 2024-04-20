@@ -11,9 +11,9 @@ from ..core import (
     build_report,
     save_report,
     join_path,
-    config,
     ReportLine,
 )
+from ..contexts import config
 from .types import MemoryUsageLog, MemoryUsage
 
 get_profiler_dir = config.lazy_get("profiler.output_dir")

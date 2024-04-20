@@ -5,7 +5,6 @@ from functools import wraps
 from toolz import curry, compose
 from toolz.curried import map
 from ..core import (
-    config,
     get_logger,
     build_report,
     save_report,
@@ -13,6 +12,7 @@ from ..core import (
     align_tuples,
     ReportLine,
 )
+from ..contexts import config
 from .types import TimeLog, Time
 
 get_profiler_dir = config.lazy_get("profiler.output_dir")

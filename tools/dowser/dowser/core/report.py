@@ -1,8 +1,9 @@
 import time
 import os
 
+from toolz import compose, identity
+from ..contexts import config, report_context
 from .types import Report, ReportHeaderList, ReportLine
-from .config import config
 from .file_handling import add_ext, join_path
 from .transformers import align_tuples
 from .logging import get_logger
@@ -11,6 +12,7 @@ get_execution_id = config.lazy_get("execution_id")
 get_output_dir = config.lazy_get("output_dir")
 get_input_metadata = config.lazy_get("input.metadata")
 get_prepend_timestamp = lambda: config.get("report.prepend_timestamp").lower() == "true"
+get_group = report_context.lazy_get("group")
 
 
 ###
@@ -36,8 +38,25 @@ def build_data_text(data: list[ReportLine]) -> str:
 def get_execution_output_dir() -> str:
     output_dir = get_output_dir()
     execution_id = get_execution_id()
+    group = get_group()
 
-    return join_path(execution_id, output_dir)
+    return compose(
+        join_path(group) if group else identity,
+        join_path(execution_id),
+    )(output_dir)
+
+
+def get_absolute_path(relative_path: str) -> str:
+    should_prepend_timestamp = get_prepend_timestamp()
+    execution_output_dir = get_execution_output_dir()
+
+    if should_prepend_timestamp:
+        timestamp = time.strftime("%Y%m%d%H%M%S")
+        relative_path = f"{relative_path}-{timestamp}"
+
+    relative_path = add_ext("dat", relative_path)
+
+    return join_path(relative_path, execution_output_dir)
 
 
 ###
@@ -58,15 +77,7 @@ def build_report(custom_headers: ReportHeaderList, data: ReportLine) -> Report:
 
 def save_report(report: Report, relative_path: str) -> None:
     logger = get_logger()
-    should_prepend_timestamp = get_prepend_timestamp()
-    execution_output_dir = get_execution_output_dir()
-
-    if should_prepend_timestamp:
-        timestamp = time.strftime("%Y%m%d%H%M%S")
-        relative_path = f"{relative_path}-{timestamp}"
-
-    relative_path = add_ext("dat", relative_path)
-    absolute_path = join_path(relative_path, execution_output_dir)
+    absolute_path = get_absolute_path(relative_path)
 
     logger.info(f"Saving report to {absolute_path}")
 

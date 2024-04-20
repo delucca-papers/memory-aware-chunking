@@ -1,6 +1,7 @@
 from typing import Callable
 from toolz import compose, identity
-from .core import config, get_logger
+from .core import get_logger
+from .contexts import config
 from .profilers import time, memory_usage
 
 get_enabled_profilers = config.lazy_get("profiler.enabled_profilers")

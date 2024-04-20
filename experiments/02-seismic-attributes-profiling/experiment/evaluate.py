@@ -29,7 +29,12 @@ def run_experiment(experiment_config: dict, experiment_attributes: list[str]) ->
             logger.error(f"Attribute {attribute} does not exist")
             continue
 
-        collect_profile(attribute_module.run, inputs, input_handler=load_segy)
+        collect_profile(
+            attribute_module.run,
+            inputs,
+            input_handler=load_segy,
+            group_name=attribute,
+        )
 
         logger.info(f"Finished experiment with attribute {attribute}")
 
