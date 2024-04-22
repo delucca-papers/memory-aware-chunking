@@ -32,7 +32,9 @@ def build_header_text(header: ReportHeaderList) -> str:
 
 
 def build_data_text(data: list[ReportLine]) -> str:
-    return "\n".join(["\t".join([first, second]) for first, second in data])
+    aligned_data = align_tuples(data)
+
+    return "\n".join(["\t".join([first, second]) for first, second in aligned_data])
 
 
 def get_execution_output_dir() -> str:

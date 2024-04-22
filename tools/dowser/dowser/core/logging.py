@@ -34,11 +34,27 @@ def get_function_path() -> str:
     return f"{module_name}.{function_name}"
 
 
-@curry
 def set_level(logger: logging.Logger) -> logging.Logger:
     level = get_log_level()
     logger.setLevel(level.upper())
     return logger
+
+
+def set_transports(logger: logging.Logger) -> logging.Logger:
+    transports = get_transports()
+    formatter = get_formatter()
+    execution_id = get_execution_id()
+    output_dir = get_output_dir()
+    filename = get_filename()
+
+    return compose(
+        (
+            set_file_transport(formatter, output_dir, execution_id, filename)
+            if "file" in transports
+            else identity
+        ),
+        set_console_transport(formatter) if "console" in transports else identity,
+    )(logger)
 
 
 @curry
@@ -72,33 +88,20 @@ def set_file_transport(
 
     return logger
 
-
-def set_transports(logger: logging.Logger) -> logging.Logger:
-    transports = get_transports()
-    formatter = get_formatter()
-    execution_id = get_execution_id()
-    output_dir = get_output_dir()
-    filename = get_filename()
-
-    return compose(
-        (
-            set_file_transport(formatter, output_dir, execution_id, filename)
-            if "file" in transports
-            else identity
-        ),
-        set_console_transport(formatter) if "console" in transports else identity,
-    )(logger)
+setup_logger = memoize(
+    compose(
+        set_transports,
+        set_level,
+    ),
+)
 
 
 ###
 
 
-get_logger = memoize(
-    compose(
-        set_transports,
-        set_level,
-        get_named_logger,
-    )
+get_logger = compose(
+    setup_logger,
+    get_named_logger,
 )
 
 

@@ -52,7 +52,7 @@ function main {
     generate_synthetic_data
     run_experiment
 
-    #summarize_experiment
+    summarize_experiment
 }
 
 function save_input {
@@ -94,7 +94,9 @@ function run_experiment {
 
 function summarize_experiment {
     echo "Summarizing experiment..."
-    python experiment/summarize.py
+    EXPERIMENT_OUTPUT_DIR="${OUTPUT_DIR}" \
+        EXPERIMENT_EXECUTION_ID="${EXECUTION_ID}" \
+        python experiment/summarize.py
 }
 
 main
