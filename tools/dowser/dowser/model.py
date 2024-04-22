@@ -44,7 +44,7 @@ def collect_profile(
             metadata = input_metadata.get(input_data)
             if metadata:
                 logger.debug(f"Metadata: {metadata}")
-                config.update({"input": {"metadata": metadata}})
+                config.update({"report": {"metadata": {"input": metadata}}})
             run_in_process(profiled_function, input_data)
 
     logger.info(f'Profile collection for "{group_name}" completed')

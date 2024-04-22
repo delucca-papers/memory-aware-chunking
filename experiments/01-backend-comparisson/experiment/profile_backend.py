@@ -32,8 +32,10 @@ if __name__ == "__main__":
         "logging": {
             "level": experiment_logging_level,
         },
-        "input": {
-            "metadata": input_metadata,
+        "report": {
+            "metadata": {
+                "input": input_metadata,
+            },
         },
         "profiler": {
             "time": {

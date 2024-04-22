@@ -43,17 +43,6 @@ def format_float(
     return formatted.rjust(zfill + decimal_places, zfill_character)
 
 
-def align_tuples(tuples: list[tuple]) -> list[tuple]:
-    max_length = max(len(first) for first, _ in tuples)
-
-    formatted_tuples = []
-    for first, second in tuples:
-        padded_first = f"{first:{max_length}}\t"
-        formatted_tuples.append((padded_first, second))
-
-    return formatted_tuples
-
-
 @curry
 def deep_merge(old_dict: dict, new_dict: dict) -> dict:
     merged = dict(old_dict)
@@ -74,7 +63,6 @@ def full_function_name(function: Callable) -> str:
 __all__ = [
     "convert_to",
     "format_float",
-    "align_tuples",
     "deep_merge",
     "full_function_name",
 ]

@@ -8,12 +8,10 @@ from ..core import (
     convert_to,
     format_float,
     get_logger,
-    build_report,
-    save_report,
     join_path,
     full_function_name,
-    ReportLine,
 )
+from ..report import save_report, ReportData, ReportRow
 from ..contexts import config
 from .types import MemoryUsageLog, MemoryUsage
 
@@ -71,20 +69,19 @@ def report_memory_usage(function: Callable, profiler_results: MemoryUsageLog) ->
     precision = get_precision()
     backend = get_backend_name()
 
-    custom_headers = [
+    custom_metadata = [
         ("Backend", backend),
         ("Precision", f"{str(precision)} seconds"),
         ("Function", function_name),
     ]
 
     data = process_results(profiler_results)
-    report = build_report(custom_headers, data)
     report_path = build_report_path()
 
-    save_report(report, report_path)
+    save_report(data, report_path, custom_metadata=custom_metadata)
 
 
-def process_results(profiler_results: MemoryUsageLog) -> list[ReportLine]:
+def process_results(profiler_results: MemoryUsageLog) -> ReportData:
     return compose(
         list,
         map(process_result_line),
@@ -92,7 +89,7 @@ def process_results(profiler_results: MemoryUsageLog) -> list[ReportLine]:
 
 
 @curry
-def process_result_line(result: MemoryUsage) -> ReportLine:
+def process_result_line(result: MemoryUsage) -> ReportRow:
     memory_usage, unit = result
     report_unit = get_report_unit()
     decimal_places = get_report_decimal_places()

@@ -9,11 +9,11 @@ level = "info"
 transports = "console,file"
 format = "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
 
-[input]
-metadata = ""
-
 [report]
-prepend_timestamp = "true"
+append_timestamp = "true"
+
+[report.metadata]
+input = ""
 
 [profiler]
 output_dir = "profiler"

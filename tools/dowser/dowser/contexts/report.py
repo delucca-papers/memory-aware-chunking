@@ -1,4 +1,3 @@
-from logging import Logger
 from ..core.transformers import deep_merge
 from .base import Context
 

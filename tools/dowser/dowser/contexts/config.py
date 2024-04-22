@@ -2,8 +2,6 @@ import os
 import uuid
 import toml
 
-from typing import Any
-from ..core.transformers import deep_merge
 from .base import Context
 
 
@@ -18,10 +16,10 @@ class Config(Context):
             "format": "%(asctime)s - %(name)s - %(levelname)s - %(message)s",
         },
         "report": {
-            "prepend_timestamp": "true",
-        },
-        "input": {
-            "metadata": "",
+            "append_timestamp": "true",
+            "metadata": {
+                "input": "",
+            },
         },
         "profiler": {
             "output_dir": "profiler",

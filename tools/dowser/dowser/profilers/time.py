@@ -6,12 +6,10 @@ from toolz import curry, compose
 from toolz.curried import map
 from ..core import (
     get_logger,
-    build_report,
-    save_report,
     join_path,
     full_function_name,
-    ReportLine,
 )
+from ..report import save_report, ReportData, ReportRow
 from ..contexts import config
 from .types import TimeLog, Time
 
@@ -30,18 +28,17 @@ def report_time(function: Callable, time_log: TimeLog) -> str:
     function_name = full_function_name(function)
     logger.debug(f"Building report for function {function_name}")
 
-    custom_headers = [
+    custom_metadata = [
         ("Function", function_name),
     ]
 
     data = process_results(time_log)
-    report = build_report(custom_headers, data)
     report_path = build_report_path()
 
-    save_report(report, report_path)
+    save_report(data, report_path, custom_metadata=custom_metadata)
 
 
-def process_results(time_log: TimeLog) -> list[ReportLine]:
+def process_results(time_log: TimeLog) -> ReportData:
     return compose(
         list,
         map(process_result_line),
@@ -49,7 +46,7 @@ def process_results(time_log: TimeLog) -> list[ReportLine]:
 
 
 @curry
-def process_result_line(result: Time) -> ReportLine:
+def process_result_line(result: Time) -> ReportRow:
     unit = "SECONDS"
     event, time = result
 
