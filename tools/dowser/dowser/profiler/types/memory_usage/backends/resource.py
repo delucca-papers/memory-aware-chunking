@@ -2,11 +2,13 @@ import time
 import resource
 
 from typing import Callable, Any
-from toolz import compose
+from toolz import compose, curry
 from functools import wraps
+from dowser.common import get_function_path
 from dowser.logger import get_logger
 from dowser.core import build_parallelized_profiler
 from dowser.profiler.context import profiler_context
+from ....report import ProfilerReport
 from ..types import MemoryUsageRecord
 
 
@@ -30,14 +32,21 @@ resource_profiler = build_parallelized_profiler(
 )
 
 
-def profile_memory_usage(function: Callable) -> Callable:
+@curry
+def profile_memory_usage(report: ProfilerReport, function: Callable) -> Callable:
     logger = get_logger()
     logger.info(
-        f'Setting up psutil memory usage profiler for function "{function.__name__}"'
+        f'Setting up resource memory usage profiler for function "{function.__name__}"'
     )
 
     pid = profiler_context.session_pid
     precision = profiler_context.memory_usage_precision
+
+    metadata = {
+        "backend": "resource",
+        "precision": precision,
+        "function_path": get_function_path(function),
+    }
 
     @wraps(function)
     def wrapper(*args, **kwargs) -> Any:
@@ -53,6 +62,8 @@ def profile_memory_usage(function: Callable) -> Callable:
         memory_usage_profile = get_memory_usage_profile()
         logger.debug(f"Amount of collected profile points: {len(memory_usage_profile)}")
         logger.debug(f"Sample data point: {memory_usage_profile[0]}")
+
+        report.add_profile("memory_usage", memory_usage_profile, metadata)
 
         return result
 

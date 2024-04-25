@@ -1,10 +1,12 @@
 from typing import Callable, Any
 from functools import wraps
-from toolz import compose
+from toolz import compose, curry
 from toolz.curried import map
 from memory_profiler import memory_usage
+from dowser.common import get_function_path
 from dowser.logger import get_logger
 from dowser.profiler.context import profiler_context
+from ....report import ProfilerReport
 from ..types import MemoryUsageRecord
 
 
@@ -18,14 +20,21 @@ def to_memory_usage_record(mprof_result: tuple[float, float]) -> MemoryUsageReco
 to_memory_usage_log = compose(list, map(to_memory_usage_record))
 
 
-def profile_memory_usage(function: Callable) -> Callable:
+@curry
+def profile_memory_usage(report: ProfilerReport, function: Callable) -> Callable:
     logger = get_logger()
     logger.info(
-        f'Setting up psutil memory usage profiler for function "{function.__name__}"'
+        f'Setting up mprof memory usage profiler for function "{function.__name__}"'
     )
 
     pid = profiler_context.session_pid
     precision = profiler_context.memory_usage_precision
+
+    metadata = {
+        "backend": "mprof",
+        "precision": precision,
+        "function_path": get_function_path(function),
+    }
 
     @wraps(function)
     def profiled_function(*args, **kwargs) -> Any:
@@ -45,7 +54,7 @@ def profile_memory_usage(function: Callable) -> Callable:
         logger.debug(f"Amount of collected profile points: {len(memory_usage_log)}")
         logger.debug(f"Sample data point: {memory_usage_log[0]}")
 
-        profiler_result = [(memory_usage, "MB") for memory_usage in memory_usage_log]
+        report.add_profile("memory_usage", memory_usage_log, metadata)
 
         return result
 

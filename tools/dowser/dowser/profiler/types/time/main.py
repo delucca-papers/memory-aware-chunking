@@ -2,7 +2,10 @@ import time
 
 from typing import Callable, Any
 from functools import wraps
+from toolz import curry
+from dowser.common import get_function_path
 from dowser.logger import get_logger
+from ...report import ProfilerReport
 from .types import TimeLog
 
 
@@ -15,9 +18,14 @@ def to_time_log(start_time: float, end_time: float) -> TimeLog:
     ]
 
 
-def profile_time(function: Callable) -> Callable:
+@curry
+def profile_time(report: ProfilerReport, function: Callable) -> Callable:
     logger = get_logger()
     logger.info(f'Setting up time profiler for function "{function.__name__}"')
+
+    metadata = {
+        "function_path": get_function_path(function),
+    }
 
     @wraps(function)
     def wrapper(*args, **kwargs) -> Any:
@@ -29,6 +37,8 @@ def profile_time(function: Callable) -> Callable:
         logger.debug(f"Amount of collected profile points: {len(time_profile)}")
         logger.debug(f"Sample data point: {time_profile[0]}")
         logger.debug(f"Total execution time: {time_profile[-1][1]}s")
+
+        report.add_profile("time", time_profile, metadata)
 
         return result
 

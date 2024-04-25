@@ -1,11 +1,13 @@
 from typing import Callable
-from toolz import compose, identity
+from toolz import compose, identity, curry
 from dowser.logger import get_logger
 from dowser.profiler.context import profiler_context
+from ...report import ProfilerReport
 from .backends import kernel, mprof, psutil, resource, tracemalloc
 
 
-def profile_memory_usage(function: Callable) -> Callable:
+@curry
+def profile_memory_usage(report: ProfilerReport, function: Callable) -> Callable:
     logger = get_logger()
     logger.info(f'Setting up memory usage profiler for function "{function.__name__}"')
 
@@ -13,12 +15,28 @@ def profile_memory_usage(function: Callable) -> Callable:
     logger.debug(f"Enabled memory usage backends: {enabled_backends}")
 
     return compose(
-        (kernel.profile_memory_usage if "kernel" in enabled_backends else identity),
-        (mprof.profile_memory_usage if "mprof" in enabled_backends else identity),
-        (psutil.profile_memory_usage if "psutil" in enabled_backends else identity),
-        (resource.profile_memory_usage if "resource" in enabled_backends else identity),
         (
-            tracemalloc.profile_memory_usage
+            kernel.profile_memory_usage(report)
+            if "kernel" in enabled_backends
+            else identity
+        ),
+        (
+            mprof.profile_memory_usage(report)
+            if "mprof" in enabled_backends
+            else identity
+        ),
+        (
+            psutil.profile_memory_usage(report)
+            if "psutil" in enabled_backends
+            else identity
+        ),
+        (
+            resource.profile_memory_usage(report)
+            if "resource" in enabled_backends
+            else identity
+        ),
+        (
+            tracemalloc.profile_memory_usage(report)
             if "tracemalloc" in enabled_backends
             else identity
         ),

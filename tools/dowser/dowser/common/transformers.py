@@ -10,7 +10,7 @@ def deep_merge(old_dict: dict, new_dict: dict) -> dict:
             merged[key] = deep_merge(old_dict[key], value)
         elif key in old_dict and isinstance(value, list):
             merged[key] = old_dict[key] + value
-        elif value:
+        else:
             merged[key] = value
 
     return merged
