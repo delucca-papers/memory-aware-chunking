@@ -1,41 +1,31 @@
 # This is a sample configuration file for Dowser
 
-execution_id = ""
-output_dir = "./dowser"
-
-[logging]
-filename = "dowser.log"
-level = "info"
-transports = "console,file"
+[logger]
+enabled_transports = "console,file"
 format = "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+level = "info"
 
-[report]
-append_timestamp = "true"
-
-[report.metadata]
-input = ""
+[logger.transports.file]
+filename = "dowser"
+output_dir = "./"
+max_bytes = "10485760"
+backup_count = "3"
 
 [profiler]
-output_dir = "profiler"
-enabled_profilers = "time,memory_usage"
+enabled_types = "memory_usage,time"
 
-[profiler.time.report]
-filename = "time"
+[profiler.session]
+id = ""
+
+[profiler.session.metadata]
+input = ""
+
+[profiler.report]
 prefix = ""
 suffix = ""
+output_dir = "./"
 
-[profiler.memory_usage]
-backend = "mprof"
+[profiler.types.memory_usage]
+enabled_backends = "psutil,resource,tracemalloc,mprof,kernel"
 precision = "4"
-
-[profiler.memory_usage.report]
 unit = "mb"
-filename = "memory-usage"
-prefix = ""
-suffix = ""
-decimal_places = "2"
-zfill = "6"
-zfill_character = " "
-
-[model.collect]
-num_iterations = "5"

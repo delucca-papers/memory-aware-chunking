@@ -1,29 +1,42 @@
 from typing import Callable, Any
-from multiprocessing import Process, Queue, Manager
+from multiprocessing import Process, Manager, Queue
+from threading import Event
+from toolz import curry
+from dowser.logger import get_logger
+from dowser.common import lazy
+from .synchronization import loop_until_sync, queue_to_list
 
 
-def run_in_process(function: Callable, *args, **kwargs) -> Any:
-    def target(queue: Queue) -> None:
-        try:
-            result = function(*args, **kwargs)
-        except Exception as e:
-            queue.put(e)
-        else:
-            queue.put(result)
+def get_result(process: Process, queue: Queue) -> list[Any]:
+    process.join()
+    return queue_to_list(queue)
 
-        return
+
+@curry
+def parallelized_profiler(
+    function: Callable,
+    precision: float,
+    *args,
+    **kwargs,
+) -> tuple[Callable, Event]:
+    logger = get_logger()
+    logger.debug(
+        f"Setting up multiprocessing parallelized profiler for function {function.__name__}"
+    )
 
     manager = Manager()
     queue = manager.Queue()
-    process = Process(target=target, args=(queue,))
+    sync_event = manager.Event()
+    process = Process(
+        target=loop_until_sync,
+        args=(function, sync_event, queue, precision, *args),
+        kwargs=kwargs,
+    )
     process.start()
-    process.join()
 
-    result = queue.get()
-    if isinstance(result, Exception):
-        raise result
+    result_handler = lazy(get_result)(process, queue)
 
-    return result
+    return result_handler, sync_event
 
 
-__all__ = ["run_in_process"]
+__all__ = ["parallelized_profiler"]

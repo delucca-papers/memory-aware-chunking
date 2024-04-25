@@ -1,24 +1,28 @@
 import os
 
-from dowser import profile, config
-from dowser.core.logging import get_logger
+from dowser import profile
+from dowser.logger import get_logger
+from dowser.profiler.context import profiler_context
+from dowser.logger.context import logger_context
 from tasks import consume_large_memory
 
 
 def run_experiment(experiment_config: dict) -> None:
-    config.update(experiment_config)
-    execution_id = config.get("execution_id")
+    logger_context.update(experiment_config.get("logger"))
+    profiler_context.update(experiment_config.get("profiler"))
+
+    execution_id = profiler_context.get("session.id")
 
     logger = get_logger()
-    logger.info(f"Starting experiment with Execution ID: {execution_id}")
+    logger.info(f"Starting experiment with Session ID: {execution_id}")
     logger.debug(f"Experiment config: {experiment_config}")
 
     profile(consume_large_memory)(experiment_num_elements)
 
 
 if __name__ == "__main__":
-    experiment_backend_name = os.environ.get("EXPERIMENT_BACKEND")
-    experiment_execution_id = os.environ.get("EXPERIMENT_EXECUTION_ID")
+    experiment_session_id = os.environ.get("EXPERIMENT_SESSION_ID")
+    experiment_backend_names = os.environ.get("EXPERIMENT_BACKEND_NAMES")
     experiment_num_elements = int(os.environ.get("EXPERIMENT_NUM_ELEMENTS", 1_000_000))
     experiment_output_dir = os.environ.get("EXPERIMENT_OUTPUT_DIR", "./output")
     experiment_unit = os.environ.get("EXPERIMENT_UNIT", "mb")
@@ -27,35 +31,30 @@ if __name__ == "__main__":
     input_metadata = f"num_elements={experiment_num_elements}"
 
     experiment_config = {
-        "execution_id": experiment_execution_id,
-        "output_dir": experiment_output_dir,
-        "logging": {
+        "logger": {
             "level": experiment_logging_level,
         },
-        "report": {
-            "metadata": {
-                "input": input_metadata,
-            },
-        },
         "profiler": {
-            "time": {
-                "report": {
-                    "suffix": f"-{experiment_backend_name}",
+            "session": {
+                "id": experiment_session_id,
+                "metadata": {
+                    "input": input_metadata,
                 },
             },
-            "memory_usage": {
-                "backend": experiment_backend_name,
-                "report": {
-                    "unit": experiment_unit,
-                    "suffix": f"-{experiment_backend_name}",
-                },
+            "report": {
+                "output_dir": experiment_output_dir,
+            },
+            "types": {
+                "memory_usage": {
+                    "enabled_backends": experiment_backend_names,
+                }
             },
         },
     }
 
-    if not experiment_backend_name:
+    if not experiment_backend_names:
         raise ValueError(
-            'You must provide a backend name on the "EXPERIMENT_BACKEND" environment variable'
+            'You must provide a backend name on the "EXPERIMENT_BACKEND_NAMES" environment variable'
         )
 
     run_experiment(experiment_config)

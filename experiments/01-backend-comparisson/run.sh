@@ -8,21 +8,21 @@ TIMESTAMP=$(date "+%Y%m%d_%H%M%S")
 # Input Parameters
 export NUM_ELEMENTS
 export OUTPUT_DIR
-export EXECUTION_ID
+export SESSION_ID
 export LOGGING_LEVEL
 export UNIT
 #
 # For development
 # NUM_ELEMENTS="100000"
-# OUTPUT_DIR="${SCRIPT_DIR}/output"
-# EXECUTION_ID="${TIMESTAMP}"
+# OUTPUT_DIR="${SCRIPT_DIR}/output/${TIMESTAMP}"
+# SESSION_ID="${TIMESTAMP}"
 # LOGGING_LEVEL="DEBUG"
 # UNIT="kb"
 #
 # For production
 NUM_ELEMENTS="10_000_000"
-OUTPUT_DIR="${SCRIPT_DIR}/output/"
-EXECUTION_ID="${TIMESTAMP}"
+OUTPUT_DIR="${SCRIPT_DIR}/output/${TIMESTAMP}"
+SESSION_ID="${TIMESTAMP}"
 LOGGING_LEVEL="DEBUG"
 UNIT="mb"
 #
@@ -31,11 +31,7 @@ UNIT="mb"
 function main {
     save_input
 
-    run_with_backend "psutil"
-    run_with_backend "resource"
-    run_with_backend "mprof"
-    run_with_backend "tracemalloc"
-    run_with_backend "kernel"
+    run_with_backend "psutil,resource,mprof,tracemalloc,kernel"
 
     summarize_experiment
 }
@@ -52,14 +48,14 @@ function save_input {
 }
 
 function run_with_backend {
-    local backend_name=$1
+    local backend_names=$1
 
-    echo "Running with ${backend_name} backend..."
-    EXPERIMENT_EXECUTION_ID="${TIMESTAMP}" \
+    echo "Running with ${backend_names} backend..."
+    EXPERIMENT_SESSION_ID="${TIMESTAMP}" \
         EXPERIMENT_OUTPUT_DIR="${OUTPUT_DIR}" \
         EXPERIMENT_UNIT="${UNIT}" \
         EXPERIMENT_LOGGING_LEVEL="${LOGGING_LEVEL}" \
-        EXPERIMENT_BACKEND="${backend_name}" \
+        EXPERIMENT_BACKEND_NAMES="${backend_names}" \
         EXPERIMENT_NUM_ELEMENTS="${NUM_ELEMENTS}" \
         python experiment/profile_backend.py
     echo
@@ -67,7 +63,7 @@ function run_with_backend {
 
 function summarize_experiment {
     echo "Summarizing experiment..."
-    EXPERIMENT_OUTPUT_DIR="${OUTPUT_DIR}/${TIMESTAMP}" \
+    EXPERIMENT_OUTPUT_DIR="${OUTPUT_DIR}" \
         EXPERIMENT_UNIT="${UNIT}" \
         python experiment/summarize.py
 }
