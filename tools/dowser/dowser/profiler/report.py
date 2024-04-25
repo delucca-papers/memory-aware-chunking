@@ -3,9 +3,10 @@ import os
 
 from io import TextIOWrapper
 from typing import Literal
-from toolz import identity, first, compose, second
+from toolz import identity, first, compose, second, curry
+from toolz.curried import map
 from dowser.logger import get_logger
-from dowser.common.transformers import convert_keys_to_camel_case
+from dowser.common.transformers import convert_keys_to_camel_case, convert_to
 from .context import profiler_context
 
 ProfilerType = Literal["time", "memory_usage"]
@@ -84,7 +85,33 @@ class ProfilerReport:
         }
 
     def __parse_memory_usage_profile(self, profile: dict) -> dict:
-        pass
+        profile_data = profile.get("data", [])
+        output_unit = self.__context.memory_usage_unit
+        parse_data = compose(list, map(self.__parse_memory_usage_record(output_unit)))
+
+        parsed_profile_data = parse_data(profile_data)
+
+        return {
+            "type": "memory_usage",
+            "metadata": {
+                **profile.get("metadata"),
+                "unit": output_unit,
+                "collected_data_points": len(parsed_profile_data),
+            },
+            "data": parsed_profile_data,
+        }
+
+    @curry
+    def __parse_memory_usage_record(
+        self,
+        output_unit: str,
+        record: tuple[int, float, str],
+    ) -> dict:
+        timestamp, memory_usage, unit = record
+        return {
+            "timestamp": timestamp,
+            "memory_usage": convert_to(output_unit, unit, memory_usage),
+        }
 
     def __filter_record_by_key(self, records: list, key: str) -> list:
         return list(filter(lambda r: r[0] == key, records))

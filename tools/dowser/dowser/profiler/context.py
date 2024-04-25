@@ -49,6 +49,10 @@ class ProfilerContext(Context):
         return 10 ** -int(self.get("types.memory_usage.precision"))
 
     @property
+    def memory_usage_unit(self) -> str:
+        return self.get("types.memory_usage.unit")
+
+    @property
     def session_pid(self) -> int:
         return self.get("session.pid")
 

@@ -23,6 +23,7 @@ def run_experiment(experiment_config: dict) -> None:
 if __name__ == "__main__":
     experiment_session_id = os.environ.get("EXPERIMENT_SESSION_ID")
     experiment_backend_names = os.environ.get("EXPERIMENT_BACKEND_NAMES")
+    experiment_precision = os.environ.get("EXPERIMENT_PRECISION")
     experiment_num_elements = int(os.environ.get("EXPERIMENT_NUM_ELEMENTS", 1_000_000))
     experiment_output_dir = os.environ.get("EXPERIMENT_OUTPUT_DIR", "./output")
     experiment_unit = os.environ.get("EXPERIMENT_UNIT", "mb")
@@ -47,6 +48,7 @@ if __name__ == "__main__":
             "types": {
                 "memory_usage": {
                     "enabled_backends": experiment_backend_names,
+                    "precision": experiment_precision,
                 }
             },
         },
