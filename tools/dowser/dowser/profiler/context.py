@@ -1,6 +1,7 @@
 import os
 
 from uuid import uuid4
+from datetime import datetime, timezone
 from dowser.common import Context
 
 
@@ -11,6 +12,9 @@ class ProfilerContext(Context):
         "session": {
             "id": str(uuid4()),
             "pid": os.getpid(),
+            "version": "0.1.0",
+            "start_time": None,
+            "end_time": None,
             "metadata": {
                 "input": "",
             },
@@ -44,6 +48,21 @@ class ProfilerContext(Context):
     @property
     def session_pid(self) -> int:
         return self.get("session.pid")
+
+    def __init__(
+        self,
+        initial_data: dict | None = None,
+    ):
+        super().__init__(initial_data=initial_data)
+        initial_data = initial_data or self._initial_data
+
+        self.start_session()
+
+    def start_session(self) -> None:
+        self.set("session.start_time", self.__get_current_time())
+
+    def __get_current_time(self) -> str:
+        return datetime.now(timezone.utc).isoformat()
 
 
 profiler_context = ProfilerContext()

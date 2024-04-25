@@ -38,6 +38,20 @@ class Context(ABC):
 
         return value
 
+    def set(self, path: str, value: Any) -> None:
+        path_parts = path.split(".")
+        final_key = path_parts[-1]
+        path_parts = path_parts[:-1]
+        data = self._data
+
+        for key in path_parts:
+            if key not in data:
+                data[key] = {}
+
+            data = data[key]
+
+        data[final_key] = value
+
     def update(self, new_data: dict) -> None:
         self._data = deep_merge(self._data, new_data)
 
