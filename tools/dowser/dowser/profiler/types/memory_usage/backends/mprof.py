@@ -9,7 +9,7 @@ from ..types import MemoryUsageRecord
 
 
 def to_memory_usage_record(mprof_result: tuple[float, float]) -> MemoryUsageRecord:
-    memory_usage, timestamp = mprof_result
+    timestamp, memory_usage = mprof_result
     unit = "mb"
 
     return memory_usage, timestamp, unit
