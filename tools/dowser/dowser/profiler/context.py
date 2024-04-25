@@ -52,6 +52,14 @@ class ProfilerContext(Context):
     def session_pid(self) -> int:
         return self.get("session.pid")
 
+    @property
+    def report_output_dir(self) -> str:
+        return self.get("report.output_dir")
+
+    @property
+    def session(self) -> dict:
+        return self.get("session")
+
     def __init__(
         self,
         initial_data: dict | None = None,

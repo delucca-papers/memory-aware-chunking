@@ -25,6 +25,7 @@ def profile_time(report: ProfilerReport, function: Callable) -> Callable:
 
     metadata = {
         "function_path": get_function_path(function),
+        "unit": "seconds",
     }
 
     @wraps(function)
