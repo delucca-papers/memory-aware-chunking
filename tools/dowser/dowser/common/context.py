@@ -55,6 +55,9 @@ class Context(ABC):
     def update(self, new_data: dict) -> None:
         self._data = deep_merge(self._data, new_data)
 
+    def as_dict(self) -> dict:
+        return self._data
+
     def __load_config_file(self, config_file: str) -> None:
         try:
             config_file = open(config_file, "r")

@@ -3,7 +3,7 @@ from functools import wraps
 from toolz import compose, curry
 from toolz.curried import map
 from memory_profiler import memory_usage
-from dowser.common import Report
+from dowser.common import Report, session_context
 from dowser.logger import get_logger
 from dowser.profiler.context import profiler_context
 from dowser.profiler.types import Metadata
@@ -30,7 +30,7 @@ def profile_memory_usage(
         f'Setting up mprof memory usage profiler for function "{function.__name__}"'
     )
 
-    pid = profiler_context.session_pid
+    pid = session_context.pid
     precision = profiler_context.memory_usage_precision
 
     metadata = {

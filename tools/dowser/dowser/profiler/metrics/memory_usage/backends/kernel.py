@@ -4,7 +4,7 @@ import inspect
 from typing import Callable, Any
 from toolz import compose, curry
 from functools import wraps
-from dowser.common import Report
+from dowser.common import Report, session_context
 from dowser.logger import get_logger
 from dowser.core import (
     get_line_with_keyword,
@@ -43,7 +43,7 @@ def profile_memory_usage(
         f'Setting up kernel memory usage profiler for function "{function.__name__}"'
     )
 
-    pid = profiler_context.session_pid
+    pid = session_context.pid
     precision = profiler_context.memory_usage_precision
     status_file = open(f"/proc/{pid}/status", "r")
 
@@ -56,7 +56,6 @@ def profile_memory_usage(
 
     @wraps(function)
     def wrapper(*args, **kwargs) -> Any:
-        print(" okkkkkk")
         logger.debug(
             f"Profiling memory usage of PID {pid} with precision of {precision}s"
         )

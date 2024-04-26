@@ -1,6 +1,6 @@
 import os
 
-from dowser.common import Context
+from dowser.common import Context, SessionContext, session_context, normalize_keys_case
 
 
 class LoggerContext(Context):
@@ -18,6 +18,7 @@ class LoggerContext(Context):
             }
         },
     }
+    __session_context: SessionContext
 
     @property
     def enabled_transports(self) -> list[str]:
@@ -45,7 +46,10 @@ class LoggerContext(Context):
 
     @property
     def transport_file_output_dir(self) -> str:
-        return self.get("transports.file.output_dir")
+        relative_output_dir = self.get("transports.file.output_dir")
+        session_folder = self.__session_context.output_dir
+
+        return os.path.join(session_folder, relative_output_dir)
 
     @property
     def transport_file_abspath(self) -> str:
@@ -55,6 +59,14 @@ class LoggerContext(Context):
         )
 
         return os.path.join(self.transport_file_output_dir, filename_with_ext)
+
+    def __init__(
+        self,
+        initial_data: dict = {},
+        session_context: SessionContext = session_context,
+    ):
+        super().__init__(initial_data=initial_data)
+        self.__session_context = normalize_keys_case(session_context)
 
 
 logger_context = LoggerContext()

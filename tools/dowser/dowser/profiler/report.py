@@ -6,46 +6,56 @@ from io import TextIOWrapper
 from logging import Logger
 from toolz import identity
 from dowser.logger import get_logger
-from dowser.common import normalize_keys_case, Report
+from dowser.common import normalize_keys_case, Report, session_context, SessionContext
 from .context import profiler_context, ProfilerContext
 from .types import ProfilerMetric, Profile, Log, Entries, Metadata
 from .metrics import to_memory_usage_profile, to_time_profile
 
 
 class ProfilerReport(Report):
-    __report_filename = "profiler-report.json"
     __logs: list[Log] = []
     __profiles: list[Profile]
-    __context: ProfilerContext
+    __profiler_context: ProfilerContext
+    __session_context: SessionContext
     __logger: Logger
 
     @classmethod
     def from_filepath(cls, filepath: str) -> "ProfilerReport":
         file = json.load(open(filepath, "r"))
-        context = copy.deepcopy(profiler_context)
-        context.update({"session": file.get("session", {})})
+        session_context = copy.deepcopy(session_context)
+        profiler_context = copy.deepcopy(profiler_context)
+
+        session_context.update(file.get("session", {}))
+        profiler_context.update(file.get("context", {}))
         profiles = file.get("profiles", [])
 
-        return cls(context, profiles)
+        return cls(session_context, profiler_context, profiles)
 
     @property
     def write_stream(self) -> TextIOWrapper:
-        filepath = os.path.join(
-            self.__context.report_output_dir, self.__report_filename
-        )
+        output_dir = self.output_dir
+        format = self.__profiler_context.report_format
+        filename = f"{self.__profiler_context.report_filename}.{format}"
+        filepath = os.path.join(output_dir, filename)
+
         return open(filepath, "w")
 
     @property
     def output_dir(self) -> str:
-        return self.__context.report_output_dir
+        relative_output_dir = self.__profiler_context.report_output_dir
+        session_folder = self.__session_context.output_dir
+
+        return os.path.join(session_folder, relative_output_dir)
 
     def __init__(
         self,
-        context: ProfilerContext = profiler_context,
+        session_context: SessionContext = session_context,
+        profiler_context: ProfilerContext = profiler_context,
         profiles: list[dict] = [],
     ):
         self.__logger = get_logger()
-        self.__context = normalize_keys_case(context)
+        self.__session_context = normalize_keys_case(session_context)
+        self.__profiler_context = normalize_keys_case(profiler_context)
         self.__profiles = normalize_keys_case(profiles)
 
     def add_log(
@@ -64,21 +74,33 @@ class ProfilerReport(Report):
 
     def save(self) -> None:
         self.__logger.info("Saving profiler report")
-        self.__context = profiler_context.close_session()
+        self.__session_context = session_context.close_session()
         if len(self.__logs) > 0:
             self.__parse_logs()
 
         os.makedirs(self.output_dir, exist_ok=True)
         report = self.__to_dict()
 
+        available_formats = {
+            "json": self.__save_as_json,
+        }
+
+        enabled_format = self.__profiler_context.report_format
+        format_handler = available_formats.get(enabled_format)
+        if not format_handler:
+            raise ValueError(f'Format "{enabled_format} not available')
+
+        return format_handler(report)
+
+    def get_profiles_by_metric(self, metric: str) -> Profile:
+        return list(filter(lambda x: x.get("metric") == metric, self.__profiles))
+
+    def __save_as_json(self, report: dict) -> None:
         json.dump(
             normalize_keys_case(report, to_case="camel"),
             self.write_stream,
             indent=4,
         )
-
-    def get_profiles_by_metric(self, metric: str) -> Profile:
-        return list(filter(lambda x: x.get("metric") == metric, self.__profiles))
 
     def __parse_logs(self) -> None:
         available_parsers = {
@@ -93,7 +115,7 @@ class ProfilerReport(Report):
         self.__logs = []
 
     def __parse_memory_usage_log(self, entries: Entries, metadata: Metadata) -> Profile:
-        output_unit = self.__context.memory_usage_unit
+        output_unit = self.__profiler_context.memory_usage_unit
         log_unit = metadata.get("unit")
 
         return {
@@ -113,7 +135,10 @@ class ProfilerReport(Report):
         }
 
     def __to_dict(self) -> dict:
-        return {"session": self.__context.session, "profiles": self.__profiles}
+        return {
+            "session": self.__session_context.as_dict(),
+            "profiles": self.__profiles,
+        }
 
 
 __all__ = ["ProfilerReport"]

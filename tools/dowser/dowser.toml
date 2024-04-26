@@ -1,5 +1,9 @@
 # This is a sample configuration file for Dowser
 
+[session]
+id = ""
+output_dir = "./"
+
 [logger]
 enabled_transports = "console,file"
 format = "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
@@ -7,20 +11,17 @@ level = "info"
 
 [logger.transports.file]
 filename = "dowser"
-output_dir = "./"
 max_bytes = "10485760"
 backup_count = "3"
+output_dir = ""
 
 [profiler]
 enabled_metrics = "memory_usage,time"
 
-[profiler.session]
-id = ""
-
 [profiler.report]
-prefix = ""
-suffix = ""
-output_dir = "./"
+filename = "profiles"
+format = "json"
+output_dir = ""
 
 [profiler.metrics.memory_usage]
 enabled_backends = "psutil,resource,tracemalloc,mprof,kernel"

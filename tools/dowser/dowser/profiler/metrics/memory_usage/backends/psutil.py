@@ -4,7 +4,7 @@ from typing import Callable, NamedTuple, Any
 from toolz import compose, curry
 from functools import wraps
 from psutil import Process
-from dowser.common import Report
+from dowser.common import Report, session_context
 from dowser.logger import get_logger
 from dowser.core import build_parallelized_profiler
 from dowser.profiler.context import profiler_context
@@ -41,7 +41,7 @@ def profile_memory_usage(
         f'Setting up psutil memory usage profiler for function "{function.__name__}"'
     )
 
-    pid = profiler_context.session_pid
+    pid = session_context.pid
     precision = profiler_context.memory_usage_precision
     process = Process(pid=pid)
 
