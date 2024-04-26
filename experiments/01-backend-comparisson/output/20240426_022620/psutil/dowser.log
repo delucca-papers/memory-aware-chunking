@@ -1,0 +1,21 @@
+2024-04-26 02:26:20,492 - dowser.logger.main.get_logger - INFO - Starting experiment with Session ID: 20240426_022620
+2024-04-26 02:26:20,493 - dowser.logger.main.get_logger - DEBUG - Experiment config: {'logger': {'level': 'DEBUG', 'transports': {'file': {'output_dir': '/home/delucca/src/msc/seismic-attributes-memory-profile/experiments/01-backend-comparisson/output/20240426_022620/psutil'}}}, 'profiler': {'session': {'id': '20240426_022620', 'metadata': {'input': 'num_elements=10000000'}}, 'report': {'output_dir': '/home/delucca/src/msc/seismic-attributes-memory-profile/experiments/01-backend-comparisson/output/20240426_022620/psutil'}, 'metrics': {'memory_usage': {'enabled_backends': 'psutil', 'precision': 3}}}}
+2024-04-26 02:26:20,493 - dowser.logger.main.get_logger - INFO - Setting up profilers for function "consume_large_memory"
+2024-04-26 02:26:20,493 - dowser.logger.main.get_logger - DEBUG - Enabled profilers: ['memory_usage', 'time']
+2024-04-26 02:26:20,494 - dowser.logger.main.get_logger - INFO - Setting up time profiler for function "consume_large_memory"
+2024-04-26 02:26:20,495 - dowser.logger.main.get_logger - INFO - Setting up memory usage profiler for function "consume_large_memory"
+2024-04-26 02:26:20,495 - dowser.logger.main.get_logger - DEBUG - Enabled memory usage backends: ['psutil']
+2024-04-26 02:26:20,495 - dowser.logger.main.get_logger - INFO - Setting up psutil memory usage profiler for function "consume_large_memory"
+2024-04-26 02:26:20,495 - dowser.logger.main.get_logger - INFO - Profiling function "consume_large_memory"
+2024-04-26 02:26:20,496 - dowser.logger.main.get_logger - DEBUG - Profiling memory usage of PID 2017 with precision of 0.001s
+2024-04-26 02:26:20,496 - dowser.logger.main.get_logger - DEBUG - Setting up multiprocessing parallelized profiler for function to_memory_usage_record_of_get_memory_info
+2024-04-26 02:26:20,514 - dowser.logger.main.get_logger - INFO - Hooking sync event to function consume_large_memory
+2024-04-26 02:26:21,355 - dowser.logger.main.get_logger - INFO - Consumed 10000000 elements
+2024-04-26 02:26:21,405 - dowser.logger.main.get_logger - DEBUG - Amount of collected profile records: 3
+2024-04-26 02:26:21,405 - dowser.logger.main.get_logger - DEBUG - Sample record: ('START', 1714109180.5153499)
+2024-04-26 02:26:21,405 - dowser.logger.main.get_logger - DEBUG - Total execution time: 0.8897154331207275s
+2024-04-26 02:26:21,405 - dowser.logger.main.get_logger - DEBUG - Adding time log entries to report
+2024-04-26 02:26:21,644 - dowser.logger.main.get_logger - DEBUG - Amount of collected profile records: 600
+2024-04-26 02:26:21,644 - dowser.logger.main.get_logger - DEBUG - Sample record: (1714109180.5184543, 48459776.0)
+2024-04-26 02:26:21,645 - dowser.logger.main.get_logger - DEBUG - Adding memory_usage log entries to report
+2024-04-26 02:26:21,650 - dowser.logger.main.get_logger - INFO - Saving profiler report

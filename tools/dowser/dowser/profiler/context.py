@@ -4,13 +4,12 @@ import copy
 from uuid import uuid4
 from datetime import datetime, timezone
 from dowser.common import Context
-from dowser.logger import get_logger
 
 
 class ProfilerContext(Context):
     _base_path: str = "profiler"
     _initial_data: dict = {
-        "enabled_types": "memory_usage,time",
+        "enabled_metrics": "memory_usage,time",
         "session": {
             "pid": os.getpid(),
             "version": "0.1.0",
@@ -26,7 +25,7 @@ class ProfilerContext(Context):
             "suffix": "",
             "output_dir": "./",
         },
-        "types": {
+        "metrics": {
             "memory_usage": {
                 "enabled_backends": "psutil,resource,tracemalloc,mprof,kernel",
                 "precision": "4",
@@ -34,23 +33,22 @@ class ProfilerContext(Context):
             },
         },
     }
-    __logger = get_logger()
 
     @property
     def enabled_profilers(self) -> list[str]:
-        return self.get("enabled_types").split(",")
+        return self.get("enabled_metrics").split(",")
 
     @property
     def memory_usage_enabled_backends(self) -> list[str]:
-        return self.get("types.memory_usage.enabled_backends").split(",")
+        return self.get("metrics.memory_usage.enabled_backends").split(",")
 
     @property
     def memory_usage_precision(self) -> float:
-        return 10 ** -int(self.get("types.memory_usage.precision"))
+        return 10 ** -int(self.get("metrics.memory_usage.precision"))
 
     @property
     def memory_usage_unit(self) -> str:
-        return self.get("types.memory_usage.unit")
+        return self.get("metrics.memory_usage.unit")
 
     @property
     def session_pid(self) -> int:
@@ -74,14 +72,10 @@ class ProfilerContext(Context):
         self.start_session()
 
     def start_session(self) -> None:
-        self.__logger.info("Starting new profiler session")
-
         self.set("session.start_time", self.__get_current_time())
         self.set("session.id", self.__generate_id())
 
     def close_session(self) -> "ProfilerContext":
-        self.__logger.info("Closing profiler session")
-
         self.set("session.end_time", self.__get_current_time())
         final_profiler_context = copy.deepcopy(self)
         self.flush()
@@ -89,7 +83,6 @@ class ProfilerContext(Context):
         return final_profiler_context
 
     def flush(self) -> None:
-        self.__logger.debug("Flushing profiler context")
         self.update(self._initial_data)
         self.start_session()
 
@@ -103,4 +96,4 @@ class ProfilerContext(Context):
 profiler_context = ProfilerContext()
 
 
-__all__ = ["profiler_context"]
+__all__ = ["profiler_context", "ProfilerContext"]

@@ -1,6 +1,7 @@
 import re
 
 from toolz import curry
+from typing import Literal
 
 
 @curry
@@ -24,25 +25,38 @@ def standardize_key(key: str):
     return key
 
 
-def to_camel_case(s: str):
+def to_camel_case(s: str) -> str:
     words = standardize_key(s).split()
     return words[0] + "".join(word.capitalize() for word in words[1:])
 
 
-def convert_keys_to_camel_case(obj: dict | list | str):
+def to_snake_case(s: str) -> str:
+    return re.sub(r"(?<!^)(?=[A-Z])", "_", s).lower()
+
+
+def normalize_keys_case(
+    obj: dict | list | str,
+    to_case: Literal["camel", "snake"] = "snake",
+):
+    available_converters = {
+        "camel": to_camel_case,
+        "snake": to_snake_case,
+    }
+    convert = available_converters[to_case]
+
     if isinstance(obj, dict):
         new_dict = {}
         for key, value in obj.items():
-            new_key = to_camel_case(key)
-            new_dict[new_key] = convert_keys_to_camel_case(value)
+            new_key = convert(key)
+            new_dict[new_key] = normalize_keys_case(value, to_case=to_case)
         return new_dict
     elif isinstance(obj, list):
-        return [convert_keys_to_camel_case(item) for item in obj]
+        return [normalize_keys_case(item, to_case=to_case) for item in obj]
     else:
         return obj
 
 
-def convert_to(unit_to: str, unit_from: str, value: float) -> float:
+def convert_to_unit(unit_to: str, unit_from: str, value: float) -> float:
     normalized_unit_to = unit_to.lower()
     normalized_unit_from = unit_from.lower()
 
@@ -71,4 +85,4 @@ def convert_to(unit_to: str, unit_from: str, value: float) -> float:
     return float(value / conversion[conversion_key])
 
 
-__all__ = ["deep_merge", "convert_keys_to_camel_case", "convert_to"]
+__all__ = ["deep_merge", "normalize_keys_case", "convert_to_unit"]

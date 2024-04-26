@@ -1,7 +1,7 @@
 from typing import Callable
 from functools import wraps
 from dowser.logger import get_logger
-from .types import build_enabled_profilers
+from .metrics import build_enabled_profilers
 from .report import ProfilerReport
 
 

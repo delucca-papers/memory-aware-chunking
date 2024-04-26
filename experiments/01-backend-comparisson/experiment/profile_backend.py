@@ -22,8 +22,8 @@ def run_experiment(experiment_config: dict) -> None:
 
 if __name__ == "__main__":
     experiment_session_id = os.environ.get("EXPERIMENT_SESSION_ID")
-    experiment_backend_names = os.environ.get("EXPERIMENT_BACKEND_NAMES")
-    experiment_precision = os.environ.get("EXPERIMENT_PRECISION")
+    experiment_backend_name = os.environ.get("EXPERIMENT_BACKEND_NAME")
+    experiment_precision = int(os.environ.get("EXPERIMENT_PRECISION", "3"))
     experiment_num_elements = int(os.environ.get("EXPERIMENT_NUM_ELEMENTS", 1_000_000))
     experiment_output_dir = os.environ.get("EXPERIMENT_OUTPUT_DIR", "./output")
     experiment_unit = os.environ.get("EXPERIMENT_UNIT", "mb")
@@ -34,6 +34,11 @@ if __name__ == "__main__":
     experiment_config = {
         "logger": {
             "level": experiment_logging_level,
+            "transports": {
+                "file": {
+                    "output_dir": experiment_output_dir,
+                }
+            },
         },
         "profiler": {
             "session": {
@@ -45,18 +50,18 @@ if __name__ == "__main__":
             "report": {
                 "output_dir": experiment_output_dir,
             },
-            "types": {
+            "metrics": {
                 "memory_usage": {
-                    "enabled_backends": experiment_backend_names,
+                    "enabled_backends": experiment_backend_name,
                     "precision": experiment_precision,
                 }
             },
         },
     }
 
-    if not experiment_backend_names:
+    if not experiment_backend_name:
         raise ValueError(
-            'You must provide a backend name on the "EXPERIMENT_BACKEND_NAMES" environment variable'
+            'You must provide a backend name on the "EXPERIMENT_BACKEND_NAME" environment variable'
         )
 
     run_experiment(experiment_config)

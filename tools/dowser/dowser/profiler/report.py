@@ -1,22 +1,32 @@
 import json
 import os
+import copy
 
 from io import TextIOWrapper
-from typing import Literal
-from toolz import identity, first, compose, second, curry
-from toolz.curried import map
+from logging import Logger
+from toolz import identity
 from dowser.logger import get_logger
-from dowser.common.transformers import convert_keys_to_camel_case, convert_to
-from .context import profiler_context
+from dowser.common import normalize_keys_case, Report
+from .context import profiler_context, ProfilerContext
+from .types import ProfilerMetric, Profile, Log, Entries, Metadata
+from .metrics import to_memory_usage_profile, to_time_profile
 
-ProfilerType = Literal["time", "memory_usage"]
 
+class ProfilerReport(Report):
+    __report_filename = "profiler-report.json"
+    __logs: list[Log] = []
+    __profiles: list[Profile]
+    __context: ProfilerContext
+    __logger: Logger
 
-class ProfilerReport:
-    __report_filename = "profiler_report.json"
-    __context = profiler_context
-    __logger = get_logger()
-    __profiles: list[dict] = []
+    @classmethod
+    def from_filepath(cls, filepath: str) -> "ProfilerReport":
+        file = json.load(open(filepath, "r"))
+        context = copy.deepcopy(profiler_context)
+        context.update({"session": file.get("session", {})})
+        profiles = file.get("profiles", [])
+
+        return cls(context, profiles)
 
     @property
     def write_stream(self) -> TextIOWrapper:
@@ -26,95 +36,84 @@ class ProfilerReport:
         return open(filepath, "w")
 
     @property
-    def session(self) -> dict:
-        return self.__context.session
+    def output_dir(self) -> str:
+        return self.__context.report_output_dir
 
-    @property
-    def profiles(self) -> list[dict]:
-        parsers = {
-            "time": self.__parse_time_profile,
-            "memory_usage": self.__parse_memory_usage_profile,
+    def __init__(
+        self,
+        context: ProfilerContext = profiler_context,
+        profiles: list[dict] = [],
+    ):
+        self.__logger = get_logger()
+        self.__context = normalize_keys_case(context)
+        self.__profiles = normalize_keys_case(profiles)
+
+    def add_log(
+        self,
+        metric: ProfilerMetric,
+        entries: Log,
+        metadata: dict = {},
+    ) -> None:
+        self.__logger.debug(f"Adding {metric} log entries to report")
+        metadata = {
+            **metadata,
+            "collected_entries": len(entries),
         }
 
-        return [
-            parsers.get(profile.get("type"), identity)(profile)
-            for profile in self.__profiles
-        ]
-
-    def add_profile(self, type: ProfilerType, data: list, metadata: dict = {}) -> None:
-        self.__logger.debug(f"Adding {type} profile to report")
-        profile = {
-            "type": type,
-            "metadata": metadata,
-            "data": data,
-        }
-
-        self.__profiles.append(profile)
+        self.__logs.append((metric, entries, metadata))
 
     def save(self) -> None:
         self.__logger.info("Saving profiler report")
         self.__context = profiler_context.close_session()
+        if len(self.__logs) > 0:
+            self.__parse_logs()
+
+        os.makedirs(self.output_dir, exist_ok=True)
+        report = self.__to_dict()
 
         json.dump(
-            convert_keys_to_camel_case(self.to_dict()), self.write_stream, indent=4
+            normalize_keys_case(report, to_case="camel"),
+            self.write_stream,
+            indent=4,
         )
 
-    def to_dict(self) -> dict:
-        return {"session": self.session, "profiles": self.profiles}
+    def get_profiles_by_metric(self, metric: str) -> Profile:
+        return list(filter(lambda x: x.get("metric") == metric, self.__profiles))
 
-    def __parse_time_profile(self, profile: dict) -> dict:
-        get_record_data = compose(
-            lambda r: compose(second, first)(r) if len(r) > 0 else None,
-            self.__filter_record_by_key,
-        )
-
-        profile_data = profile.get("data", [])
-
-        start_time = get_record_data(profile_data, "START")
-        end_time = get_record_data(profile_data, "START")
-        total_execution_time = get_record_data(profile_data, "EXECUTION_TIME")
-
-        return {
-            "type": "time",
-            "metadata": profile.get("metadata"),
-            "data": {
-                "start": start_time,
-                "end": end_time,
-                "execution_time": total_execution_time,
-            },
+    def __parse_logs(self) -> None:
+        available_parsers = {
+            "time": self.__parse_time_log,
+            "memory_usage": self.__parse_memory_usage_log,
         }
 
-    def __parse_memory_usage_profile(self, profile: dict) -> dict:
-        profile_data = profile.get("data", [])
+        self.__profiles = [
+            available_parsers.get(metric, identity)(entries, metadata)
+            for metric, entries, metadata in self.__logs
+        ]
+        self.__logs = []
+
+    def __parse_memory_usage_log(self, entries: Entries, metadata: Metadata) -> Profile:
         output_unit = self.__context.memory_usage_unit
-        parse_data = compose(list, map(self.__parse_memory_usage_record(output_unit)))
-
-        parsed_profile_data = parse_data(profile_data)
+        log_unit = metadata.get("unit")
 
         return {
-            "type": "memory_usage",
+            "metric": "memory_usage",
             "metadata": {
-                **profile.get("metadata"),
+                **metadata,
                 "unit": output_unit,
-                "collected_data_points": len(parsed_profile_data),
             },
-            "data": parsed_profile_data,
+            "entries": to_memory_usage_profile(output_unit, log_unit, entries),
         }
 
-    @curry
-    def __parse_memory_usage_record(
-        self,
-        output_unit: str,
-        record: tuple[int, float, str],
-    ) -> dict:
-        timestamp, memory_usage, unit = record
+    def __parse_time_log(self, entries: Entries, metadata: Metadata) -> Profile:
         return {
-            "timestamp": timestamp,
-            "memory_usage": convert_to(output_unit, unit, memory_usage),
+            "metric": "time",
+            "metadata": metadata,
+            "entries": to_time_profile(entries),
         }
 
-    def __filter_record_by_key(self, records: list, key: str) -> list:
-        return list(filter(lambda r: r[0] == key, records))
+    def __to_dict(self) -> dict:
+        return {"session": self.__context.session, "profiles": self.__profiles}
 
 
 __all__ = ["ProfilerReport"]

@@ -1,3 +1,5 @@
+import os
+
 from logging import Logger, StreamHandler, Formatter
 from logging.handlers import RotatingFileHandler
 from toolz import compose, identity
@@ -25,7 +27,11 @@ def set_console_transport(logger: Logger) -> Logger:
 def set_file_transport(logger: Logger) -> Logger:
     formatter = __get_formatter()
 
+    log_output_dir = logger_context.transport_file_output_dir
     log_filepath = logger_context.transport_file_abspath
+
+    os.makedirs(log_output_dir, exist_ok=True)
+
     file_handler = RotatingFileHandler(
         log_filepath,
         maxBytes=logger_context.transport_file_max_bytes,

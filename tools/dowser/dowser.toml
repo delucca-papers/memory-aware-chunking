@@ -12,7 +12,7 @@ max_bytes = "10485760"
 backup_count = "3"
 
 [profiler]
-enabled_types = "memory_usage,time"
+enabled_metrics = "memory_usage,time"
 
 [profiler.session]
 id = ""
@@ -25,7 +25,7 @@ prefix = ""
 suffix = ""
 output_dir = "./"
 
-[profiler.types.memory_usage]
+[profiler.metrics.memory_usage]
 enabled_backends = "psutil,resource,tracemalloc,mprof,kernel"
 precision = "4"
 unit = "mb"

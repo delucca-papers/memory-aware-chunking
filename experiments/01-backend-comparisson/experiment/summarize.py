@@ -1,10 +1,12 @@
 import os
+import json
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 
 from scipy.interpolate import interp1d
 from matplotlib.ticker import AutoLocator
+from dowser.profiler.report import ProfilerReport
 
 axis_kwargs = {
     "fontsize": 12,
@@ -87,62 +89,50 @@ def plot_execution_time_by_backend(directory: str):
 
 
 def __get_execution_time_result(directory: str, backend: str) -> float:
-    backend_times_file = __get_result_file(directory, backend, "time")
+    backend_report = __get_result_file_report(directory, backend)
+    time_profile = backend_report.get_profiles_by_metric("time")[0]
 
-    execution_time = None
-
-    for line in backend_times_file.readlines():
-        if "EXECUTION_TIME" in line:
-            _, execution_time_report = line.split("\t")
-            execution_time, _ = execution_time_report.strip().split(" ")
-            break
+    execution_time_entry = list(
+        filter(
+            lambda entry: entry.get("event_type") == "EXECUTION_TIME",
+            time_profile.get("entries"),
+        )
+    )
+    execution_time = execution_time_entry[0].get("time")
 
     return float(execution_time)
 
 
-def __get_memory_usage_results(
-    directory: str,
-    backend: str,
-    heading_lines: int = 6,
-) -> pd.DataFrame:
-    backend_memory_usage_result = __get_result_file(directory, backend, "memory-usage")
+def __get_memory_usage_results(directory: str, backend: str) -> pd.DataFrame:
+    backend_report = __get_result_file_report(directory, backend)
+    memory_usage_profile = backend_report.get_profiles_by_metric("memory_usage")[0]
 
-    lines = backend_memory_usage_result.readlines()
-    data = lines[heading_lines:]
-    unit = None
-    current_memory_usage_list = []
-
-    for line in data:
-        _, memory_usage_report = line.split("\t")
-        memory_usage, reported_unit = memory_usage_report.strip().split(" ")
-
-        current_memory_usage_list.append(float(memory_usage))
-
-        if unit is None:
-            unit = reported_unit
+    unit = memory_usage_profile.get("metadata").get("unit")
+    memory_usage_log = [
+        entry.get("memory_usage") for entry in memory_usage_profile.get("entries")
+    ]
 
     return pd.DataFrame(
         {
-            "current_memory_usage": current_memory_usage_list,
+            "current_memory_usage": memory_usage_log,
             "unit": unit,
         },
     )
 
 
-def __get_result_file(directory: str, backend: str, metric: str):
-    profiler_dir = os.path.join(directory, "profiler")
-    profiler_files = os.listdir(profiler_dir)
-    filepaths = list(filter(lambda x: f"{metric}-{backend}" in x, profiler_files))
+def __get_result_file_report(directory: str, backend: str) -> ProfilerReport:
+    output_dir = os.path.join(directory, backend)
+    output_files = os.listdir(output_dir)
+    profiler_filepaths = list(filter(lambda x: f"profiler-report" in x, output_files))
 
-    if len(filepaths) > 1:
+    if len(profiler_filepaths) > 1:
         raise RuntimeError("More than one memory usage result file found")
-    if len(filepaths) == 0:
+    if len(profiler_filepaths) == 0:
         raise RuntimeError("No memory usage result file found")
 
-    return open(
-        os.path.join(profiler_dir, filepaths[0]),
-        "r",
-    )
+    backend_profile_filepath = os.path.join(output_dir, profiler_filepaths[0])
+
+    return ProfilerReport.from_filepath(backend_profile_filepath)
 
 
 if __name__ == "__main__":
