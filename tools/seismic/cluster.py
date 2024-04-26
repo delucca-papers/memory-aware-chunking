@@ -1,6 +1,6 @@
 from typing import Any
 from dasf_seismic.transforms.transforms import Transform
-from dowser.core import get_logger
+from dowser.logger import get_logger
 
 
 def run_attribute(

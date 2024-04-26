@@ -1,8 +1,9 @@
 import os
 
-from dowser import config
-from dowser.core.logging import get_logger
-from seismic.data.synthetic import generate_and_save_for_range
+from dowser.common import session_context
+from dowser.logger import get_logger
+from dowser.logger.context import logger_context
+from seismic.data.synthetic import generate_and_save_synthetic_data
 
 
 def generate_data(
@@ -10,46 +11,41 @@ def generate_data(
     experiment_num_inlines: int,
     experiment_num_crosslines: int,
     experiment_num_samples: int,
-    experiment_step_size: int,
-    experiment_range_size: int,
 ) -> None:
-    config.update(experiment_config)
-    execution_id = config.get("execution_id")
-    output_dir = config.get("output_dir")
+    session_context.update(experiment_config.get("session", {}))
+    logger_context.update(experiment_config.get("logger", {}))
 
     logger = get_logger()
     logger.info(
-        f"Generating synthetic data for experiment with Execution ID: {execution_id}"
+        f"Generating synthetic data for experiment with Session ID: {session_context.id}"
     )
 
-    data_dir = os.path.join(output_dir, execution_id, "data")
+    data_dir = os.path.join(session_context.output_dir, "data")
 
-    generate_and_save_for_range(
+    generate_and_save_synthetic_data(
         experiment_num_inlines,
         experiment_num_crosslines,
         experiment_num_samples,
-        experiment_step_size,
-        experiment_range_size,
-        data_dir,
+        output_dir=data_dir,
     )
 
     logger.info(f"Finished generating synthetic data. Data stored on: {data_dir}")
 
 
 if __name__ == "__main__":
-    experiment_execution_id = os.environ.get("EXPERIMENT_EXECUTION_ID")
+    experiment_session_id = os.environ.get("EXPERIMENT_SESSION_ID", "experiment")
     experiment_num_inlines = int(os.environ.get("EXPERIMENT_NUM_INLINES"))
     experiment_num_crosslines = int(os.environ.get("EXPERIMENT_NUM_CROSSLINES"))
     experiment_num_samples = int(os.environ.get("EXPERIMENT_NUM_SAMPLES"))
-    experiment_step_size = int(os.environ.get("EXPERIMENT_STEP_SIZE"))
-    experiment_range_size = int(os.environ.get("EXPERIMENT_RANGE_SIZE"))
     experiment_output_dir = os.environ.get("EXPERIMENT_OUTPUT_DIR", "./output")
     experiment_logging_level = os.environ.get("EXPERIMENT_LOGGING_LEVEL", "DEBUG")
 
     experiment_config = {
-        "execution_id": experiment_execution_id,
-        "output_dir": experiment_output_dir,
-        "logging": {
+        "session": {
+            "id": experiment_session_id,
+            "output_dir": experiment_output_dir,
+        },
+        "logger": {
             "level": experiment_logging_level,
         },
     }
@@ -59,6 +55,4 @@ if __name__ == "__main__":
         experiment_num_inlines,
         experiment_num_crosslines,
         experiment_num_samples,
-        experiment_step_size,
-        experiment_range_size,
     )

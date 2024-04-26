@@ -39,7 +39,7 @@ def profile_memory_usage(
 ) -> Callable:
     logger = get_logger()
     logger.info(
-        f'Setting up tracemalloc memory usage profiler for function "{function.__name__}"'
+        f'Setting up tracemalloc memory usage profiler for function "{metadata.get("function_path")}"'
     )
 
     pid = session_context.pid
