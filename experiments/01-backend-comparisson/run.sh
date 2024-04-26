@@ -70,7 +70,6 @@ function run_with_backend {
 function summarize_experiment {
     echo "Summarizing experiment..."
     EXPERIMENT_OUTPUT_DIR="${OUTPUT_DIR}" \
-        EXPERIMENT_UNIT="${UNIT}" \
         python experiment/summarize.py
 }
 

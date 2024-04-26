@@ -22,14 +22,14 @@ class ProfilerReport(Report):
     @classmethod
     def from_filepath(cls, filepath: str) -> "ProfilerReport":
         file = json.load(open(filepath, "r"))
-        session_context = copy.deepcopy(session_context)
-        profiler_context = copy.deepcopy(profiler_context)
+        report_session_context = copy.deepcopy(session_context)
+        report_profiler_context = copy.deepcopy(profiler_context)
 
-        session_context.update(file.get("session", {}))
-        profiler_context.update(file.get("context", {}))
+        report_session_context.update(file.get("session", {}))
+        report_profiler_context.update(file.get("context", {}))
         profiles = file.get("profiles", [])
 
-        return cls(session_context, profiler_context, profiles)
+        return cls(report_session_context, report_profiler_context, profiles)
 
     @property
     def write_stream(self) -> TextIOWrapper:
@@ -137,6 +137,7 @@ class ProfilerReport(Report):
     def __to_dict(self) -> dict:
         return {
             "session": self.__session_context.as_dict(),
+            "context": self.__profiler_context.as_dict(),
             "profiles": self.__profiles,
         }
 

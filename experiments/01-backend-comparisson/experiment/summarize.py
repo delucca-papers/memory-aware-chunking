@@ -22,7 +22,7 @@ plt.style.use("bmh")
 plt.grid(True)
 
 
-def plot_memory_usage_by_backend(directory: str, unit: str):
+def plot_memory_usage_by_backend(directory: str):
     dataframes = {
         "psutil": __get_memory_usage_results(directory, "psutil"),
         "resource": __get_memory_usage_results(directory, "resource"),
@@ -32,6 +32,8 @@ def plot_memory_usage_by_backend(directory: str, unit: str):
     }
 
     largest_length = max([len(df) for df in dataframes.values()])
+    unit = dataframes["psutil"]["unit"][0]
+    inputs = dataframes["psutil"]["inputs"][0]
 
     for name, df in dataframes.items():
         df_length = len(df)
@@ -46,7 +48,7 @@ def plot_memory_usage_by_backend(directory: str, unit: str):
 
     plt.xlabel("Normalized Time", **axis_kwargs)
     plt.ylabel(f"Memory Usage (in {unit.upper()})", **axis_kwargs)
-    plt.title("Memory Usage Over Time by Backend", **title_kwargs)
+    plt.title(f"Memory Usage Over Time by Backend ({inputs})", **title_kwargs)
     plt.legend()
     ax = plt.gca()
     ax.yaxis.set_major_locator(AutoLocator())
@@ -65,9 +67,16 @@ def plot_execution_time_by_backend(directory: str):
         "kernel": __get_execution_time_result(directory, "kernel"),
     }
 
-    sorted_data = dict(sorted(data.items(), key=lambda item: item[1]))
+    inputs = data["psutil"][1]
+    sorted_data = [
+        (backend, value[0])
+        for backend, value in sorted(data.items(), key=lambda item: item[1])
+    ]
 
-    bars = plt.bar(sorted_data.keys(), sorted_data.values(), color="gray")
+    backends = [backend for backend, _ in sorted_data]
+    values = [value for _, value in sorted_data]
+
+    bars = plt.bar(backends, values, color="gray")
 
     for bar in bars:
         yval = bar.get_height()
@@ -80,7 +89,9 @@ def plot_execution_time_by_backend(directory: str):
 
     plt.xlabel("Libraries", **axis_kwargs)
     plt.ylabel("Execution time (in seconds)", **axis_kwargs)
-    plt.title("Performance Comparison of Different Libraries", **title_kwargs)
+    plt.title(
+        f"Performance Comparison of Different Libraries ({inputs})", **title_kwargs
+    )
     plt.xticks(fontsize=10)
     plt.yticks(fontsize=10)
 
@@ -88,9 +99,10 @@ def plot_execution_time_by_backend(directory: str):
     plt.clf()
 
 
-def __get_execution_time_result(directory: str, backend: str) -> float:
+def __get_execution_time_result(directory: str, backend: str) -> tuple[float, str]:
     backend_report = __get_result_file_report(directory, backend)
     time_profile = backend_report.get_profiles_by_metric("time")[0]
+    inputs = time_profile.get("metadata").get("inputs")
 
     execution_time_entry = list(
         filter(
@@ -100,7 +112,7 @@ def __get_execution_time_result(directory: str, backend: str) -> float:
     )
     execution_time = execution_time_entry[0].get("time")
 
-    return float(execution_time)
+    return float(execution_time), inputs
 
 
 def __get_memory_usage_results(directory: str, backend: str) -> pd.DataFrame:
@@ -108,6 +120,7 @@ def __get_memory_usage_results(directory: str, backend: str) -> pd.DataFrame:
     memory_usage_profile = backend_report.get_profiles_by_metric("memory_usage")[0]
 
     unit = memory_usage_profile.get("metadata").get("unit")
+    inputs = memory_usage_profile.get("metadata").get("inputs")
     memory_usage_log = [
         entry.get("memory_usage") for entry in memory_usage_profile.get("entries")
     ]
@@ -116,6 +129,7 @@ def __get_memory_usage_results(directory: str, backend: str) -> pd.DataFrame:
         {
             "current_memory_usage": memory_usage_log,
             "unit": unit,
+            "inputs": inputs,
         },
     )
 
@@ -123,7 +137,7 @@ def __get_memory_usage_results(directory: str, backend: str) -> pd.DataFrame:
 def __get_result_file_report(directory: str, backend: str) -> ProfilerReport:
     output_dir = os.path.join(directory, backend)
     output_files = os.listdir(output_dir)
-    profiler_filepaths = list(filter(lambda x: f"profiler-report" in x, output_files))
+    profiler_filepaths = list(filter(lambda x: f"profiles" in x, output_files))
 
     if len(profiler_filepaths) > 1:
         raise RuntimeError("More than one memory usage result file found")
@@ -137,7 +151,6 @@ def __get_result_file_report(directory: str, backend: str) -> ProfilerReport:
 
 if __name__ == "__main__":
     directory_path = os.environ.get("EXPERIMENT_OUTPUT_DIR")
-    unit = os.environ.get("EXPERIMENT_UNIT")
 
-    plot_memory_usage_by_backend(directory_path, unit)
+    plot_memory_usage_by_backend(directory_path)
     plot_execution_time_by_backend(directory_path)
