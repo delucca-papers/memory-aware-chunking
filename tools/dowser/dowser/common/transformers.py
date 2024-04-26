@@ -85,4 +85,13 @@ def convert_to_unit(unit_to: str, unit_from: str, value: float) -> float:
     return float(value / conversion[conversion_key])
 
 
-__all__ = ["deep_merge", "normalize_keys_case", "convert_to_unit"]
+def args_to_str(args: dict) -> str:
+    normalized_args = []
+
+    for key, value in args.items():
+        normalized_args.append(f"{key}={value}")
+
+    return ";".join(normalized_args)
+
+
+__all__ = ["deep_merge", "normalize_keys_case", "convert_to_unit", "args_to_str"]

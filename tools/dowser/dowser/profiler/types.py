@@ -1,15 +1,22 @@
 from typing import Literal, TypedDict
 
 Entries = list
-Metadata = dict
 ProfilerMetric = Literal["time", "memory_usage"]
-Log = tuple[ProfilerMetric, Entries, Metadata]
 
 
 class Profile(TypedDict):
     metric: ProfilerMetric
     metadata: dict
     entries: list
+
+
+class Metadata(TypedDict):
+    inputs: str
+    function_path: str
+    collected_entries: int
+
+
+Log = tuple[ProfilerMetric, Entries, Metadata]
 
 
 __all__ = ["ProfilerMetric", "ProfileEntry", "Log", "Entries", "Metadata"]

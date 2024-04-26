@@ -1,9 +1,10 @@
 import time
+import inspect
 
 from typing import Callable, Any
 from toolz import compose, curry
 from functools import wraps
-from dowser.common import get_function_path, Report
+from dowser.common import Report
 from dowser.logger import get_logger
 from dowser.core import (
     get_line_with_keyword,
@@ -11,6 +12,7 @@ from dowser.core import (
     build_parallelized_profiler,
 )
 from dowser.profiler.context import profiler_context
+from dowser.profiler.types import Metadata
 from ..types import MemoryUsageRecord
 
 
@@ -31,7 +33,11 @@ kernel_profiler = build_parallelized_profiler(
 
 
 @curry
-def profile_memory_usage(report: Report, function: Callable) -> Callable:
+def profile_memory_usage(
+    report: Report,
+    metadata: Metadata,
+    function: Callable,
+) -> Callable:
     logger = get_logger()
     logger.info(
         f'Setting up kernel memory usage profiler for function "{function.__name__}"'
@@ -42,14 +48,15 @@ def profile_memory_usage(report: Report, function: Callable) -> Callable:
     status_file = open(f"/proc/{pid}/status", "r")
 
     metadata = {
+        **metadata,
         "backend": "kernel",
         "precision": precision,
-        "function_path": get_function_path(function),
         "unit": "kb",
     }
 
     @wraps(function)
     def wrapper(*args, **kwargs) -> Any:
+        print(" okkkkkk")
         logger.debug(
             f"Profiling memory usage of PID {pid} with precision of {precision}s"
         )
@@ -61,8 +68,10 @@ def profile_memory_usage(report: Report, function: Callable) -> Callable:
 
         result = hooked_function(*args, **kwargs)
         memory_usage_log = get_memory_usage_log()
+
         logger.debug(f"Amount of collected profile records: {len(memory_usage_log)}")
         logger.debug(f"Sample record: {memory_usage_log[0]}")
+        logger.debug(f"Metadata: {metadata}")
 
         report.add_log("memory_usage", memory_usage_log, metadata)
 

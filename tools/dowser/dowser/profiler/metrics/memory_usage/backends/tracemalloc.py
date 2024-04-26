@@ -4,10 +4,11 @@ import tracemalloc
 from typing import Callable, Any
 from toolz import compose, curry
 from functools import wraps
-from dowser.common import get_function_path, Report
+from dowser.common import Report
 from dowser.logger import get_logger
 from dowser.core import build_parallelized_profiler
 from dowser.profiler.context import profiler_context
+from dowser.profiler.types import Metadata
 from ..types import MemoryUsageRecord
 
 
@@ -31,7 +32,11 @@ tracemalloc_profiler = build_parallelized_profiler(
 
 
 @curry
-def profile_memory_usage(report: Report, function: Callable) -> Callable:
+def profile_memory_usage(
+    report: Report,
+    metadata: Metadata,
+    function: Callable,
+) -> Callable:
     logger = get_logger()
     logger.info(
         f'Setting up tracemalloc memory usage profiler for function "{function.__name__}"'
@@ -41,9 +46,9 @@ def profile_memory_usage(report: Report, function: Callable) -> Callable:
     precision = profiler_context.memory_usage_precision
 
     metadata = {
+        **metadata,
         "backend": "tracemalloc",
         "precision": precision,
-        "function_path": get_function_path(function),
         "unit": "b",
     }
 

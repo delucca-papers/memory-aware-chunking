@@ -29,8 +29,6 @@ if __name__ == "__main__":
     experiment_unit = os.environ.get("EXPERIMENT_UNIT", "mb")
     experiment_logging_level = os.environ.get("EXPERIMENT_LOGGING_LEVEL", "DEBUG")
 
-    input_metadata = f"num_elements={experiment_num_elements}"
-
     experiment_config = {
         "logger": {
             "level": experiment_logging_level,
@@ -43,9 +41,6 @@ if __name__ == "__main__":
         "profiler": {
             "session": {
                 "id": experiment_session_id,
-                "metadata": {
-                    "input": input_metadata,
-                },
             },
             "report": {
                 "output_dir": experiment_output_dir,

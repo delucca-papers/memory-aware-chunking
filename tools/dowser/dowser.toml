@@ -17,9 +17,6 @@ enabled_metrics = "memory_usage,time"
 [profiler.session]
 id = ""
 
-[profiler.session.metadata]
-input = ""
-
 [profiler.report]
 prefix = ""
 suffix = ""
