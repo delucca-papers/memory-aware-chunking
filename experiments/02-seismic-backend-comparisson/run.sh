@@ -47,7 +47,7 @@ function main {
     run_with_backend "tracemalloc"
     run_with_backend "kernel"
 
-    #summarize_experiment
+    summarize_experiment
 }
 
 function save_input {
