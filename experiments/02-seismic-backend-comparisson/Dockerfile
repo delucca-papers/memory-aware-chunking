@@ -1,4 +1,4 @@
-FROM dowser
+FROM seismic
 
 ARG USER_ID
 ARG GROUP_ID
@@ -7,7 +7,7 @@ ARG GROUP_NAME=experiments
 
 ENV HOME="/home/${USER_NAME}"
 
-WORKDIR ${HOME}/01-backend-comparisson
+WORKDIR ${HOME}/02-seismic-backend-comparisson
 
 RUN if getent passwd ${USER_ID} >/dev/null; then \
     deluser $(getent passwd ${USER_ID} | cut -d: -f1); fi && \
@@ -22,7 +22,7 @@ USER ${USER_ID}
 COPY requirements.txt .
 RUN pip install -r requirements.txt
 
-COPY experiment/tasks.py experiment/
+COPY experiment/generate.py experiment/
 COPY experiment/profile_backend.py experiment/
 COPY experiment/summarize.py experiment/
 COPY run.sh .

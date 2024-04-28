@@ -29,6 +29,7 @@ def plot_memory_usage_by_backend(directory: str):
         "mprof": __get_memory_usage_results(directory, "mprof"),
         "tracemalloc": __get_memory_usage_results(directory, "tracemalloc"),
         "kernel": __get_memory_usage_results(directory, "kernel"),
+        "fil": __get_fil_memory_usage_results(directory),
     }
 
     largest_length = max([len(df) for df in dataframes.values()])
@@ -66,6 +67,7 @@ def plot_execution_time_by_backend(directory: str):
         "mprof": __get_execution_time_result(directory, "mprof"),
         "tracemalloc": __get_execution_time_result(directory, "tracemalloc"),
         "kernel": __get_execution_time_result(directory, "kernel"),
+        "fil": __get_execution_time_result(directory, "fil"),
     }
 
     inputs = data["psutil"][1]
@@ -130,6 +132,27 @@ def __get_memory_usage_results(directory: str, backend: str) -> pd.DataFrame:
     memory_usage_log = [
         entry.get("memory_usage") for entry in memory_usage_profile.get("entries")
     ]
+
+    return pd.DataFrame(
+        {
+            "current_memory_usage": memory_usage_log,
+            "unit": unit,
+            "inputs": inputs,
+        },
+    )
+
+
+def __get_fil_memory_usage_results(directory: str) -> pd.DataFrame:
+    fil_report = open(os.path.join(directory, "fil/peak-memory.prof"), "r")
+    inputs = __get_execution_time_result(directory, "fil")[1]
+    unit = "mb"
+
+    memory_usage_log = [
+        int(line.split(" ")[-1]) / 1024**2 for line in fil_report.readlines()
+    ]
+
+    for i in range(1, len(memory_usage_log)):
+        memory_usage_log[i] += memory_usage_log[i - 1]
 
     return pd.DataFrame(
         {

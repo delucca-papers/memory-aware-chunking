@@ -25,8 +25,12 @@ def run_experiment(
     logger.debug(f"Experiment attribute: {experiment_attribute}")
     logger.debug(f"Data directory: {experiment_data_dir}")
 
-    input_data_filename = os.listdir(experiment_data_dir)[0]
-    input_data_filepath = os.path.join(experiment_data_dir, input_data_filename)
+    input_data_files = os.listdir(experiment_data_dir)
+    input_data_segy_files = [
+        file for file in input_data_files if file.endswith(".segy")
+    ]
+    input_data_filepath = os.path.join(experiment_data_dir, input_data_segy_files[0])
+    logger.info(f"Input data file: {input_data_filepath}")
 
     attribute_module = importlib.import_module(
         f"seismic.attributes.{experiment_attribute}"
@@ -40,12 +44,25 @@ def run_experiment(
     logger.info("Finished executing experiment")
 
 
+def __set_memory_limit() -> None:
+    with open(f"/sys/fs/cgroup/memory/dowser/memory.limit_in_bytes", "w") as f:
+        f.write(str(50 * (1024**2)))
+
+    with open(f"/sys/fs/cgroup/memory/dowser/cgroup.procs", "w") as f:
+        f.write(str(os.getpid()))
+
+
 if __name__ == "__main__":
+    __set_memory_limit()
+
     experiment_backend_name = os.environ.get("EXPERIMENT_BACKEND_NAME")
     experiment_session_id = os.environ.get("EXPERIMENT_SESSION_ID", "experiment")
     experiment_output_dir = os.environ.get("EXPERIMENT_OUTPUT_DIR", "./output")
     experiment_data_dir = os.environ.get("EXPERIMENT_DATA_DIR", "./output/data")
     experiment_logging_level = os.environ.get("EXPERIMENT_LOGGING_LEVEL", "DEBUG")
+    experiment_enabled_metrics = os.environ.get(
+        "EXPERIMENT_ENABLED_METRICS", "memory_usage,time"
+    )
     experiment_precision = int(os.environ.get("EXPERIMENT_PRECISION"))
     experiment_attribute = os.environ.get("EXPERIMENT_ATTRIBUTE")
 
@@ -58,19 +75,15 @@ if __name__ == "__main__":
             "level": experiment_logging_level,
         },
         "profiler": {
+            "enabled_metrics": experiment_enabled_metrics,
             "metrics": {
                 "memory_usage": {
                     "enabled_backends": experiment_backend_name,
                     "precision": experiment_precision,
                 }
-            }
+            },
         },
     }
-
-    if not experiment_backend_name:
-        raise ValueError(
-            'You must provide a backend name on the "EXPERIMENT_BACKEND_NAME" environment variable'
-        )
 
     if not experiment_attribute:
         raise ValueError(

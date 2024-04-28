@@ -1,18 +1,12 @@
-FROM python:3.10-alpine
+FROM python:3.10
 
 ARG DOWSER_HOME="/root/.local/src/dowser"
 
 WORKDIR ${DOWSER_HOME}
 
-RUN apk update && \
+RUN apt-get update && \
     pip install --upgrade pip
 
-RUN apk add --no-cache \
-    gcc \
-    python3-dev \
-    musl-dev \
-    linux-headers
-
-COPY --chown=${USER_NAME}:${GROUP_NAME} . .
+COPY . .
 
 RUN pip install .

@@ -46,6 +46,7 @@ function main {
     run_with_backend "mprof"
     run_with_backend "tracemalloc"
     run_with_backend "kernel"
+    run_with_fil_profiler
 
     summarize_experiment
 }
@@ -65,7 +66,7 @@ function generate_synthetic_data {
         EXPERIMENT_NUM_INLINES="${NUM_INLINES}" \
         EXPERIMENT_NUM_CROSSLINES="${NUM_CROSSLINES}" \
         EXPERIMENT_NUM_SAMPLES="${NUM_SAMPLES}" \
-        EXPERIMENT_OUTPUT_DIR="${OUTPUT_DIR}" \
+        EXPERIMENT_OUTPUT_DIR="${OUTPUT_DIR}/data" \
         EXPERIMENT_LOGGING_LEVEL="${LOG_LEVEL}" \
         python experiment/generate.py
     echo
@@ -83,6 +84,27 @@ function run_with_backend {
         EXPERIMENT_PRECISION="${PRECISION}" \
         EXPERIMENT_LOGGING_LEVEL="${LOG_LEVEL}" \
         python experiment/profile_backend.py
+    echo
+}
+
+function run_with_fil_profiler {
+    echo "Running with fil-profiler..."
+    EXPERIMENT_DATA_DIR="${OUTPUT_DIR}/data" \
+        EXPERIMENT_SESSION_ID="${SESSION_ID}" \
+        EXPERIMENT_OUTPUT_DIR="${OUTPUT_DIR}/fil" \
+        EXPERIMENT_ATTRIBUTE="${ATTRIBUTE}" \
+        EXPERIMENT_PRECISION="${PRECISION}" \
+        EXPERIMENT_LOGGING_LEVEL="${LOG_LEVEL}" \
+        EXPERIMENT_ENABLED_METRICS="time" \
+        fil-profile \
+        -o "${OUTPUT_DIR}/fil" \
+        --no-browser \
+        run experiment/profile_backend.py
+
+    pushd "${OUTPUT_DIR}/fil" || return
+    find . -mindepth 2 -type f -exec mv {} . \; && find . -mindepth 1 -type d -empty -delete
+    popd || return
+
     echo
 }
 

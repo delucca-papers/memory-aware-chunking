@@ -20,16 +20,16 @@ def generate_data(
         f"Generating synthetic data for experiment with Session ID: {session_context.id}"
     )
 
-    data_dir = os.path.join(session_context.output_dir, "data")
-
     generate_and_save_synthetic_data(
         experiment_num_inlines,
         experiment_num_crosslines,
         experiment_num_samples,
-        output_dir=data_dir,
+        output_dir=session_context.output_dir,
     )
 
-    logger.info(f"Finished generating synthetic data. Data stored on: {data_dir}")
+    logger.info(
+        f"Finished generating synthetic data. Data stored on: {session_context.output_dir}"
+    )
 
 
 if __name__ == "__main__":
