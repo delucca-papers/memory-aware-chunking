@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
+PYTHON_CMD=${1:-"python"}
 SCRIPT_DIR=$(dirname "$(realpath "${BASH_SOURCE[0]}")")
 TIMESTAMP=$(date "+%Y%m%d_%H%M%S")
 
@@ -68,7 +69,7 @@ function generate_synthetic_data {
         EXPERIMENT_NUM_SAMPLES="${NUM_SAMPLES}" \
         EXPERIMENT_OUTPUT_DIR="${OUTPUT_DIR}/data" \
         EXPERIMENT_LOGGING_LEVEL="${LOG_LEVEL}" \
-        python experiment/generate.py
+        ${PYTHON_CMD} experiment/generate.py
     echo
 }
 
@@ -83,7 +84,7 @@ function run_with_backend {
         EXPERIMENT_ATTRIBUTE="${ATTRIBUTE}" \
         EXPERIMENT_PRECISION="${PRECISION}" \
         EXPERIMENT_LOGGING_LEVEL="${LOG_LEVEL}" \
-        python experiment/profile_backend.py
+        ${PYTHON_CMD} experiment/profile_backend.py
     echo
 }
 
@@ -96,7 +97,8 @@ function run_with_fil_profiler {
         EXPERIMENT_PRECISION="${PRECISION}" \
         EXPERIMENT_LOGGING_LEVEL="${LOG_LEVEL}" \
         EXPERIMENT_ENABLED_METRICS="time" \
-        fil-profile \
+        ${PYTHON_CMD} \
+        -m filprofiler \
         -o "${OUTPUT_DIR}/fil" \
         --no-browser \
         run experiment/profile_backend.py
@@ -111,7 +113,7 @@ function run_with_fil_profiler {
 function summarize_experiment {
     echo "Summarizing experiment..."
     EXPERIMENT_OUTPUT_DIR="${OUTPUT_DIR}" \
-        python experiment/summarize.py
+        ${PYTHON_CMD} experiment/summarize.py
 }
 
 main

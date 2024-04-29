@@ -11,10 +11,15 @@ setup(
     url="http://github.com/delucca/dowser",
     packages=find_packages(),
     install_requires=open("requirements.txt").read().splitlines(),
+    python_requires=">=3.10",
     classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
         "Operating System :: OS Independent",
     ],
-    python_requires=">=3.10",
+    entry_points={
+        "console_scripts": [
+            "dowser=dowser.cli:cli",
+        ],
+    },
 )

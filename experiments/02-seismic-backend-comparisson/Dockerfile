@@ -20,11 +20,11 @@ RUN chown -R ${USER_ID}:${GROUP_ID} ${HOME}
 USER ${USER_ID}
 
 COPY requirements.txt .
-RUN pip install -r requirements.txt
+RUN conda run -n experiments pip install -r requirements.txt
 
 COPY experiment/generate.py experiment/
 COPY experiment/profile_backend.py experiment/
 COPY experiment/summarize.py experiment/
 COPY run.sh .
 
-ENTRYPOINT ["./run.sh"]
+ENTRYPOINT ["./run.sh", "conda run -n experiments python"]

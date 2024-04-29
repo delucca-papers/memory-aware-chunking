@@ -1,4 +1,4 @@
-from .main import profile
+from .cli import attach_profiler_args
 
 
-__all__ = ["profile"]
+__all__ = ["attach_profiler_args"]

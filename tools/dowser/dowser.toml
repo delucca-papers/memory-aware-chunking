@@ -1,29 +1,17 @@
 # This is a sample configuration file for Dowser
 
-[session]
-id = ""
 output_dir = "./"
 
 [logger]
 enabled_transports = "console,file"
-format = "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
 level = "info"
 
-[logger.transports.file]
-filename = "dowser"
-max_bytes = "10485760"
-backup_count = "3"
-output_dir = ""
-
 [profiler]
+session_id = "" # By default, it will be a random UUID if not provided
 enabled_metrics = "memory_usage,time"
+script = ""
+args = ""
 
-[profiler.report]
-filename = "profiles"
-format = "json"
-output_dir = ""
-
-[profiler.metrics.memory_usage]
+[profiler.memory_usage]
 enabled_backends = "psutil,resource,tracemalloc,mprof,kernel"
-precision = "4"
 unit = "mb"

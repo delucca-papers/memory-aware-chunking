@@ -44,17 +44,7 @@ def run_experiment(
     logger.info("Finished executing experiment")
 
 
-def __set_memory_limit() -> None:
-    with open(f"/sys/fs/cgroup/memory/dowser/memory.limit_in_bytes", "w") as f:
-        f.write(str(50 * (1024**2)))
-
-    with open(f"/sys/fs/cgroup/memory/dowser/cgroup.procs", "w") as f:
-        f.write(str(os.getpid()))
-
-
 if __name__ == "__main__":
-    __set_memory_limit()
-
     experiment_backend_name = os.environ.get("EXPERIMENT_BACKEND_NAME")
     experiment_session_id = os.environ.get("EXPERIMENT_SESSION_ID", "experiment")
     experiment_output_dir = os.environ.get("EXPERIMENT_OUTPUT_DIR", "./output")

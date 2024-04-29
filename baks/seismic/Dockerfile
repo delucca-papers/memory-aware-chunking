@@ -1,5 +1,9 @@
 FROM dowser
 
+ARG SEISMIC_HOME="/root/.local/src/seismic"
+
+WORKDIR ${SEISMIC_HOME}
+
 COPY requirements.txt requirements.txt
 
 RUN wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh && \
@@ -16,6 +20,8 @@ RUN conda config --set channel_priority flexible && \
 ARG DOWSER_HOME="/root/.local/src/dowser"
 RUN conda run -n experiments pip3 install ${DOWSER_HOME}
 
+RUN conda run -n experiments pip install --upgrade setuptools
+
 ARG SSH_KEY
 RUN mkdir ~/.ssh/ && \
     echo "$SSH_KEY" > ~/.ssh/id_rsa && \
@@ -23,12 +29,7 @@ RUN mkdir ~/.ssh/ && \
     chmod 600 ~/.ssh/id_rsa && \
     conda run -n experiments pip3 install --extra-index-url https://test.pypi.org/simple/ XPySom-dask git+https://github.com/discovery-unicamp/dasf-core.git && \
     conda run -n experiments pip3 install git+ssh://git@ssh.github.com:443/discovery-unicamp/dasf-seismic.git && \
-    conda run -n experiments pip3 install dask-cuda==23.8.0 && \
     rm -rf ~/.ssh
-
-ARG SEISMIC_HOME="/root/.local/src/seismic"
-
-WORKDIR ${SEISMIC_HOME}
 
 COPY . .
 
