@@ -28,21 +28,26 @@ def deep_merge(old_dict: dict, new_dict: dict, append: bool = True) -> dict:
     return merged
 
 
-def filter_defined_values(data: dict) -> dict:
+def filter_defined_values(data: dict, allow_empty_lists: bool = True) -> dict:
     if not isinstance(data, dict):
         return data
 
     filtered_data = {}
     for key, value in data.items():
         if isinstance(value, dict):
-            nested = filter_defined_values(value)
+            nested = filter_defined_values(value, allow_empty_lists=allow_empty_lists)
             if nested:
                 filtered_data[key] = nested
+        elif isinstance(value, list):
+            if len(value) > 0 or allow_empty_lists:
+                filtered_data[key] = value
         elif value is not None:
             filtered_data[key] = value
 
     return filtered_data
 
 
-def str_as_list(value: str, sep: str = ",") -> list:
+def str_as_list(value: str | None, sep: str = ",") -> list:
+    if not value:
+        return []
     return [part for part in value.split(sep) if part and part != ""]

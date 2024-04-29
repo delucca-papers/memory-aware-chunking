@@ -1,6 +1,8 @@
 from argparse import ArgumentParser, _SubParsersAction, Namespace
 from toolz import do, compose, curry
-from .common import AppendUnique, Config, logger, setup_logger_from_config
+from .config import Config
+from .common.cli import AppendUnique
+from .common.logger import logger, setup_logger_from_config
 from .profiler import attach_profiler_args
 
 

@@ -13,6 +13,8 @@ class AppendUnique(Action):
         value: str,
         __: None = None,
     ) -> None:
-        value = getattr(namespace, self.dest, []) + [value]
-        unique_values = unique(value)
+        old_value = getattr(namespace, self.dest) or []
+        new_value = old_value + [value]
+
+        unique_values = unique(new_value)
         setattr(namespace, self.dest, unique_values)

@@ -3,7 +3,7 @@ import sys
 
 from loguru import logger
 from toolz import compose, do, curry
-from .config import Config
+from dowser.config import Config, LoggerTransport
 from .builders import isonow
 
 
@@ -16,11 +16,11 @@ def clear_handlers(_: Config) -> None:
 
 def set_transports(config: Config) -> None:
     available_transports = {
-        "console": set_console_transport,
-        "file": set_file_transport,
+        LoggerTransport.CONSOLE: set_console_transport,
+        LoggerTransport.FILE: set_file_transport,
     }
 
-    for transport in config.get("logger.enabled_transports"):
+    for transport in config.logger.enabled_transports:
         transport_handler = available_transports.get(transport)
         if not transport_handler:
             raise ValueError(f'Invalid logger handler: "{transport}"')
@@ -29,14 +29,14 @@ def set_transports(config: Config) -> None:
 
 
 def set_console_transport(config: Config) -> None:
-    logger.add(sys.stdout, level=config.get("logger.level").upper())
+    logger.add(sys.stdout, level=config.logger.level.value)
 
 
 def set_file_transport(config: Config) -> None:
     now = isonow()
     filename = f"{now}.log"
-    filepath = os.path.join(config.get("output_dir"), filename)
-    logger.add(filepath, level=config.get("logger.level").upper())
+    filepath = os.path.join(config.output_dir, filename)
+    logger.add(filepath, level=config.logger.level.value)
 
 
 setup_logger_from_config = compose(

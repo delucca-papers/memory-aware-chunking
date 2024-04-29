@@ -1,6 +1,5 @@
 from argparse import _SubParsersAction
-from uuid import uuid4
-from dowser.common import AppendUnique
+from dowser.common.cli import AppendUnique
 from .main import run_profiler
 
 
@@ -14,23 +13,23 @@ def attach_profiler_args(subparsers: _SubParsersAction) -> _SubParsersAction:
     )
 
     profile_parser.add_argument(
-        "--enabled-metrics",
+        "--enable-metric",
         "-m",
-        help="Metrics to use for the profiling session (default: memory_usage,time)",
+        help="Enables metric to use on the profiling session (default: memory_usage,time)",
         choices=["memory_usage", "time"],
-        action="append",
+        action=AppendUnique,
     )
 
     profile_parser.add_argument(
-        "--memory-usage-enabled-backends",
+        "--enable-mem-backend",
         "-b",
-        help="Memory usage backends to use for the profiling session (default: psutil,resource,tracemalloc,mprof,kernel)",
+        help="Enable memory usage backend for the profiling session (default: psutil,resource,tracemalloc,mprof,kernel)",
         choices=["psutil", "resource", "tracemalloc", "mprof", "kernel"],
         action=AppendUnique,
     )
 
     profile_parser.add_argument(
-        "--memory-usage-unit",
+        "--mem-unit",
         help="Unit to use for the memory usage (default: mb)",
         choices=["kb", "mb", "gb"],
     )
