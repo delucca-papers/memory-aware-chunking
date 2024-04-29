@@ -6,7 +6,7 @@ from typing import Optional
 from enum import Enum
 
 
-__all__ = ["ProfilerConfig", "Metric", "MemoryUsageBackend", "MemoryUsageUnit"]
+__all__ = ["ProfilerConfig", "Metric", "MemoryUsageBackend"]
 
 
 class Metric(Enum):

@@ -1,9 +1,9 @@
-from dowser.common.types import TraceFunction
+from dowser.profiler.types import TraceFunction
 from types import FrameType
 
 
-__all__ = ["trace"]
+__all__ = ["on_call"]
 
 
-def trace(frame: FrameType, event: str, args: any) -> TraceFunction:
-    return trace
+def on_call(frame: FrameType, event: str, args: any) -> TraceFunction:
+    return on_call

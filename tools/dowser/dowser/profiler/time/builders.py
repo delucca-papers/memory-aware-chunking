@@ -1,9 +1,11 @@
-from dowser.common.types import TraceFunction
-from .tracer import trace
+from dowser.profiler.types import TraceHooks
+from .tracer import on_call
 
 
 __all__ = ["build_tracer"]
 
 
-def build_tracer() -> TraceFunction:
-    return trace
+def build_trace_hooks() -> TraceHooks:
+    return {
+        "on_call": [on_call],
+    }

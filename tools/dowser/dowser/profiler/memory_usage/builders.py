@@ -1,13 +1,12 @@
-from dowser.config import MemoryUsageBackend, MemoryUsageUnit
-from dowser.common.types import TraceFunction
-from .tracer import trace
+from dowser.config import MemoryUsageBackend
+from dowser.profiler.types import TraceHooks
+from .tracer import on_call
 
 
 __all__ = ["build_tracer"]
 
 
-def build_tracer(
-    enabled_backends: list[MemoryUsageBackend],
-    unit: MemoryUsageUnit,
-) -> TraceFunction:
-    return trace
+def build_trace_hooks(enabled_backends: MemoryUsageBackend) -> TraceHooks:
+    return {
+        "on_call": [on_call],
+    }

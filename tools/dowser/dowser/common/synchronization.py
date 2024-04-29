@@ -1,7 +1,7 @@
 from functools import wraps
 
 
-__all__ = ["lazy", "passthrough"]
+__all__ = ["lazy"]
 
 
 def lazy(func: callable):
@@ -14,7 +14,3 @@ def lazy(func: callable):
         return delayed
 
     return wrapper
-
-
-def passthrough(*args, **kwargs) -> tuple[tuple, dict]:
-    return args, kwargs

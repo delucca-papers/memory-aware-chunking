@@ -11,6 +11,7 @@ export OUTPUT_DIR
 export SESSION_ID
 export PRECISION
 export LOGGING_LEVEL
+export LOGGING_TRANSPORTS
 export UNIT
 #
 # For development
@@ -19,6 +20,7 @@ export UNIT
 # SESSION_ID="${TIMESTAMP}"
 # PRECISION="4"
 # LOGGING_LEVEL="DEBUG"
+# LOGGING_TRANSPORTS="CONSOLE"
 # UNIT="kb"
 #
 # For production
@@ -27,6 +29,7 @@ OUTPUT_DIR="${SCRIPT_DIR}/output/${TIMESTAMP}"
 SESSION_ID="${TIMESTAMP}"
 PRECISION="3"
 LOGGING_LEVEL="DEBUG"
+LOGGING_TRANSPORTS="CONSOLE,FILE"
 UNIT="mb"
 #
 ################################################################################
@@ -60,6 +63,7 @@ function run_with_backend {
         EXPERIMENT_OUTPUT_DIR="${OUTPUT_DIR}/${backend_name}" \
         EXPERIMENT_UNIT="${UNIT}" \
         EXPERIMENT_LOGGING_LEVEL="${LOGGING_LEVEL}" \
+        EXPERIMENT_LOGGING_TRANSPORTS="${LOGGING_TRANSPORTS}" \
         EXPERIMENT_BACKEND_NAME="${backend_name}" \
         EXPERIMENT_PRECISION="${PRECISION}" \
         EXPERIMENT_NUM_ELEMENTS="${NUM_ELEMENTS}" \
