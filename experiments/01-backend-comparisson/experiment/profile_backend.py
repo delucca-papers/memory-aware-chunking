@@ -1,23 +1,18 @@
 import os
+import dowser
 
-from dowser import profile
-from dowser.logger import get_logger
-from dowser.common import session_context
-from dowser.profiler.context import profiler_context
-from dowser.logger.context import logger_context
 from tasks import consume_large_memory
 
 
-def run_experiment(experiment_config: dict) -> None:
-    logger_context.update(experiment_config.get("logger"))
-    profiler_context.update(experiment_config.get("profiler"))
-    session_context.update(experiment_config.get("session"))
+def run_experiment(experiment_num_elements: int) -> None:
+    logger = dowser.get_logger()
 
-    logger = get_logger()
-    logger.info(f"Starting experiment with Session ID: {session_context.id}")
-    logger.debug(f"Experiment config: {experiment_config}")
+    logger.info(
+        f"Starting experiment with Session ID: {dowser.config.profiler.session_id}"
+    )
+    logger.debug(f"Experiment config: {dowser.config}")
 
-    profile(consume_large_memory)(experiment_num_elements)
+    dowser.profile(consume_large_memory, experiment_num_elements)
 
 
 if __name__ == "__main__":
@@ -28,28 +23,29 @@ if __name__ == "__main__":
     experiment_output_dir = os.environ.get("EXPERIMENT_OUTPUT_DIR", "./output")
     experiment_unit = os.environ.get("EXPERIMENT_UNIT", "mb")
     experiment_logging_level = os.environ.get("EXPERIMENT_LOGGING_LEVEL", "DEBUG")
-
-    experiment_config = {
-        "session": {
-            "id": experiment_session_id,
-            "output_dir": experiment_output_dir,
-        },
-        "logger": {
-            "level": experiment_logging_level,
-        },
-        "profiler": {
-            "metrics": {
-                "memory_usage": {
-                    "enabled_backends": experiment_backend_name,
-                    "precision": experiment_precision,
-                }
-            },
-        },
-    }
+    experiment_logging_transports = os.environ.get(
+        "EXPERIMENT_LOGGING_TRANSPORTS", "CONSOLE,FILE"
+    ).split(",")
 
     if not experiment_backend_name:
         raise ValueError(
             'You must provide a backend name on the "EXPERIMENT_BACKEND_NAME" environment variable'
         )
 
-    run_experiment(experiment_config)
+    dowser.load_config(
+        {
+            "output_dir": experiment_output_dir,
+            "logger": {
+                "enabled_transports": experiment_logging_transports,
+                "level": experiment_logging_level,
+            },
+            "profiler": {
+                "enabled_backends": [experiment_backend_name],
+                "session_id": experiment_session_id,
+                "precision": experiment_precision,
+                "unit": experiment_unit,
+            },
+        }
+    )
+
+    run_experiment(experiment_num_elements)

@@ -3,7 +3,7 @@
 output_dir = "./"
 
 [logger]
-enabled_transports = "console,file"
+enabled_transports = "console"
 level = "info"
 
 [profiler]

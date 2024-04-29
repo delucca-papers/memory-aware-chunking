@@ -32,15 +32,15 @@ UNIT="mb"
 ################################################################################
 
 function main {
-    #save_input
+    save_input
 
-    #run_with_backend "psutil"
-    #run_with_backend "resource"
-    #run_with_backend "mprof"
-    #run_with_backend "tracemalloc"
+    run_with_backend "psutil"
+    run_with_backend "resource"
+    run_with_backend "mprof"
+    run_with_backend "tracemalloc"
     run_with_backend "kernel"
 
-    #summarize_experiment
+    summarize_experiment
 }
 
 function save_input {

@@ -1,7 +1,14 @@
 from toolz import curry
+from enum import Enum
 
 
-__all__ = ["unique", "deep_merge", "filter_defined_values", "str_as_list"]
+__all__ = [
+    "unique",
+    "deep_merge",
+    "filter_defined_values",
+    "str_as_list",
+    "readable_enum_list",
+]
 
 
 def unique(values: list) -> list:
@@ -51,3 +58,7 @@ def str_as_list(value: str | None, sep: str = ",") -> list:
     if not value:
         return []
     return [part for part in value.split(sep) if part and part != ""]
+
+
+def readable_enum_list(enum_list: list[Enum]) -> str:
+    return [enum.value for enum in enum_list]

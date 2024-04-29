@@ -13,7 +13,7 @@ __all__ = ["Config"]
 initial_config = {
     "output_dir": "./",
     "logger": {
-        "enabled_transports": ["CONSOLE", "FILE"],
+        "enabled_transports": ["CONSOLE"],
         "level": "INFO",
     },
     "profiler": {
@@ -31,7 +31,7 @@ class Config(BaseModel):
     logger: LoggerConfig
     profiler: ProfilerConfig
 
-    @field_validator("output_dir")
+    @field_validator("output_dir", mode="before")
     def create_dir_if_not_exists(cls, v):
         if not os.path.isdir(v):
             os.makedirs(v, exist_ok=True)
@@ -98,8 +98,14 @@ class Config(BaseModel):
                 "profiler": {
                     "session_id": flag_config.get("session_id"),
                     "enabled_metrics": flag_config.get("enable_metric"),
-                    "script": flag_config.get("script"),
+                    "filepath": flag_config.get("filepath"),
+                    "entrypoint": flag_config.get("entrypoint"),
                     "args": flag_config.get("args"),
+                    "kwargs": [
+                        kwarg
+                        for kwarg_list in flag_config.get("kwargs", [])
+                        for kwarg in kwarg_list
+                    ],
                     "memory_usage": {
                         "enabled_backends": flag_config.get("enable_mem_backend"),
                         "unit": flag_config.get("mem_unit"),
@@ -119,5 +125,15 @@ class Config(BaseModel):
         config = deep_merge(initial_config, file_config, append=False)
         config = deep_merge(config, env_config, append=False)
         config = deep_merge(config, namespace_config, append=False)
+
+        return cls(**config)
+
+    @classmethod
+    def from_initial_config(cls, inital_config: dict = initial_config) -> "Config":
+        env_config = cls.from_flat_config(cls.parse_env())
+        file_config = cls.parse_file()
+
+        config = deep_merge(initial_config, file_config, append=False)
+        config = deep_merge(config, env_config, append=False)
 
         return cls(**config)

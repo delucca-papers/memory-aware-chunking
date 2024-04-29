@@ -20,13 +20,13 @@ class Level(Enum):
 
 
 class LoggerConfig(BaseModel):
-    enabled_transports: list[Transport] = [Transport.CONSOLE, Transport.FILE]
+    enabled_transports: list[Transport] = [Transport.CONSOLE]
     level: Level = Level.INFO
 
     @field_validator("enabled_transports", mode="before")
     def uppercase_enabled_transports(cls, v: any) -> list[Transport]:
         if isinstance(v, list):
-            return [Transport(i.upper()) for i in v]
+            return [Transport(i.upper()) if isinstance(i, str) else i for i in v]
 
         return v
 

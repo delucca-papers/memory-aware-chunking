@@ -1,15 +1,11 @@
 import random
-import dowser
+from dowser.logger import get_logger
 
 
 def consume_large_memory(num_elements: int) -> float:
-    logger = dowser.get_logger()
+    logger = get_logger()
     data = [random.random() for _ in range(num_elements)]
 
     logger.info(f"Consumed {num_elements} elements")
 
     return sum(data)
-
-
-if __name__ == "__main__":
-    consume_large_memory(1_000_000)

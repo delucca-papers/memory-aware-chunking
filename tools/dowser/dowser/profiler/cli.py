@@ -39,11 +39,28 @@ def attach_profiler_args(subparsers: _SubParsersAction) -> _SubParsersAction:
         help="Session ID to use for the profiling session (default: random UUID4)",
     )
 
-    profile_parser.add_argument("script", help="Path to the Python script to execute")
+    profile_parser.add_argument("filepath", help="Path to the Python file to execute")
+
+    profile_parser.add_argument(
+        "--entrypoint",
+        "-e",
+        help="Function to use as entrypoint of your file (default: __main__)",
+    )
+
+    profile_parser.add_argument(
+        "--kwargs",
+        nargs="*",
+        help="Keyword arguments that will be passed to your function in the format key=value",
+        action="append",
+        default={},
+    )
+
     profile_parser.add_argument(
         "args",
         nargs="*",
-        help="Arguments that will be passed to your script",
+        help="Arguments that will be passed to your function",
+        type=tuple,
+        default=tuple(),
     )
 
     profile_parser.set_defaults(func=run_profiler)
