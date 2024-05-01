@@ -3,7 +3,7 @@ from enum import Enum
 from pydantic import BaseModel, field_validator
 
 
-__all__ = (["LoggerConfig", "Transport"],)
+__all__ = ["LoggerConfig", "Transport"]
 
 
 class Transport(Enum):

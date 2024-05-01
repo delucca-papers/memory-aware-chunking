@@ -9,7 +9,6 @@ TIMESTAMP=$(date "+%Y%m%d_%H%M%S")
 export NUM_ELEMENTS
 export OUTPUT_DIR
 export SESSION_ID
-export PRECISION
 export LOGGING_LEVEL
 export LOGGING_TRANSPORTS
 export UNIT
@@ -18,7 +17,6 @@ export UNIT
 # NUM_ELEMENTS="100000"
 # OUTPUT_DIR="${SCRIPT_DIR}/output/${TIMESTAMP}"
 # SESSION_ID="${TIMESTAMP}"
-# PRECISION="4"
 # LOGGING_LEVEL="DEBUG"
 # LOGGING_TRANSPORTS="CONSOLE"
 # UNIT="kb"
@@ -27,7 +25,6 @@ export UNIT
 NUM_ELEMENTS="10_000_000"
 OUTPUT_DIR="${SCRIPT_DIR}/output/${TIMESTAMP}"
 SESSION_ID="${TIMESTAMP}"
-PRECISION="3"
 LOGGING_LEVEL="DEBUG"
 LOGGING_TRANSPORTS="CONSOLE,FILE"
 UNIT="mb"
@@ -39,9 +36,8 @@ function main {
 
     #run_with_backend "psutil"
     #run_with_backend "resource"
-    #run_with_backend "mprof"
     #run_with_backend "tracemalloc"
-    run_with_backend "kernel"
+    #run_with_backend "kernel"
 
     #summarize_experiment
 }
@@ -65,7 +61,6 @@ function run_with_backend {
         EXPERIMENT_LOGGING_LEVEL="${LOGGING_LEVEL}" \
         EXPERIMENT_LOGGING_TRANSPORTS="${LOGGING_TRANSPORTS}" \
         EXPERIMENT_BACKEND_NAME="${backend_name}" \
-        EXPERIMENT_PRECISION="${PRECISION}" \
         EXPERIMENT_NUM_ELEMENTS="${NUM_ELEMENTS}" \
         python experiment/profile_backend.py
     echo

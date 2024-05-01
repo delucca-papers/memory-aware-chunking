@@ -1,19 +1,16 @@
+import resource
+
 from types import FrameType
 from typing import Any, Tuple
-from io import TextIOWrapper
 from dowser.config import ProfilerMetric
-from dowser.common.file_handling import get_line_with_keyword, go_to_pointer
 
 
 __all__ = ["on_call", "on_return"]
 
 
-def get_memory_usage(
-    status_file: TextIOWrapper = open("/proc/self/status", "r"),
-) -> Tuple[float, str]:
-    file_content = go_to_pointer(0, status_file)
-    status_line = get_line_with_keyword("VmRSS", file_content)
-    memory_usage, unit = status_line.split(":")[1].split()
+def get_memory_usage() -> Tuple[float, str]:
+    unit = "kb"
+    memory_usage = resource.getrusage(resource.RUSAGE_SELF).ru_maxrss
 
     return ProfilerMetric.MEMORY_USAGE.value, float(memory_usage), unit
 

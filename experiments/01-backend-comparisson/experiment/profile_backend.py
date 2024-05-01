@@ -18,7 +18,6 @@ def run_experiment(experiment_num_elements: int) -> None:
 if __name__ == "__main__":
     experiment_backend_name = os.environ.get("EXPERIMENT_BACKEND_NAME")
     experiment_session_id = os.environ.get("EXPERIMENT_SESSION_ID", "experiment")
-    experiment_precision = int(os.environ.get("EXPERIMENT_PRECISION", "3"))
     experiment_num_elements = int(os.environ.get("EXPERIMENT_NUM_ELEMENTS", 1_000_000))
     experiment_output_dir = os.environ.get("EXPERIMENT_OUTPUT_DIR", "./output")
     experiment_unit = os.environ.get("EXPERIMENT_UNIT", "mb")
@@ -34,16 +33,17 @@ if __name__ == "__main__":
 
     dowser.load_config(
         {
+            "session_id": experiment_session_id,
             "output_dir": experiment_output_dir,
             "logger": {
                 "enabled_transports": experiment_logging_transports,
                 "level": experiment_logging_level,
             },
             "profiler": {
-                "enabled_backends": [experiment_backend_name],
-                "session_id": experiment_session_id,
-                "precision": experiment_precision,
-                "unit": experiment_unit,
+                "memory_usage": {
+                    "enabled_backends": [experiment_backend_name],
+                    "unit": experiment_unit,
+                },
             },
         }
     )
