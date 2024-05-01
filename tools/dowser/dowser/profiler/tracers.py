@@ -7,16 +7,21 @@ from dowser.common.logger import logger
 from .types import TraceHooks, TraceFunction, TracesList
 
 
-__all__ = ["build_tracer", "stop_tracer"]
+__all__ = ["build_start_tracer", "build_stop_tracer"]
 
 
-def build_tracer(**hooks: TraceHooks) -> Tuple[Callable, TracesList]:
+def build_start_tracer(**hooks: TraceHooks) -> Tuple[Callable, TracesList]:
     logger.info("Building profile tracer")
     enabled_hooks = hooks.keys()
     traces = []
 
     def start_tracer() -> None:
         logger.info("Starting profile tracer")
+
+        logger.info("Running before hooks")
+        before_hooks = hooks.get("before", [])
+        for hook in before_hooks:
+            hook()
 
         def collect_trace(frame: FrameType, event: str, arg: Any) -> TraceFunction:
             timestamp = time.time()
@@ -46,6 +51,17 @@ def build_tracer(**hooks: TraceHooks) -> Tuple[Callable, TracesList]:
     return start_tracer, traces
 
 
-def stop_tracer() -> None:
-    logger.info("Stopping profile tracer")
-    sys.settrace(None)
+def build_stop_tracer(**hooks: TraceHooks) -> Callable:
+    logger.info("Building stop profile tracer")
+
+    def stop_tracer() -> None:
+        logger.info("Stopping profile tracer")
+
+        logger.info("Running after hooks")
+        after_hooks = hooks.get("after", [])
+        for hook in after_hooks:
+            hook()
+
+        sys.settrace(None)
+
+    return stop_tracer

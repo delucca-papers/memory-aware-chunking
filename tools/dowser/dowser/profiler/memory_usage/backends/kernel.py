@@ -3,9 +3,14 @@ from typing import Any, Tuple
 from io import TextIOWrapper
 from dowser.config import ProfilerMetric
 from dowser.common.file_handling import get_line_with_keyword, go_to_pointer
+from dowser.common.synchronization import passthrough
 
 
-__all__ = ["on_call", "on_return"]
+__all__ = ["before", "on_call", "on_return", "after"]
+
+
+before = passthrough
+after = passthrough
 
 
 def get_memory_usage(

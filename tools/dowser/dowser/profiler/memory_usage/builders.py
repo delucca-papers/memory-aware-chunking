@@ -12,8 +12,10 @@ def build_trace_hooks(enabled_backends: MemoryUsageBackend) -> TraceHooks:
     logger.info(f'Enabled memory usage backends: "{enabled_backends}"')
 
     hooks = {
+        "before": [],
         "on_call": [],
         "on_return": [],
+        "after": [],
     }
 
     for backend in enabled_backends:

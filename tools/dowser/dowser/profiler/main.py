@@ -2,7 +2,7 @@ import random
 
 from dowser.config import Config
 from dowser.common.logger import logger
-from .tracers import build_tracer, stop_tracer
+from .tracers import build_start_tracer, build_stop_tracer
 from .handlers import execute_file
 from .builders import build_trace_hooks
 
@@ -17,7 +17,9 @@ def run_profiler(config: Config) -> None:
         config.profiler.enabled_metrics,
         config.profiler.memory_usage.enabled_backends,
     )
-    start_tracer, traces = build_tracer(**trace_hooks)
+
+    start_tracer, traces = build_start_tracer(**trace_hooks)
+    stop_tracer = build_stop_tracer(**trace_hooks)
 
     logger.info(f'Starting profiler execution for "{config.profiler.filepath}"')
     logger.debug(f"Enabled hooks: {trace_hooks.keys()}")
