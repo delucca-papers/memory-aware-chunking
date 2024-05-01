@@ -1,10 +1,11 @@
+from typing import Callable
 from functools import wraps
 
 
 __all__ = ["lazy"]
 
 
-def lazy(func: callable):
+def lazy(func: Callable):
     @wraps(func)
     def wrapper(*args, **kwargs):
         @wraps(func)

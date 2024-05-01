@@ -7,7 +7,7 @@ from functools import wraps
 from dowser.logger import get_logger
 
 
-def queue_to_list(queue: Queue) -> list[Any]:
+def queue_to_list(queue: Queue):
     return [queue.get() for _ in range(queue.qsize())]
 
 

@@ -1,6 +1,7 @@
 from typing import Any
 from dasf_seismic.transforms.transforms import Transform
-from dowser.core import get_logger
+from dowser.logger import get_logger
+from .data.loaders import load_segy
 
 
 def run_attribute(
@@ -11,6 +12,7 @@ def run_attribute(
 ):
     logger = get_logger()
     logger.debug(f"Running attribute {attribute.__class__.__name__}")
+    input = load_segy(input)
 
     if single_threaded:
         return __run_single_threaded(attribute, input)

@@ -16,7 +16,7 @@ class Metadata(TypedDict):
     collected_entries: int
 
 
-Log = tuple[ProfilerMetric, Entries, Metadata]
+Log = tuple
 
 
 __all__ = ["ProfilerMetric", "ProfileEntry", "Log", "Entries", "Metadata"]

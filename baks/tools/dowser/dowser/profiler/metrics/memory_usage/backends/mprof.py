@@ -10,7 +10,7 @@ from dowser.profiler.types import Metadata
 from ..types import MemoryUsageRecord
 
 
-def to_memory_usage_record(mprof_result: tuple[float, float]) -> MemoryUsageRecord:
+def to_memory_usage_record(mprof_result) -> MemoryUsageRecord:
     timestamp, memory_usage = mprof_result
 
     return memory_usage, timestamp

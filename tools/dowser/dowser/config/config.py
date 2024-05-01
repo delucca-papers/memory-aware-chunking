@@ -129,11 +129,11 @@ class Config(BaseModel):
         return cls(**config)
 
     @classmethod
-    def from_initial_config(cls, inital_config: dict = initial_config) -> "Config":
+    def from_initial_config(cls, custom_config: dict = initial_config) -> "Config":
         env_config = cls.from_flat_config(cls.parse_env())
         file_config = cls.parse_file()
 
-        config = deep_merge(initial_config, file_config, append=False)
+        config = deep_merge(custom_config, file_config, append=False)
         config = deep_merge(config, env_config, append=False)
 
         return cls(**config)

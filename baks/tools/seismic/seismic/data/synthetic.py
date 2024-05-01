@@ -39,7 +39,7 @@ def build_dataset_paths(
     return dataset_paths
 
 
-def get_sorted_dataset_paths_from_dir(datasets_path: str) -> list[str]:
+def get_sorted_dataset_paths_from_dir(datasets_path: str):
     return [
         os.path.join(datasets_path, filename)
         for filename in sorted(os.listdir(datasets_path))
@@ -54,7 +54,7 @@ def generate_and_save_for_range(
     step_size: int,
     range_size: int,
     output_dir: str,
-) -> list[str]:
+):
     logger = get_logger()
 
     logger.info(f"Generating synthetic data with the following parameters:")
@@ -96,7 +96,7 @@ def generate_varying_dimension(
     step_size: int,
     range_size: int,
     output_dir: str,
-) -> list[str]:
+):
     return [
         generate_and_save_synthetic_data(
             step_num * step_size if dimension == 0 else num_inlines,
@@ -151,7 +151,7 @@ def generate_and_save_synthetic_data(
     return filepath
 
 
-def __ricker_wavelet(frequency: int, length: int, dt: float) -> np.ndarray[float]:
+def __ricker_wavelet(frequency: int, length: int, dt: float) -> np.ndarray:
     t = np.linspace(-length / 2, (length / 2) - dt, length) * dt
     y = (1 - 2 * (np.pi**2) * (frequency**2) * (t**2)) * np.exp(
         -(np.pi**2) * (frequency**2) * (t**2)
@@ -162,10 +162,10 @@ def __ricker_wavelet(frequency: int, length: int, dt: float) -> np.ndarray[float
 
 def __generate_synthetic_seismic(
     reflectivity: float,
-    wavelet: np.ndarray[float],
+    wavelet: np.ndarray,
     num_traces: int,
     num_samples: int,
-) -> np.ndarray[float]:
+) -> np.ndarray:
     seismic_data = np.zeros((num_traces, num_samples))
     for i in range(num_traces):
         seismic_data[i, :] = convolve(reflectivity, wavelet, mode="same")
@@ -174,7 +174,7 @@ def __generate_synthetic_seismic(
 
 
 def __save_seismic_to_segy(
-    data: np.ndarray[float],
+    data: np.ndarray,
     filename: str,
     sample_interval: int,
 ) -> None:

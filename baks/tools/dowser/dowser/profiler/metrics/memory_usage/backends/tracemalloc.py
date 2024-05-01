@@ -12,13 +12,13 @@ from dowser.profiler.types import Metadata
 from ..types import MemoryUsageRecord
 
 
-def to_memory_usage_record(traced_memory: tuple[int, int]) -> MemoryUsageRecord:
+def to_memory_usage_record(traced_memory) -> MemoryUsageRecord:
     timestamp = time.time()
 
     return timestamp, float(traced_memory[0])
 
 
-def get_traced_memory() -> tuple[int, int]:
+def get_traced_memory():
     return tracemalloc.get_traced_memory()
 
 

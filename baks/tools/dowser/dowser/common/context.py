@@ -14,7 +14,7 @@ class Context(ABC):
 
     def __init__(
         self,
-        initial_data: dict | None = None,
+        initial_data,
         config_file: str = os.environ.get("DOWSER_CONFIG_FILE", "dowser.toml"),
     ):
         initial_data = initial_data or self._initial_data
@@ -68,7 +68,7 @@ class Context(ABC):
         loaded_config = loaded_config.get(self._base_path, {})
         self.update(loaded_config)
 
-    def __override_with_env(self, config: dict | None = None, parent_key: str = ""):
+    def __override_with_env(self, config=None, parent_key: str = ""):
         config = config or self._data
 
         for key, value in config.items():

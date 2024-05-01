@@ -2,7 +2,7 @@ import uuid
 import importlib
 
 from pydantic import BaseModel, FilePath, field_validator
-from typing import Optional
+from typing import Optional, List, Any
 from enum import Enum
 
 
@@ -29,11 +29,11 @@ class MemoryUsageUnit(Enum):
 
 
 class MemoryUsageConfig(BaseModel):
-    enabled_backends: list[MemoryUsageBackend] = [MemoryUsageBackend.KERNEL]
+    enabled_backends: List[MemoryUsageBackend] = [MemoryUsageBackend.KERNEL]
     unit: MemoryUsageUnit = MemoryUsageUnit.MB
 
     @field_validator("enabled_backends", mode="before")
-    def uppercase_enabled_backends(cls, v: any) -> list[MemoryUsageBackend]:
+    def uppercase_enabled_backends(cls, v: Any) -> List[MemoryUsageBackend]:
         if isinstance(v, list):
             return [
                 MemoryUsageBackend(i.upper()) if isinstance(i, str) else i for i in v
@@ -42,7 +42,7 @@ class MemoryUsageConfig(BaseModel):
         return v
 
     @field_validator("unit", mode="before")
-    def uppercase_unit(cls, v: any) -> MemoryUsageUnit:
+    def uppercase_unit(cls, v: Any) -> MemoryUsageUnit:
         if isinstance(v, str):
             v = v.upper()
 
@@ -51,7 +51,7 @@ class MemoryUsageConfig(BaseModel):
 
 class ProfilerConfig(BaseModel):
     session_id: str = str(uuid.uuid4())
-    enabled_metrics: list[Metric] = [Metric.MEMORY_USAGE, Metric.TIME]
+    enabled_metrics: List[Metric] = [Metric.MEMORY_USAGE, Metric.TIME]
     memory_usage: MemoryUsageConfig
     filepath: Optional[FilePath] = None
     entrypoint: Optional[str] = None
@@ -59,14 +59,14 @@ class ProfilerConfig(BaseModel):
     kwargs: dict = {}
 
     @field_validator("enabled_metrics", mode="before")
-    def uppercase_enabled_transports(cls, v: any) -> list[Metric]:
+    def uppercase_enabled_transports(cls, v: Any) -> List[Metric]:
         if isinstance(v, list):
             return [Metric(i.upper()) if isinstance(i, str) else i for i in v]
 
         return v
 
     @field_validator("kwargs", mode="before")
-    def parse_kwargs(cls, v: any):
+    def parse_kwargs(cls, v: Any):
         if isinstance(v, dict):
             return v
         if isinstance(v, list):
@@ -82,7 +82,7 @@ class ProfilerConfig(BaseModel):
         raise TypeError("kwarg must be a list of strings or a dict")
 
     @field_validator("entrypoint")
-    def check_function_exists(cls, v: any, values):
+    def check_function_exists(cls, v: Any, values):
         if v is None:
             return v
         filepath = values.data.get("filepath")

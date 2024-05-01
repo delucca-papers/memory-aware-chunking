@@ -3,8 +3,8 @@ from typing import Literal, TypedDict
 EventType = Literal["START", "END", "EXECUTION_TIME"]
 Time = float
 
-TimeRecord = tuple[EventType, Time]
-TimeLog = list[TimeRecord]
+TimeRecord = tuple
+TimeLog = list
 
 
 class TimeEntry(TypedDict):
@@ -12,7 +12,7 @@ class TimeEntry(TypedDict):
     time: Time
 
 
-TimeProfile = list[TimeEntry]
+TimeProfile = list
 
 
 __all__ = ["TimeLog", "TimeRecord", "TimeProfile", "TimeProfile", "TimeEntry"]

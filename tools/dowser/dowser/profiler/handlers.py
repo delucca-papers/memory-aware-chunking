@@ -1,5 +1,6 @@
 import sys
 
+from typing import Optional, Callable
 from pathlib import Path
 from dowser.common.logger import logger
 
@@ -11,9 +12,9 @@ def execute_file(
     filepath: Path,
     args: tuple,
     kwargs: dict,
-    function_name: str | None = None,
-    before: callable = lambda: None,
-    after: callable = lambda: None,
+    function_name: Optional[str] = None,
+    before: Callable = lambda: None,
+    after: Callable = lambda: None,
 ) -> None:
     logger.info(
         f'Starting new profiler session for file "{filepath}" with entrypoint set to: "{function_name if function_name else "__main__"}"'

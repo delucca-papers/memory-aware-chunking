@@ -20,11 +20,11 @@ class ProfilerContext(Context):
     }
 
     @property
-    def enabled_profilers(self) -> list[str]:
+    def enabled_profilers(self):
         return self.get("enabled_metrics").split(",")
 
     @property
-    def memory_usage_enabled_backends(self) -> list[str]:
+    def memory_usage_enabled_backends(self):
         return self.get("metrics.memory_usage.enabled_backends").split(",")
 
     @property
@@ -48,7 +48,7 @@ class ProfilerContext(Context):
         return self.get("report.format")
 
 
-profiler_context = ProfilerContext()
+profiler_context = ProfilerContext({})
 
 
 __all__ = ["profiler_context", "ProfilerContext"]

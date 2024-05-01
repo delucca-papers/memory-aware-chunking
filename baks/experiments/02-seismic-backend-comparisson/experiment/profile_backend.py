@@ -43,6 +43,13 @@ def run_experiment(
 
     logger.info("Finished executing experiment")
 
+"""
+with open(f"/sys/fs/cgroup/memory/dowser/memory.limit_in_bytes", "w") as f:
+    f.write(str(524288000))
+
+with open(f"/sys/fs/cgroup/memory/dowser/cgroup.procs", "w") as f:
+    f.write(str(os.getpid()))
+"""
 
 if __name__ == "__main__":
     experiment_backend_name = os.environ.get("EXPERIMENT_BACKEND_NAME")

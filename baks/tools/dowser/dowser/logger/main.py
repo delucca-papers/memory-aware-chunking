@@ -6,7 +6,7 @@ from dowser.common import get_function_path
 from .builders import build_logger
 
 
-def get_logger(logger_name: str | None = None) -> Logger:
+def get_logger(logger_name=None) -> Logger:
     logger_name = logger_name or get_function_path()
 
     return compose(build_logger, getLogger)(logger_name)

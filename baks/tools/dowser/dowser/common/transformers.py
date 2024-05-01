@@ -35,7 +35,7 @@ def to_snake_case(s: str) -> str:
 
 
 def normalize_keys_case(
-    obj: dict | list | str,
+    obj,
     to_case: Literal["camel", "snake"] = "snake",
 ):
     available_converters = {

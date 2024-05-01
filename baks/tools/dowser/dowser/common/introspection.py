@@ -18,7 +18,7 @@ def get_caller_function_path() -> str:
     return f"{module_name}.{function_name}"
 
 
-def get_function_path(function: Callable | None = None) -> str:
+def get_function_path(function=None) -> str:
     return (
         get_defined_function_path(function) if function else get_caller_function_path()
     )

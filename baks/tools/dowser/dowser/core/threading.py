@@ -7,7 +7,7 @@ from dowser.common import lazy
 from .synchronization import loop_until_sync, queue_to_list
 
 
-def get_result(thread: Thread, queue: Queue) -> list[Any]:
+def get_result(thread: Thread, queue: Queue):
     thread.join()
     return queue_to_list(queue)
 
@@ -18,7 +18,7 @@ def parallelized_profiler(
     precision: float,
     *args,
     **kwargs,
-) -> tuple[Callable, Event]:
+):
     logger = get_logger()
     logger.debug(
         f"Setting up threading parallelized profiler for function {function.__name__}"

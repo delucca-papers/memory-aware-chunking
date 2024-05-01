@@ -26,7 +26,7 @@ def to_memory_usage_record(line: str) -> MemoryUsageRecord:
 kernel_profiler = build_parallelized_profiler(
     compose(
         to_memory_usage_record,
-        get_line_with_keyword("VmSize"),
+        get_line_with_keyword("VmRSS"),
         go_to_pointer(0),
     )
 )

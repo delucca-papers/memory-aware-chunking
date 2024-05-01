@@ -21,7 +21,7 @@ class LoggerContext(Context):
     __session_context: SessionContext
 
     @property
-    def enabled_transports(self) -> list[str]:
+    def enabled_transports(self):
         return self.get("enabled_transports").split(",")
 
     @property
@@ -62,7 +62,7 @@ class LoggerContext(Context):
 
     def __init__(
         self,
-        initial_data: dict = {},
+        initial_data={},
         session_context: SessionContext = session_context,
     ):
         super().__init__(initial_data=initial_data)

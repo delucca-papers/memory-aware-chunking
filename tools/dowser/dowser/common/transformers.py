@@ -1,3 +1,4 @@
+from typing import List, Optional
 from toolz import curry
 from enum import Enum
 
@@ -11,7 +12,7 @@ __all__ = [
 ]
 
 
-def unique(values: list) -> list:
+def unique(values: List) -> List:
     unique_values = []
     for value in values:
         if value not in unique_values:
@@ -54,11 +55,11 @@ def filter_defined_values(data: dict, allow_empty_lists: bool = True) -> dict:
     return filtered_data
 
 
-def str_as_list(value: str | None, sep: str = ",") -> list:
+def str_as_list(value: Optional[str], sep: str = ",") -> list:
     if not value:
         return []
     return [part for part in value.split(sep) if part and part != ""]
 
 
-def readable_enum_list(enum_list: list[Enum]) -> str:
+def readable_enum_list(enum_list: List[Enum]) -> str:
     return [enum.value for enum in enum_list]

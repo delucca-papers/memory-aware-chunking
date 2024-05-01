@@ -13,8 +13,8 @@ from .metrics import to_memory_usage_profile, to_time_profile
 
 
 class ProfilerReport(Report):
-    __logs: list[Log] = []
-    __profiles: list[Profile]
+    __logs: list = []
+    __profiles: list
     __profiler_context: ProfilerContext
     __session_context: SessionContext
     __logger: Logger
@@ -51,7 +51,7 @@ class ProfilerReport(Report):
         self,
         session_context: SessionContext = session_context,
         profiler_context: ProfilerContext = profiler_context,
-        profiles: list[dict] = [],
+        profiles: list = [],
     ):
         self.__logger = get_logger()
         self.__session_context = normalize_keys_case(session_context)

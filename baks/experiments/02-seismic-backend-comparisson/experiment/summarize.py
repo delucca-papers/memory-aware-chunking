@@ -102,7 +102,7 @@ def plot_execution_time_by_backend(directory: str):
     plt.clf()
 
 
-def __get_execution_time_result(directory: str, backend: str) -> tuple[float, str]:
+def __get_execution_time_result(directory: str, backend: str):
     backend_report = __get_result_file_report(directory, backend)
     time_profile = backend_report.get_profiles_by_metric("time")[0]
     inputs = time_profile.get("metadata").get("inputs")

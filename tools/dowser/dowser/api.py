@@ -1,5 +1,6 @@
 import inspect
 
+from typing import Callable
 from toolz import compose, curry, do
 from .config import Config
 from .common.transformers import deep_merge
@@ -33,7 +34,7 @@ def load_config(config: dict) -> None:
         setup_logger_from_config(context.config)
 
 
-def profile(function: callable, *args, **kwargs) -> None:
+def profile(function: Callable, *args, **kwargs) -> None:
     function_filepath = inspect.getfile(function)
     function_name = function.__name__
 

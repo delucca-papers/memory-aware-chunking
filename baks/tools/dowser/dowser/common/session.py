@@ -30,7 +30,7 @@ class SessionContext(Context):
 
     def __init__(
         self,
-        initial_data: dict | None = None,
+        initial_data=None,
     ):
         super().__init__(initial_data=initial_data)
         initial_data = initial_data or self._initial_data

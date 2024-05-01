@@ -3,8 +3,8 @@ from typing import Literal, TypedDict
 Timestamp = float
 MemoryUsage = float
 MemoryUnit = Literal["b", "kb", "mb", "gb"]
-MemoryUsageRecord = tuple[Timestamp, MemoryUsage]
-MemoryUsageLog = list[MemoryUsageRecord]
+MemoryUsageRecord = tuple
+MemoryUsageLog = list
 
 
 class MemoryUsageEntry(TypedDict):
@@ -19,7 +19,7 @@ class Metadata(TypedDict):
     unit: MemoryUnit
 
 
-MemoryUsageProfile = list[MemoryUsageEntry]
+MemoryUsageProfile = list
 
 
 __all__ = [

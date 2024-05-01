@@ -13,7 +13,7 @@ def build_parallelized_profiler(
     *profiler_args,
     strategy: Literal["process", "thread"] = "process",
     **profiler_kwargs,
-) -> tuple[Callable, Callable]:
+):
     available_handlers = {
         "process": mp_parallelized_profiler,
         "thread": th_parallelized_profiler,
