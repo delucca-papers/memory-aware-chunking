@@ -32,11 +32,12 @@ def execute_file(
     }
 
     with open(filepath, "r") as f:
-        file = f.read()
+        file_content = f.read()
 
     try:
+        compiled_code = compile(file_content, str(filepath), "exec")
         before()
-        exec(file, exec_globals)
+        exec(compiled_code, exec_globals)
         if function_name:
             function = exec_globals[function_name]
             function(*args, **kwargs)

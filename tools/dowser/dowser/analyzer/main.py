@@ -13,3 +13,5 @@ def compare_profiles(config: Config) -> None:
     loaded_sessions = {
         name: load_session(path) for name, path in config.analyzer.sessions.items()
     }
+
+    print(loaded_sessions["psutil"])
