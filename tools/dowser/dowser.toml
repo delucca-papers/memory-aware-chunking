@@ -12,3 +12,7 @@ enabled_metrics = "memory_usage,time"
 
 [profiler.memory_usage]
 enabled_backends = "psutil,resource,tracemalloc,mprof,kernel"
+
+[analyzer]
+unit = "mb"
+sessions = ""

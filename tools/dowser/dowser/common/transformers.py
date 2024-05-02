@@ -1,4 +1,4 @@
-from typing import List, Optional
+from typing import List, Dict, Optional
 from toolz import curry
 from enum import Enum
 
@@ -9,6 +9,7 @@ __all__ = [
     "filter_defined_values",
     "str_as_list",
     "readable_enum_list",
+    "from_key_value_string",
 ]
 
 
@@ -63,3 +64,13 @@ def str_as_list(value: Optional[str], sep: str = ",") -> list:
 
 def readable_enum_list(enum_list: List[Enum]) -> str:
     return [enum.value for enum in enum_list]
+
+
+def from_key_value_string(key_value_string: Optional[str], sep: str = "=") -> Dict:
+    if not key_value_string:
+        return {}
+
+    return {
+        key: value
+        for key, value in [part.split(sep) for part in key_value_string.split(",")]
+    }

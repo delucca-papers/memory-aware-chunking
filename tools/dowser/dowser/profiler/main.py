@@ -12,6 +12,7 @@ __all__ = ["run_profiler"]
 
 def run_profiler(config: Config) -> None:
     logger.info("Starting profiler execution")
+    logger.debug(f"Using config: {config}")
 
     trace_hooks = build_trace_hooks(
         config.profiler.enabled_metrics,

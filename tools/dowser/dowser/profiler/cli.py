@@ -3,10 +3,10 @@ from dowser.common.cli import AppendUnique
 from .main import run_profiler
 
 
-__all__ = ["attach_profiler_args"]
+__all__ = ["attach_args"]
 
 
-def attach_profiler_args(subparsers: _SubParsersAction) -> _SubParsersAction:
+def attach_args(subparsers: _SubParsersAction) -> _SubParsersAction:
     profile_parser = subparsers.add_parser(
         "profile",
         help="Profile enabled metrics of a Python program",
