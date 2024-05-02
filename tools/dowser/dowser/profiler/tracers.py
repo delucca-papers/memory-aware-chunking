@@ -29,18 +29,22 @@ def build_start_tracer(**hooks: TraceHooks) -> Tuple[Callable, TraceList]:
             function_name = frame.f_code.co_name
             event_key = f"on_{event}"
 
+            # We should not store the stop_tracer event, since that would
+            # be an orphan trace
+            if function_name == "stop_tracer" and "dowser" in source:
+                return
+
             if event_key in enabled_hooks:
-                for hook in hooks[event_key]:
-                    trace = hook(frame, event, arg)
-                    traces.append(
-                        (
-                            timestamp,
-                            source,
-                            function_name,
-                            event,
-                            *trace,
-                        )
+                event_traces = [hook(frame, event, arg) for hook in hooks[event_key]]
+                traces.append(
+                    (
+                        timestamp,
+                        source,
+                        function_name,
+                        event,
+                        event_traces,
                     )
+                )
 
             return collect_trace
 
@@ -53,13 +57,13 @@ def build_stop_tracer(**hooks: TraceHooks) -> Callable:
     logger.info("Building stop profile tracer")
 
     def stop_tracer() -> None:
+        sys.settrace(None)
+
         logger.info("Stopping profile tracer")
 
         logger.info("Running after hooks")
         after_hooks = hooks.get("after", [])
         for hook in after_hooks:
             hook()
-
-        sys.settrace(None)
 
     return stop_tracer

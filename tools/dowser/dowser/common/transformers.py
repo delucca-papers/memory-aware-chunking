@@ -10,6 +10,7 @@ __all__ = [
     "str_as_list",
     "readable_enum_list",
     "from_key_value_string",
+    "convert_to_unit",
 ]
 
 
@@ -74,3 +75,32 @@ def from_key_value_string(key_value_string: Optional[str], sep: str = "=") -> Di
         key: value
         for key, value in [part.split(sep) for part in key_value_string.split(",")]
     }
+
+
+def convert_to_unit(unit_to: str, unit_from: str, value: float) -> float:
+    normalized_unit_to = unit_to.lower()
+    normalized_unit_from = unit_from.lower()
+
+    if normalized_unit_to == normalized_unit_from:
+        return value
+
+    conversion = {
+        "b_to_kb": 1024,
+        "b_to_mb": 1024**2,
+        "b_to_gb": 1024**3,
+        "kb_to_b": 1 / 1024,
+        "kb_to_mb": 1024,
+        "kb_to_gb": 1024**2,
+        "mb_to_b": 1 / 1024**2,
+        "mb_to_kb": 1 / 1024,
+        "mb_to_gb": 1024,
+        "gb_to_b": 1 / 1024**3,
+        "gb_to_kb": 1 / 1024**2,
+        "gb_to_mb": 1 / 1024,
+    }
+
+    conversion_key = f"{normalized_unit_from}_to_{normalized_unit_to}"
+    if conversion_key not in conversion:
+        raise ValueError(f"Conversion from {unit_from} to {unit_to} is not supported")
+
+    return float(value / conversion[conversion_key])

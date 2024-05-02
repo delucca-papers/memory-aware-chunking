@@ -1,7 +1,7 @@
 import pyarrow as pa
 import pyarrow.parquet as pq
 
-from typing import List, Tuple, List
+from typing import List, Tuple, List, Any
 from dowser.config import MemoryUsageBackend, ProfilerMetric
 from dowser.common.transformers import deep_merge
 from dowser.common.logger import logger
@@ -41,7 +41,6 @@ def build_profile(trace_list: TraceList, output_dir: str, file_name: str) -> str
         source_locations,
         function_names,
         event_types,
-        metrics,
         additional_data,
     ) = build_profile_parquet_data(trace_list)
     logger.debug(f"Using data: {len(timestamps)} records")
@@ -53,7 +52,6 @@ def build_profile(trace_list: TraceList, output_dir: str, file_name: str) -> str
                 source_locations,
                 function_names,
                 event_types,
-                metrics,
                 additional_data,
             ],
             schema=schema,
@@ -73,8 +71,7 @@ def build_profile_parquet_schema() -> pa.Schema:
             ("source", pa.string()),
             ("function_name", pa.string()),
             ("event_type", pa.string()),
-            ("metric", pa.string()),
-            ("additional_data", pa.list_(pa.string())),
+            ("additional_data", pa.list_(pa.list_(pa.string()))),
         ]
     )
 
@@ -84,14 +81,12 @@ def build_profile_parquet_data(trace_list: TraceList) -> Tuple[
     List[str],
     List[str],
     List[str],
-    List[str],
-    List[List[str]],
+    List[List[List[str]]],
 ]:
     timestamps = []
     source_locations = []
     function_names = []
     event_types = []
-    metrics = []
     additional_data = []
 
     for trace in trace_list:
@@ -99,14 +94,16 @@ def build_profile_parquet_data(trace_list: TraceList) -> Tuple[
         source_locations.append(trace[1])
         function_names.append(trace[2])
         event_types.append(trace[3])
-        metrics.append(trace[4])
-        additional_data.append([str(e) for e in trace[5:]] if len(trace) > 5 else [])
+        additional_data.append(build_additional_data(trace[4:][0]))
 
     return (
         timestamps,
         source_locations,
         function_names,
         event_types,
-        metrics,
         additional_data,
     )
+
+
+def build_additional_data(data: List[List[Any]]) -> List[List[str]]:
+    return [[str(item) for item in sublist] for sublist in data]

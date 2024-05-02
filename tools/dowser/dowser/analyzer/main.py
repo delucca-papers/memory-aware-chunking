@@ -1,6 +1,7 @@
 from dowser.common.logger import logger
 from dowser.config import Config
 from .loaders import load_session
+from .builders import build_trace_tree
 
 
 __all__ = ["compare_profiles"]
@@ -14,4 +15,4 @@ def compare_profiles(config: Config) -> None:
         name: load_session(path) for name, path in config.analyzer.sessions.items()
     }
 
-    print(loaded_sessions["psutil"])
+    trace_tree = build_trace_tree(loaded_sessions["psutil"])
