@@ -8,7 +8,7 @@ from .common.logger import setup_logger_from_config, logger
 from .profiler import run_profiler
 
 
-__all__ = ["load_config", "get_logger", "config", "profile"]
+__all__ = ["load_config", "get_logger", "profile", "context"]
 
 
 class Context:
@@ -19,9 +19,6 @@ class Context:
 
 
 context = Context()
-
-
-config = context.config
 
 
 def load_config(config: dict) -> None:

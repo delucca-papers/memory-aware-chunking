@@ -4,7 +4,7 @@ from dowser.config import Config
 from dowser.common.logger import logger
 from .tracers import build_start_tracer, build_stop_tracer
 from .handlers import execute_file
-from .builders import build_trace_hooks
+from .builders import build_trace_hooks, build_profile
 
 
 __all__ = ["run_profiler"]
@@ -41,3 +41,5 @@ def run_profiler(config: Config) -> None:
     logger.info("Profiler execution finished")
     logger.info(f"Amount of collected traces: {amount_of_traces}")
     logger.debug(f"Sample trace: {traces[sample_trace_index]}")
+
+    build_profile(traces, config.output_dir, config.profiler.session_id)

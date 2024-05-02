@@ -29,13 +29,7 @@ def attach_profiler_args(subparsers: _SubParsersAction) -> _SubParsersAction:
     )
 
     profile_parser.add_argument(
-        "--mem-unit",
-        help="Unit to use for the memory usage (default: mb)",
-        choices=["kb", "mb", "gb"],
-    )
-
-    profile_parser.add_argument(
-        "--session-id",
+        "--profiler-session-id",
         help="Session ID to use for the profiling session (default: random UUID4)",
     )
 

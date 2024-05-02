@@ -18,19 +18,11 @@ class MemoryUsageBackend(Enum):
     PSUTIL = "PSUTIL"
     RESOURCE = "RESOURCE"
     TRACEMALLOC = "TRACEMALLOC"
-    MPROF = "MPROF"
     KERNEL = "KERNEL"
-
-
-class MemoryUsageUnit(Enum):
-    KB = "KB"
-    MB = "MB"
-    GB = "GB"
 
 
 class MemoryUsageConfig(BaseModel):
     enabled_backends: List[MemoryUsageBackend] = [MemoryUsageBackend.KERNEL]
-    unit: MemoryUsageUnit = MemoryUsageUnit.MB
 
     @field_validator("enabled_backends", mode="before")
     def uppercase_enabled_backends(cls, v: Any) -> List[MemoryUsageBackend]:
@@ -40,13 +32,6 @@ class MemoryUsageConfig(BaseModel):
             ]
 
         return v
-
-    @field_validator("unit", mode="before")
-    def uppercase_unit(cls, v: Any) -> MemoryUsageUnit:
-        if isinstance(v, str):
-            v = v.upper()
-
-        return MemoryUsageUnit(v)
 
 
 class ProfilerConfig(BaseModel):

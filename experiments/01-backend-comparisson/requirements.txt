@@ -2,3 +2,4 @@ pandas==2.2.1
 matplotlib==3.8.3
 numpy==1.26.4
 scipy==1.13.0
+pyarrow==16.0.0 

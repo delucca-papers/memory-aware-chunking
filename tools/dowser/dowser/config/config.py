@@ -20,7 +20,6 @@ initial_config = {
         "enabled_metrics": ["MEMORY_USAGE", "TIME"],
         "memory_usage": {
             "enabled_backends": ["KERNEL"],
-            "unit": "MB",
         },
     },
 }
@@ -41,7 +40,7 @@ class Config(BaseModel):
     def parse_env() -> dict:
         return filter_defined_values(
             {
-                "session_id": os.environ.get("DOWSER_SESSION_ID"),
+                "profiler_session_id": os.environ.get("DOWSER_PROFILER_SESSION_ID"),
                 "output_dir": os.environ.get("DOWSER_OUTPUT_DIR"),
                 "log_level": os.environ.get("DOWSER_LOG_LEVEL"),
                 "log_transport": str_as_list(os.environ.get("DOWSER_LOG_TRANSPORT")),
@@ -49,7 +48,6 @@ class Config(BaseModel):
                 "enable_mem_backend": str_as_list(
                     os.environ.get("DOWSER_ENABLE_MEM_BACKEND")
                 ),
-                "mem_unit": os.environ.get("DOWSER_MEM_UNIT"),
             },
             allow_empty_lists=False,
         )
@@ -96,7 +94,7 @@ class Config(BaseModel):
                     "level": flag_config.get("log_level"),
                 },
                 "profiler": {
-                    "session_id": flag_config.get("session_id"),
+                    "session_id": flag_config.get("profiler_session_id"),
                     "enabled_metrics": flag_config.get("enable_metric"),
                     "filepath": flag_config.get("filepath"),
                     "entrypoint": flag_config.get("entrypoint"),
@@ -108,7 +106,6 @@ class Config(BaseModel):
                     ],
                     "memory_usage": {
                         "enabled_backends": flag_config.get("enable_mem_backend"),
-                        "unit": flag_config.get("mem_unit"),
                     },
                 },
             },

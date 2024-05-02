@@ -1,5 +1,6 @@
 from typing import Callable, TypedDict, List, Any, Tuple
 from types import FrameType
+from dowser.config import ProfilerMetric
 
 
 __all__ = ["TraceFunction", "TraceHooks", "TraceList"]
@@ -9,11 +10,17 @@ Event = str
 TraceFunction = Callable[[FrameType, Event, Any], Tuple]
 
 Timestamp = str
-FilePath = str
-FunctionLineNumber = int
+Source = str
 FunctionName = str
-Trace = Tuple[Timestamp, FilePath, FunctionLineNumber, FunctionName, Event, Any]
-TracesList = List[Trace]
+Trace = Tuple[
+    Timestamp,
+    Source,
+    FunctionName,
+    Event,
+    ProfilerMetric,
+    Any,
+]
+TraceList = List[Trace]
 
 
 class TraceHooks(TypedDict):

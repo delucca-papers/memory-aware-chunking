@@ -8,7 +8,7 @@ TIMESTAMP=$(date "+%Y%m%d_%H%M%S")
 # Input Parameters
 export NUM_ELEMENTS
 export OUTPUT_DIR
-export SESSION_ID
+export SESSION_ID_PREFIX
 export LOGGING_LEVEL
 export LOGGING_TRANSPORTS
 export UNIT
@@ -16,7 +16,7 @@ export UNIT
 # For development
 # NUM_ELEMENTS="100000"
 # OUTPUT_DIR="${SCRIPT_DIR}/output/${TIMESTAMP}"
-# SESSION_ID="${TIMESTAMP}"
+# SESSION_ID_PREFIX="${TIMESTAMP}"
 # LOGGING_LEVEL="DEBUG"
 # LOGGING_TRANSPORTS="CONSOLE"
 # UNIT="kb"
@@ -24,7 +24,7 @@ export UNIT
 # For production
 NUM_ELEMENTS="10_000_000"
 OUTPUT_DIR="${SCRIPT_DIR}/output/${TIMESTAMP}"
-SESSION_ID="${TIMESTAMP}"
+SESSION_ID_PREFIX="${TIMESTAMP}"
 LOGGING_LEVEL="DEBUG"
 LOGGING_TRANSPORTS="CONSOLE,FILE"
 UNIT="mb"
@@ -55,9 +55,8 @@ function run_with_backend {
     local backend_name=$1
 
     echo "Running with ${backend_name} backend..."
-    EXPERIMENT_SESSION_ID="${TIMESTAMP}" \
+    EXPERIMENT_SESSION_ID="${SESSION_ID_PREFIX}-${backend_name}" \
         EXPERIMENT_OUTPUT_DIR="${OUTPUT_DIR}/${backend_name}" \
-        EXPERIMENT_UNIT="${UNIT}" \
         EXPERIMENT_LOGGING_LEVEL="${LOGGING_LEVEL}" \
         EXPERIMENT_LOGGING_TRANSPORTS="${LOGGING_TRANSPORTS}" \
         EXPERIMENT_BACKEND_NAME="${backend_name}" \
@@ -69,6 +68,7 @@ function run_with_backend {
 function summarize_experiment {
     echo "Summarizing experiment..."
     EXPERIMENT_OUTPUT_DIR="${OUTPUT_DIR}" \
+        EXPERIMENT_UNIT="${UNIT}" \
         python experiment/summarize.py
 }
 

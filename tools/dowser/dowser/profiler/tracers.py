@@ -4,13 +4,13 @@ import time
 from typing import Any, Callable, Tuple
 from types import FrameType
 from dowser.common.logger import logger
-from .types import TraceHooks, TraceFunction, TracesList
+from .types import TraceHooks, TraceFunction, TraceList
 
 
 __all__ = ["build_start_tracer", "build_stop_tracer"]
 
 
-def build_start_tracer(**hooks: TraceHooks) -> Tuple[Callable, TracesList]:
+def build_start_tracer(**hooks: TraceHooks) -> Tuple[Callable, TraceList]:
     logger.info("Building profile tracer")
     enabled_hooks = hooks.keys()
     traces = []
@@ -25,8 +25,7 @@ def build_start_tracer(**hooks: TraceHooks) -> Tuple[Callable, TracesList]:
 
         def collect_trace(frame: FrameType, event: str, arg: Any) -> TraceFunction:
             timestamp = time.time()
-            file_path = frame.f_code.co_filename
-            function_line_number = frame.f_code.co_firstlineno
+            source = f"{frame.f_code.co_filename}:{frame.f_code.co_firstlineno}"
             function_name = frame.f_code.co_name
             event_key = f"on_{event}"
 
@@ -36,8 +35,7 @@ def build_start_tracer(**hooks: TraceHooks) -> Tuple[Callable, TracesList]:
                     traces.append(
                         (
                             timestamp,
-                            file_path,
-                            function_line_number,
+                            source,
                             function_name,
                             event,
                             *trace,
