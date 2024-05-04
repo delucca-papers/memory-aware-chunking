@@ -1,12 +1,14 @@
 import uuid
 import importlib
+import inspect
+import importlib.util
 
 from pydantic import BaseModel, FilePath, field_validator
 from typing import Optional, List, Any
 from enum import Enum
 
 
-__all__ = ["ProfilerConfig", "Metric", "MemoryUsageBackend"]
+__all__ = ["ProfilerConfig", "Metric", "MemoryUsageBackend", "FunctionParameter"]
 
 
 class Metric(Enum):
@@ -34,12 +36,20 @@ class MemoryUsageConfig(BaseModel):
         return v
 
 
+class FunctionParameter(BaseModel):
+    name: str
+    type: str
+    position: int
+    default: str = None
+
+
 class ProfilerConfig(BaseModel):
     session_id: str = str(uuid.uuid4())
     enabled_metrics: List[Metric] = [Metric.MEMORY_USAGE, Metric.TIME]
     memory_usage: MemoryUsageConfig
     filepath: Optional[FilePath] = None
     entrypoint: Optional[str] = None
+    signature: Optional[List[FunctionParameter]] = None
     args: tuple = tuple()
     kwargs: dict = {}
 
@@ -81,3 +91,44 @@ class ProfilerConfig(BaseModel):
         if not hasattr(module, v):
             raise ValueError(f"Function '{v}' not found in {filepath}")
         return v
+
+    @field_validator("signature", mode="before")
+    def inject_signature(cls, v: Any, values):
+        if v is not None:
+            return v
+
+        filepath = values.data.get("filepath")
+        entrypoint = values.data.get("entrypoint")
+        if filepath is None or entrypoint is None:
+            return None
+
+        spec = importlib.util.spec_from_file_location("module.name", filepath)
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
+
+        function = getattr(module, entrypoint)
+        signature = inspect.signature(function)
+
+        parameters = []
+        position = 0
+        for name, param in signature.parameters.items():
+            param_type = (
+                str(param.annotation.__name__)
+                if param.annotation is not inspect.Parameter.empty
+                else "Any"
+            )
+            default = (
+                param.default if param.default is not inspect.Parameter.empty else None
+            )
+            parameters.append(
+                {
+                    "name": name,
+                    "type": param_type,
+                    "position": position,
+                    "default": repr(default),
+                }
+            )
+
+            position += 1
+
+        return [FunctionParameter(**p) for p in parameters]

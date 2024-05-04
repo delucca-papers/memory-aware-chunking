@@ -4,7 +4,7 @@ from dowser.config import Config
 from dowser.common.logger import logger
 from .tracers import build_start_tracer, build_stop_tracer
 from .handlers import execute_file
-from .builders import build_trace_hooks, build_profile
+from .builders import build_trace_hooks, build_profile, build_metadata
 
 
 __all__ = ["run_profiler"]
@@ -13,6 +13,13 @@ __all__ = ["run_profiler"]
 def run_profiler(config: Config) -> None:
     logger.info("Starting profiler execution")
     logger.debug(f"Using config: {config}")
+
+    metadata = build_metadata(
+        config.profiler.signature,
+        config.profiler.args,
+        config.profiler.kwargs,
+    )
+    logger.debug(f"Using metadata: {metadata}")
 
     trace_hooks = build_trace_hooks(
         config.profiler.enabled_metrics,
@@ -32,6 +39,7 @@ def run_profiler(config: Config) -> None:
         config.profiler.filepath,
         config.profiler.args,
         config.profiler.kwargs,
+        function_name=config.profiler.entrypoint,
         before=start_tracer,
         after=stop_tracer,
     )
@@ -43,4 +51,9 @@ def run_profiler(config: Config) -> None:
     logger.info(f"Amount of collected traces: {amount_of_traces}")
     logger.debug(f"Sample trace: {traces[sample_trace_index]}")
 
-    build_profile(traces, config.output_dir, config.profiler.session_id)
+    build_profile(
+        traces,
+        config.output_dir,
+        config.profiler.session_id,
+        metadata,
+    )
