@@ -1,7 +1,6 @@
 import sys
 import time
-
-from typing import Any, Callable, Tuple, Optional
+from typing import Any, Callable, Tuple, Optional, List
 from types import FrameType
 from dowser.common.logger import logger
 from .types import TraceHooks, TraceFunction, TraceList
@@ -11,22 +10,15 @@ __all__ = ["build_start_tracer", "build_stop_tracer"]
 
 
 def build_start_tracer(
-    depth: int = 3,
-    **hooks: TraceHooks,
+    depth: int = 3, **hooks: TraceHooks
 ) -> Tuple[Callable, TraceList]:
-    logger.info("Building profile tracer")
-    logger.debug(f"Using depth of {depth}")
-
+    logger.info("Building start profile tracer")
     traces = []
     tracer = build_tracer(depth, hooks, traces)
 
     def start_tracer() -> None:
         logger.info("Starting profile tracer")
-
-        before_hooks = hooks.get("before", [])
-        for hook in before_hooks:
-            hook()
-
+        execute_hooks(hooks.get("before", []), "before")
         sys.setprofile(tracer)
 
     return start_tracer, traces
@@ -37,42 +29,48 @@ def build_stop_tracer(**hooks: TraceHooks) -> Callable:
 
     def stop_tracer() -> None:
         sys.setprofile(None)
-
-        logger.info("Stopping profile tracer")
-
-        logger.info("Running after hooks")
-        after_hooks = hooks.get("after", [])
-        for hook in after_hooks:
-            hook()
+        logger.info("Profile tracer stopped")
+        execute_hooks(hooks.get("after", []), "after")
 
     return stop_tracer
 
 
-def build_tracer(depth: int, hooks: TraceHooks, traces: TraceList) -> TraceFunction:
+def build_tracer(max_depth: int, hooks: TraceHooks, traces: TraceList) -> TraceFunction:
+    current_depth = 0
+
     def tracer(frame: FrameType, event: str, arg: Any) -> Optional[TraceFunction]:
+        nonlocal current_depth
+        if event == "call":
+            if current_depth >= max_depth:
+                return None
+            current_depth += 1
+        elif event == "return":
+            if current_depth > 0:
+                current_depth -= 1
+
         timestamp = time.time()
         module_name = frame.f_globals.get("__name__", frame.f_code.co_filename)
         source = f"{module_name}:{frame.f_code.co_firstlineno}"
         function_name = frame.f_code.co_name
         event_key = f"on_{event}"
 
-        # We should not store the stop_tracer event, since that would
-        # be an orphan trace
+        # Avoid tracing the stop_tracer function, if we
+        # allow this we would have orphan traces
         if function_name == "stop_tracer" and "dowser" in source:
-            return
+            return None
 
-        if event_key in hooks.keys():
+        if event_key in hooks and event != "return":
             event_traces = [hook(frame, event, arg) for hook in hooks[event_key]]
-            traces.append(
-                (
-                    timestamp,
-                    source,
-                    function_name,
-                    event,
-                    event_traces,
-                )
-            )
+            traces.append((timestamp, source, function_name, event, event_traces))
 
-        return build_tracer(depth - 1, hooks, traces) if depth > 0 else None
+        return tracer if current_depth < max_depth else None
 
     return tracer
+
+
+def execute_hooks(hooks: List[Callable], hook_type: str) -> None:
+    for hook in hooks:
+        try:
+            hook()
+        except Exception as e:
+            logger.error(f"Error executing {hook_type} hook: {e}")
