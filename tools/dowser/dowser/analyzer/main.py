@@ -3,7 +3,6 @@ from dowser.common.logger import logger
 from dowser.config import Config
 from .loaders import load_session
 from .transformers import (
-    explode_additional_data,
     column_to_unit,
     to_memory_usage_evolution,
 )
@@ -18,8 +17,15 @@ def compare_profiles(config: Config) -> None:
     logger.debug(f"Using config: {config}")
 
     parse_profile = compose(
-        column_to_unit("MEMORY_USAGE", config.analyzer.unit.value),
-        explode_additional_data,
+        *(
+            column_to_unit(column, config.analyzer.unit.value)
+            for column in [
+                "kernel_memory_usage",
+                "psutil_memory_usage",
+                "resource_memory_usage",
+                "tracemalloc_memory_usage",
+            ]
+        ),
         load_session,
     )
 
@@ -31,8 +37,8 @@ def compare_profiles(config: Config) -> None:
     logger.debug("Parsing memory usage evolution data")
 
     memory_usage_evolution = {
-        name: to_memory_usage_evolution(profile)
-        for name, profile in collected_profiles.items()
+        backend: to_memory_usage_evolution(profile, f"{backend}_memory_usage")
+        for backend, profile in collected_profiles.items()
     }
 
     plot_memory_usage_comparison(memory_usage_evolution, config.output_dir)

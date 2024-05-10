@@ -2,6 +2,7 @@ import pandas as pd
 import plotly.graph_objects as go
 
 from dowser.common.logger import logger
+from dowser.common.transformers import convert_to_unit
 
 
 __all__ = ["plot_memory_usage_comparison", "plot_execution_time_comparison"]
@@ -77,11 +78,13 @@ def plot_execution_time_comparison(data_dict: dict, output_dir: str) -> None:
     execution_times = {}
 
     for name, data in data_dict.items():
-        execution_time = data["timestamp"].max() - data["timestamp"].min()
-        execution_time_seconds = (
-            execution_time.total_seconds()
-        )  # Convert to seconds if needed
-        execution_times[name] = execution_time_seconds
+        execution_time = data["unix_timestamp"].max() - data["unix_timestamp"].min()
+        execution_time_in_seconds = convert_to_unit(
+            "s",
+            data.attrs["unix_timestamp_unit"],
+            execution_time,
+        )
+        execution_times[name] = execution_time_in_seconds
 
     sorted_execution_times = sorted(execution_times.items(), key=lambda item: item[1])
 

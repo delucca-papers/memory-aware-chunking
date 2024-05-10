@@ -2,7 +2,7 @@ import pyarrow as pa
 import pyarrow.parquet as pq
 
 from collections import defaultdict
-from typing import List, Tuple, Any, Dict, Optional
+from typing import List, Tuple, Dict
 from dowser.config import MemoryUsageBackend, ProfilerMetric, FunctionParameter
 from dowser.common.transformers import deep_merge
 from dowser.common.logger import logger
@@ -91,10 +91,21 @@ def build_profile_parquet_schema() -> pa.Schema:
 
 
 def build_profile_table(trace_list: TraceList, schema: pa.schema) -> pa.table:
+    default_value = {
+        "source": "UNKNOWN",
+        "function": "UNKNOWN",
+        "event": "UNKNOWN",
+        "kernel_memory_usage": 0,
+        "psutil_memory_usage": 0,
+        "resource_memory_usage": 0,
+        "tracemalloc_memory_usage": 0,
+        "unix_timestamp": 0,
+    }
+
     columns = defaultdict(list, {field.name: [] for field in schema})
     for trace in trace_list:
         for key in schema.names:
-            columns[key].append(trace.get(key))
+            columns[key].append(trace.get(key, default_value[key]))
 
     return pa.Table.from_arrays(
         [

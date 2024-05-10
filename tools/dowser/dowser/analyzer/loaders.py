@@ -15,6 +15,6 @@ def load_session(session_path: str, include_metadata: bool = True) -> pd.DataFra
         decoded_metadata = {
             k.decode("utf-8"): v.decode("utf-8") for k, v in metadata.items()
         }
-        df.attrs["metadata"] = decoded_metadata
+        df.attrs = {**df.attrs, **decoded_metadata}
 
     return df
