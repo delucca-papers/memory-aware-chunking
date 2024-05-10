@@ -1,25 +1,40 @@
-from typing import Callable, TypedDict, List, Any, Tuple
+from typing import Callable, TypedDict, List, Any, Tuple, Optional, Literal
 from types import FrameType
-from dowser.config import ProfilerMetric
 
 
-__all__ = ["TraceFunction", "TraceHooks", "TraceList"]
-
-
-Event = str
-TraceFunction = Callable[[FrameType, Event, Any], Tuple]
-
-Timestamp = str
-Source = str
-FunctionName = str
-Trace = Tuple[
-    Timestamp,
-    Source,
-    FunctionName,
-    Event,
-    ProfilerMetric,
-    Any,
+__all__ = [
+    "TraceFunction",
+    "TraceHooks",
+    "TraceList",
+    "Trace",
+    "CapturedTrace",
+    "Source",
+    "Function",
+    "Event",
 ]
+
+
+TraceKey = str
+CapturedTrace = Tuple[TraceKey, Any]
+
+Source = str
+Function = str
+Event = Literal["call", "return"]
+
+TraceFunction = Callable[[FrameType, Event, Any], CapturedTrace]
+
+
+class Trace(TypedDict):
+    source: Source
+    function: Function
+    event: Event
+    kernel_memory_usage: Optional[float]
+    psutil_memory_usage: Optional[float]
+    resource_memory_usage: Optional[float]
+    tracemalloc_memory_usage: Optional[float]
+    unix_timestamp: Optional[int]
+
+
 TraceList = List[Trace]
 
 

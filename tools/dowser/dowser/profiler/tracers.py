@@ -3,14 +3,24 @@ import time
 from typing import Any, Callable, Tuple, Optional, List
 from types import FrameType
 from dowser.common.logger import logger
-from .types import TraceHooks, TraceFunction, TraceList
+from .types import (
+    TraceHooks,
+    TraceFunction,
+    TraceList,
+    Trace,
+    Source,
+    Function,
+    Event,
+    CapturedTrace,
+)
 
 
 __all__ = ["build_start_tracer", "build_stop_tracer"]
 
 
 def build_start_tracer(
-    depth: int = 3, **hooks: TraceHooks
+    depth: int = 3,
+    **hooks: TraceHooks,
 ) -> Tuple[Callable, TraceList]:
     logger.info("Building start profile tracer")
     traces = []
@@ -37,6 +47,7 @@ def build_stop_tracer(**hooks: TraceHooks) -> Callable:
 
 def build_tracer(max_depth: int, hooks: TraceHooks, traces: TraceList) -> TraceFunction:
     current_depth = 0
+    ignored_functions = ["start_tracer", "stop_tracer"]
 
     def tracer(frame: FrameType, event: str, arg: Any) -> Optional[TraceFunction]:
         nonlocal current_depth
@@ -48,29 +59,48 @@ def build_tracer(max_depth: int, hooks: TraceHooks, traces: TraceList) -> TraceF
             if current_depth > 0:
                 current_depth -= 1
 
-        timestamp = time.time()
         module_name = frame.f_globals.get("__name__", frame.f_code.co_filename)
         source = f"{module_name}:{frame.f_code.co_firstlineno}"
-        function_name = frame.f_code.co_name
+        function = frame.f_code.co_name
         event_key = f"on_{event}"
 
-        # Avoid tracing the stop_tracer function, if we
-        # allow this we would have orphan traces
-        if function_name == "stop_tracer" and "dowser" in source:
+        if function in ignored_functions:
             return None
 
-        if event_key in hooks and event != "return":
-            event_traces = [hook(frame, event, arg) for hook in hooks[event_key]]
-            traces.append((timestamp, source, function_name, event, event_traces))
+        if event_key in hooks:
+            event_hooks = hooks.get(event_key)
+            captured_traces = execute_hooks(event_hooks, event_key, frame, event, arg)
+            trace = build_trace(source, function, event, captured_traces)
+
+            traces.append(trace)
 
         return tracer if current_depth < max_depth else None
 
     return tracer
 
 
-def execute_hooks(hooks: List[Callable], hook_type: str) -> None:
+def execute_hooks(hooks: List[Callable], hook_type: str, *args, **kwargs) -> List[Any]:
+    hook_results = []
+
     for hook in hooks:
         try:
-            hook()
+            result = hook(*args, **kwargs)
+            hook_results.append(result)
         except Exception as e:
-            logger.error(f"Error executing {hook_type} hook: {e}")
+            logger.error(f'Error executing "{hook_type}" hook: {e}')
+
+    return hook_results
+
+
+def build_trace(
+    source: Source,
+    function: Function,
+    event: Event,
+    captured_traces: List[CapturedTrace],
+) -> Trace:
+    return {
+        "source": source,
+        "function": function,
+        "event": event,
+        **{key: value for key, value in captured_traces},
+    }

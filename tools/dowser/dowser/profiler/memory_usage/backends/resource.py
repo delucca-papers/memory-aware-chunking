@@ -1,28 +1,24 @@
 import resource
 
-from types import FrameType
-from typing import Any, Tuple
-from dowser.config import ProfilerMetric
 from dowser.common.synchronization import passthrough
+from dowser.profiler.types import CapturedTrace
 
 
 __all__ = ["before", "on_call", "on_return", "after"]
 
 
-before = passthrough
-after = passthrough
-
-
-def get_memory_usage() -> Tuple[float, str]:
-    unit = "kb"
+def get_memory_usage() -> float:
     memory_usage = resource.getrusage(resource.RUSAGE_SELF).ru_maxrss
 
-    return ProfilerMetric.MEMORY_USAGE.value, float(memory_usage), unit
+    return float(memory_usage)
 
 
-def on_call(_: FrameType, __: str, ___: Any) -> Tuple[str, float, str]:
-    return get_memory_usage()
+def capture_trace(*_) -> CapturedTrace:
+    memory_usage = get_memory_usage()
+    return "resource_memory_usage", memory_usage
 
 
-def on_return(_: FrameType, __: str, ___: Any) -> Tuple[str, float, str]:
-    return get_memory_usage()
+before = passthrough
+after = passthrough
+on_call = capture_trace
+on_return = capture_trace
