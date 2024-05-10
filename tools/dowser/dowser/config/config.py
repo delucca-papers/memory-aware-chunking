@@ -24,6 +24,7 @@ initial_config = {
     },
     "profiler": {
         "enabled_metrics": ["MEMORY_USAGE", "TIME"],
+        "depth": "3",
         "memory_usage": {
             "enabled_backends": ["KERNEL"],
         },
@@ -56,6 +57,7 @@ class Config(BaseModel):
                 "log_transport": str_as_list(os.environ.get("DOWSER_LOG_TRANSPORT")),
                 "enable_metric": str_as_list(os.environ.get("DOWSER_ENABLE_METRIC")),
                 "unit": os.environ.get("DOWSER_UNIT"),
+                "profiler_depth": os.environ.get("DOWSER_PROFILER_DEPTH"),
                 "enable_mem_backend": str_as_list(
                     os.environ.get("DOWSER_ENABLE_MEM_BACKEND")
                 ),
@@ -100,32 +102,33 @@ class Config(BaseModel):
         )
 
     @staticmethod
-    def from_flat_config(flag_config: dict) -> dict:
+    def from_flat_config(flat_config: dict) -> dict:
         return filter_defined_values(
             {
-                "output_dir": flag_config.get("output_dir"),
+                "output_dir": flat_config.get("output_dir"),
                 "logger": {
-                    "enabled_transports": flag_config.get("log_transport"),
-                    "level": flag_config.get("log_level"),
+                    "enabled_transports": flat_config.get("log_transport"),
+                    "level": flat_config.get("log_level"),
                 },
                 "profiler": {
-                    "session_id": flag_config.get("profiler_session_id"),
-                    "enabled_metrics": flag_config.get("enable_metric"),
-                    "filepath": flag_config.get("filepath"),
-                    "entrypoint": flag_config.get("entrypoint"),
-                    "args": flag_config.get("args"),
+                    "session_id": flat_config.get("profiler_session_id"),
+                    "depth": flat_config.get("profiler_depth"),
+                    "enabled_metrics": flat_config.get("enable_metric"),
+                    "filepath": flat_config.get("filepath"),
+                    "entrypoint": flat_config.get("entrypoint"),
+                    "args": flat_config.get("args"),
                     "kwargs": [
                         kwarg
-                        for kwarg_list in flag_config.get("kwargs", [])
+                        for kwarg_list in flat_config.get("kwargs", [])
                         for kwarg in kwarg_list
                     ],
                     "memory_usage": {
-                        "enabled_backends": flag_config.get("enable_mem_backend"),
+                        "enabled_backends": flat_config.get("enable_mem_backend"),
                     },
                 },
                 "analyzer": {
-                    "unit": flag_config.get("unit"),
-                    "sessions": from_key_value_string(flag_config.get("session")),
+                    "unit": flat_config.get("unit"),
+                    "sessions": from_key_value_string(flat_config.get("session")),
                 },
             },
             allow_empty_lists=False,

@@ -45,6 +45,7 @@ class FunctionParameter(BaseModel):
 
 class ProfilerConfig(BaseModel):
     session_id: str = str(uuid.uuid4())
+    depth: int = 10
     enabled_metrics: List[Metric] = [Metric.MEMORY_USAGE, Metric.TIME]
     memory_usage: MemoryUsageConfig
     filepath: Optional[FilePath] = None
@@ -59,6 +60,10 @@ class ProfilerConfig(BaseModel):
             return [Metric(i.upper()) if isinstance(i, str) else i for i in v]
 
         return v
+
+    @field_validator("depth", mode="before")
+    def transform_depth_to_int(cls, v: Any) -> int:
+        return int(v)
 
     @field_validator("kwargs", mode="before")
     def parse_kwargs(cls, v: Any):

@@ -26,7 +26,10 @@ def run_profiler(config: Config) -> None:
         config.profiler.memory_usage.enabled_backends,
     )
 
-    start_tracer, traces = build_start_tracer(**trace_hooks)
+    start_tracer, traces = build_start_tracer(
+        depth=config.profiler.depth,
+        **trace_hooks,
+    )
     stop_tracer = build_stop_tracer(**trace_hooks)
 
     logger.info(f'Starting profiler execution for "{config.profiler.filepath}"')

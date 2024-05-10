@@ -33,6 +33,12 @@ def attach_args(subparsers: _SubParsersAction) -> _SubParsersAction:
         help="Session ID to use for the profiling session (default: random UUID4)",
     )
 
+    profile_parser.add_argument(
+        "-d",
+        "--profiler-depth",
+        help="Define the depth of the profiler (default: 3)",
+    )
+
     profile_parser.add_argument("filepath", help="Path to the Python file to execute")
 
     profile_parser.add_argument(

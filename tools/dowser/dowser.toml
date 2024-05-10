@@ -8,6 +8,7 @@ level = "info"
 
 [profiler]
 session_id = "" # By default, it will be a random UUID if not provided
+depth = "3"
 enabled_metrics = "memory_usage,time"
 
 [profiler.memory_usage]

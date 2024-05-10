@@ -51,7 +51,7 @@ def build_profile(
 
     file_path = f"{output_dir}/{file_name}.parquet"
     schema = build_profile_parquet_schema()
-    logger.debug(f"Using schema: {schema}")
+    logger.debug(f"Using schema:\n{schema}")
 
     (
         timestamps,
