@@ -24,9 +24,12 @@ initial_config = {
     },
     "profiler": {
         "enabled_metrics": ["MEMORY_USAGE", "TIME"],
-        "depth": "3",
         "memory_usage": {
             "enabled_backends": ["KERNEL"],
+        },
+        "instrumentation": {
+            "depth": "3",
+            "socket_path": "/tmp/dowser.sock",
         },
     },
     "analyzer": {
@@ -58,6 +61,7 @@ class Config(BaseModel):
                 "enable_metric": str_as_list(os.environ.get("DOWSER_ENABLE_METRIC")),
                 "unit": os.environ.get("DOWSER_UNIT"),
                 "profiler_depth": os.environ.get("DOWSER_PROFILER_DEPTH"),
+                "profiler_socket_path": os.environ.get("DOWSER_PROFILER_SOCKET_PATH"),
                 "enable_mem_backend": str_as_list(
                     os.environ.get("DOWSER_ENABLE_MEM_BACKEND")
                 ),
@@ -112,7 +116,6 @@ class Config(BaseModel):
                 },
                 "profiler": {
                     "session_id": flat_config.get("profiler_session_id"),
-                    "depth": flat_config.get("profiler_depth"),
                     "enabled_metrics": flat_config.get("enable_metric"),
                     "filepath": flat_config.get("filepath"),
                     "entrypoint": flat_config.get("entrypoint"),
@@ -124,6 +127,10 @@ class Config(BaseModel):
                     ],
                     "memory_usage": {
                         "enabled_backends": flat_config.get("enable_mem_backend"),
+                    },
+                    "instrumentation": {
+                        "depth": flat_config.get("profiler_depth"),
+                        "socket_path": flat_config.get("profiler_socket_path"),
                     },
                 },
                 "analyzer": {

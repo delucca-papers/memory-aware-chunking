@@ -1,17 +1,25 @@
-import pyarrow as pa
-import pyarrow.parquet as pq
-
-from collections import defaultdict
-from typing import List, Tuple, Dict
-from dowser.config import MemoryUsageBackend, ProfilerMetric, FunctionParameter
+from typing import List, Tuple, Dict, Literal, Callable
+from dowser.config import (
+    MemoryUsageBackend,
+    ProfilerMetric,
+    FunctionParameter,
+    ProfilerInstrumentationConfig,
+)
 from dowser.common.transformers import deep_merge
 from dowser.common.logger import logger
-from .memory_usage import build_trace_hooks as build_memory_usage_trace_hooks
-from .time import build_trace_hooks as build_time_trace_hooks
-from .types import TraceHooks, TraceList
+from .metrics.memory_usage import build_trace_hooks as build_memory_usage_trace_hooks
+from .metrics.time import build_trace_hooks as build_time_trace_hooks
+from .strategies.instrumentation.builders import (
+    build_executor_hooks as build_instrumentation_executor_hooks,
+)
+from .types import TraceHooks, ExecutorHooks
 
 
-__all__ = ["build_trace_hooks", "build_profile", "build_metadata"]
+__all__ = [
+    "build_trace_hooks",
+    "build_executor_hooks",
+    "build_metadata",
+]
 
 def build_trace_hooks(
     enabled_metrics: List[ProfilerMetric],
@@ -28,27 +36,21 @@ def build_trace_hooks(
     return deep_merge(memory_usage_hooks, time_hooks, append=True)
 
 
-def build_profile(
-    trace_list: TraceList,
-    output_dir: str,
-    file_name: str,
-    metadata: Dict,
-) -> str:
-    logger.info("Building output profile file")
-    logger.debug(f"Using {len(trace_list)} traces")
+def build_executor_hooks(
+    trace_hooks: TraceHooks,
+    instrumentation_config: ProfilerInstrumentationConfig,
+    on_data: Callable,
+    strategy: Literal["instrumentation"] = "instrumentation",
+) -> ExecutorHooks:
+    logger.debug(f"Building executor hooks using strategy: {strategy}")
 
-    schema = build_profile_parquet_schema()
-    logger.debug(f"Using schema:\n{schema}")
+    strategy_builders = {
+        "instrumentation": build_instrumentation_executor_hooks(instrumentation_config),
+    }
 
-    table = build_profile_table(trace_list, schema)
-    table = apply_metadata(metadata, table)
-    logger.debug(f"Using table metadata: {table.schema.metadata}")
+    builder = strategy_builders[strategy]
 
-    file_path = f"{output_dir}/{file_name}.parquet"
-    pq.write_table(table, file_path)
-    logger.info(f"Profile file saved at: {file_path}")
-
-    return file_path
+    return builder(trace_hooks, on_data)
 
 
 def build_metadata(
@@ -73,58 +75,3 @@ def build_metadata(
         "tracemalloc_memory_usage_unit": "b",
         "unix_timestamp_unit": "ms",
     }
-
-
-def build_profile_parquet_schema() -> pa.Schema:
-    return pa.schema(
-        [
-            ("source", pa.string()),
-            ("function", pa.string()),
-            ("event", pa.string()),
-            ("kernel_memory_usage", pa.float32()),
-            ("psutil_memory_usage", pa.float32()),
-            ("resource_memory_usage", pa.float32()),
-            ("tracemalloc_memory_usage", pa.float32()),
-            ("unix_timestamp", pa.int64()),
-        ]
-    )
-
-
-def build_profile_table(trace_list: TraceList, schema: pa.schema) -> pa.table:
-    default_value = {
-        "source": "UNKNOWN",
-        "function": "UNKNOWN",
-        "event": "UNKNOWN",
-        "kernel_memory_usage": 0,
-        "psutil_memory_usage": 0,
-        "resource_memory_usage": 0,
-        "tracemalloc_memory_usage": 0,
-        "unix_timestamp": 0,
-    }
-
-    columns = defaultdict(list, {field.name: [] for field in schema})
-    for trace in trace_list:
-        for key in schema.names:
-            columns[key].append(trace.get(key, default_value[key]))
-
-    return pa.Table.from_arrays(
-        [
-            columns["source"],
-            columns["function"],
-            columns["event"],
-            columns["kernel_memory_usage"],
-            columns["psutil_memory_usage"],
-            columns["resource_memory_usage"],
-            columns["tracemalloc_memory_usage"],
-            columns["unix_timestamp"],
-        ],
-        schema=schema,
-    )
-
-
-def apply_metadata(metadata: Dict, table: pa.Table) -> pa.Table:
-    updated_metadata = table.schema.metadata or {}
-    updated_metadata.update(
-        {k.encode("utf-8"): v.encode("utf-8") for k, v in metadata.items()}
-    )
-    return table.replace_schema_metadata(updated_metadata)

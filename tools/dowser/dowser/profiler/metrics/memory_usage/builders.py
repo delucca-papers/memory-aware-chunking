@@ -23,7 +23,7 @@ def build_trace_hooks(enabled_backends: MemoryUsageBackend) -> TraceHooks:
 
         logger.debug(f'Loading backend: "{backend_name}"')
         backend_module = importlib.import_module(
-            f"dowser.profiler.memory_usage.backends.{backend_name}"
+            f"dowser.profiler.metrics.memory_usage.backends.{backend_name}"
         )
 
         if not backend_module:

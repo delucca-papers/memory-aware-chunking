@@ -1,6 +1,11 @@
 from .config import Config
 from .logger import Transport as LoggerTransport
-from .profiler import Metric as ProfilerMetric, MemoryUsageBackend, FunctionParameter
+from .profiler import (
+    Metric as ProfilerMetric,
+    MemoryUsageBackend,
+    FunctionParameter,
+    InstrumentationConfig as ProfilerInstrumentationConfig,
+)
 from .analyzer import Sessions as AnalyzerSessions, MemoryUsageUnit
 
 
@@ -12,4 +17,5 @@ __all__ = [
     "AnalyzerSessions",
     "MemoryUsageUnit",
     "FunctionParameter",
+    "ProfilerInstrumentationConfig",
 ]

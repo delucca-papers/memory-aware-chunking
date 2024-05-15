@@ -6,7 +6,10 @@ from dowser.profiler.types import CapturedTrace
 __all__ = ["before", "on_call", "on_return", "after"]
 
 
-def get_memory_usage(process: Process = Process()) -> float:
+process = Process()
+
+
+def get_memory_usage() -> float:
     memory_usage = process.memory_info().rss
 
     return float(memory_usage)
@@ -17,7 +20,10 @@ def capture_trace(*_) -> CapturedTrace:
     return "psutil_memory_usage", memory_usage
 
 
-before = passthrough
+def before() -> None:
+    globals()["process"] = Process()
+
+
 after = passthrough
 on_call = capture_trace
 on_return = capture_trace

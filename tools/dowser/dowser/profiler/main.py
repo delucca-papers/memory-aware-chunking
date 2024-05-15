@@ -1,62 +1,57 @@
-import random
-
 from dowser.config import Config
 from dowser.common.logger import logger
-from .tracers import build_start_tracer, build_stop_tracer
+from dowser.common.synchronization import run_subprocess
 from .handlers import execute_file
-from .builders import build_trace_hooks, build_profile, build_metadata
+from .report import save_profile
+from .builders import (
+    build_trace_hooks,
+    build_executor_hooks,
+    build_metadata,
+)
 
 
 __all__ = ["run_profiler"]
 
 
 def run_profiler(config: Config) -> None:
-    logger.info("Starting profiler execution")
-    logger.debug(f"Using config: {config}")
+    logger.info("Starting profiler")
 
     metadata = build_metadata(
         config.profiler.signature,
         config.profiler.args,
         config.profiler.kwargs,
     )
-    logger.debug(f"Using metadata: {metadata}")
-
     trace_hooks = build_trace_hooks(
         config.profiler.enabled_metrics,
         config.profiler.memory_usage.enabled_backends,
     )
-
-    start_tracer, traces = build_start_tracer(
-        depth=config.profiler.depth,
-        **trace_hooks,
-    )
-    stop_tracer = build_stop_tracer(**trace_hooks)
-
-    logger.info(f'Starting profiler execution for "{config.profiler.filepath}"')
-    logger.debug(f"Enabled hooks: {trace_hooks.keys()}")
-    logger.debug(f"Enabled metrics: {config.profiler.enabled_metrics}")
-    logger.debug(f"Using args: {config.profiler.args}")
-    logger.debug(f"Using kwargs: {config.profiler.kwargs}")
-
-    execute_file(
-        config.profiler.filepath,
-        config.profiler.args,
-        config.profiler.kwargs,
-        function_name=config.profiler.entrypoint,
-        before=start_tracer,
-        after=stop_tracer,
-    )
-
-    amount_of_traces = len(traces)
-    sample_trace_index = random.randint(0, amount_of_traces - 1)
-
-    logger.info("Profiler execution finished")
-    logger.info(f"Amount of collected traces: {amount_of_traces}")
-    logger.debug(f"Sample trace: {traces[sample_trace_index]}")
-
-    build_profile(
-        traces,
+    on_trace_data = save_profile(
         config.output_dir,
         config.profiler.session_id,
         metadata,
     )
+    executor_hooks = build_executor_hooks(
+        trace_hooks,
+        instrumentation_config=config.profiler.instrumentation,
+        on_data=on_trace_data,
+    )
+
+    target_args = (
+        config.profiler.filepath,
+        config.profiler.args,
+        config.profiler.kwargs,
+    )
+    target_kwargs = {"function_name": config.profiler.entrypoint, **executor_hooks}
+
+    logger.debug(f"Using config: {config}")
+    logger.debug(f"Using metadata: {metadata}")
+    logger.debug(f"Enabled trace hooks: {trace_hooks.keys()}")
+    logger.debug(f"Enabled metrics: {config.profiler.enabled_metrics}")
+    logger.debug(f"Using args: {config.profiler.args}")
+    logger.debug(f"Using kwargs: {config.profiler.kwargs}")
+
+    logger.info(f'Starting profiler execution for "{config.profiler.filepath}"')
+
+    run_subprocess(execute_file, sync=True, *target_args, **target_kwargs)
+
+    logger.info("Profiler execution finished")

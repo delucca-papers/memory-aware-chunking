@@ -11,6 +11,7 @@ __all__ = [
     "Source",
     "Function",
     "Event",
+    "ExecutorHooks",
 ]
 
 
@@ -41,3 +42,8 @@ TraceList = List[Trace]
 class TraceHooks(TypedDict):
     on_call: List[TraceFunction]
     on_return: List[TraceFunction]
+
+
+class ExecutorHooks(TypedDict):
+    before: Callable
+    after: Callable

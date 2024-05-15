@@ -1,3 +1,4 @@
+import os
 import uuid
 import importlib
 import inspect
@@ -8,7 +9,13 @@ from typing import Optional, List, Any
 from enum import Enum
 
 
-__all__ = ["ProfilerConfig", "Metric", "MemoryUsageBackend", "FunctionParameter"]
+__all__ = [
+    "ProfilerConfig",
+    "Metric",
+    "MemoryUsageBackend",
+    "FunctionParameter",
+    "InstrumentationConfig",
+]
 
 
 class Metric(Enum):
@@ -43,9 +50,25 @@ class FunctionParameter(BaseModel):
     default: str = None
 
 
+class InstrumentationConfig(BaseModel):
+    depth: int = 10
+    socket_path: str = "/tmp/dowser.sock"
+
+    @field_validator("depth", mode="before")
+    def transform_depth_to_int(cls, v: Any) -> int:
+        return int(v)
+
+    @field_validator("socket_path", mode="before")
+    def clear_socket_path(cls, v: Any) -> str:
+        socket_path = str(v)
+        if os.path.exists(socket_path):
+            os.unlink(socket_path)
+
+        return socket_path
+
+
 class ProfilerConfig(BaseModel):
     session_id: str = str(uuid.uuid4())
-    depth: int = 10
     enabled_metrics: List[Metric] = [Metric.MEMORY_USAGE, Metric.TIME]
     memory_usage: MemoryUsageConfig
     filepath: Optional[FilePath] = None
@@ -53,6 +76,7 @@ class ProfilerConfig(BaseModel):
     signature: Optional[List[FunctionParameter]] = None
     args: tuple = tuple()
     kwargs: dict = {}
+    instrumentation: InstrumentationConfig
 
     @field_validator("enabled_metrics", mode="before")
     def uppercase_enabled_transports(cls, v: Any) -> List[Metric]:
@@ -60,10 +84,6 @@ class ProfilerConfig(BaseModel):
             return [Metric(i.upper()) if isinstance(i, str) else i for i in v]
 
         return v
-
-    @field_validator("depth", mode="before")
-    def transform_depth_to_int(cls, v: Any) -> int:
-        return int(v)
 
     @field_validator("kwargs", mode="before")
     def parse_kwargs(cls, v: Any):
