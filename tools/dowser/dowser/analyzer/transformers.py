@@ -19,7 +19,13 @@ def to_memory_usage_evolution(
         "resource_memory_usage",
         "tracemalloc_memory_usage",
     ],
-    columns_to_keep: List[str] = ["value", "unit", "unix_timestamp"],
+    columns_to_keep: List[str] = [
+        "value",
+        "unit",
+        "unix_timestamp",
+        "function",
+        "source",
+    ],
 ) -> pd.DataFrame:
     memory_usage_profile = profile.copy()
 

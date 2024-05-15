@@ -21,8 +21,8 @@ def save_profile(
     file_path = f"{output_dir}/{file_name}.parquet"
 
     table = build_profile_table(trace_list, schema)
-    table = apply_metadata(metadata, table)
     table = merge_with_existing_profile(file_path, table)
+    table = apply_metadata(metadata, table)
 
     pq.write_table(table, file_path)
 

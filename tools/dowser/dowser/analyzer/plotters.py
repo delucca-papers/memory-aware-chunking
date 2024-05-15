@@ -3,6 +3,7 @@ import plotly.graph_objects as go
 
 from dowser.common.logger import logger
 from dowser.common.transformers import convert_to_unit
+from .builders import build_metadata_annotation
 
 
 __all__ = ["plot_memory_usage_comparison", "plot_execution_time_comparison"]
@@ -11,24 +12,25 @@ __all__ = ["plot_memory_usage_comparison", "plot_execution_time_comparison"]
 def plot_memory_usage_comparison(data_dict: dict, output_dir: str) -> None:
     logger.info("Plotting memory usage comparison")
     fig = go.Figure()
-
-    if data_dict:
-        sample_data = next(iter(data_dict.values()))
-        metadata = sample_data.attrs.get("metadata", {})
-        metadata_str = ", ".join(f"{key}={value}" for key, value in metadata.items())
-    else:
-        metadata_str = "No metadata available"
+    metadata = build_metadata_annotation(next(iter(data_dict.values())))
 
     for name, data in data_dict.items():
         logger.debug(f"Plotting for {name}")
         unit = data.iloc[0]["unit"].upper()
 
+        hover_text = data.apply(
+            lambda row: f"<b>Function:</b> {row['function']}<br><b>Source:</b> {row['source']}<br><b>Sample Index:</b> {row.name}<br><b>Memory Usage:</b> {row['value']} {unit}",
+            axis=1,
+        )
+
         fig.add_trace(
             go.Scatter(
                 x=data.index,
                 y=data["value"],
-                mode="lines",
+                mode="lines+markers",
                 name=name,
+                text=hover_text,
+                hoverinfo="text",
             )
         )
 
@@ -52,7 +54,7 @@ def plot_memory_usage_comparison(data_dict: dict, output_dir: str) -> None:
         y=0,
         xref="paper",
         yref="paper",
-        text=metadata_str,
+        text=metadata,
         showarrow=False,
         font=dict(family="Courier New, monospace", size=12),
         align="center",
@@ -61,20 +63,14 @@ def plot_memory_usage_comparison(data_dict: dict, output_dir: str) -> None:
 
     logger.debug(f"Saving memory usage comparison plot to {output_dir}")
     fig.write_image(f"{output_dir}/plotted-memory-usage-comparison.png")
+    fig.write_html(f"{output_dir}/interactive-memory-usage-comparison.html")
 
 
 def plot_execution_time_comparison(data_dict: dict, output_dir: str) -> None:
     logger.info("Plotting execution time for each dataset")
 
     fig = go.Figure()
-
-    if data_dict:
-        sample_data = next(iter(data_dict.values()))
-        metadata = sample_data.attrs.get("metadata", {})
-        metadata_str = ", ".join(f"{key}={value}" for key, value in metadata.items())
-    else:
-        metadata_str = "No metadata available"
-
+    metadata = build_metadata_annotation(next(iter(data_dict.values())))
     execution_times = {}
 
     for name, data in data_dict.items():
@@ -105,7 +101,7 @@ def plot_execution_time_comparison(data_dict: dict, output_dir: str) -> None:
         y=1,
         xref="paper",
         yref="paper",
-        text=metadata_str,
+        text=metadata,
         showarrow=False,
         font=dict(family="Courier New, monospace", size=12),
         align="center",

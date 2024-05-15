@@ -1,12 +1,15 @@
 import os
 import dowser
-import pandas as pd
+import pyarrow as pa
+import pyarrow.parquet as pq
 
 from typing import List
 
 
 def save_plots(directory_path: str, unit: str) -> None:
     sessions = get_sessions(directory_path)
+    normalize_metadata(sessions)
+
     session_names = get_session_names(sessions)
     zipped_sessions = zip(session_names, sessions)
 
@@ -48,6 +51,28 @@ def find_parquet_files(directory: str) -> List[str]:
                 full_path = os.path.join(root, file)
                 parquet_files.append(full_path)
     return parquet_files
+
+
+def normalize_metadata(sessions: List[str]) -> None:
+    for session in sessions:
+        table = pq.read_table(session)
+
+        metadata = table.schema.metadata
+        metadata_dict = {k: v for k, v in metadata.items()}
+
+        entrypoint_segy_filepath = metadata_dict.pop(b"entrypoint_segy_filepath", None)
+        if entrypoint_segy_filepath:
+            entrypoint_shape = os.path.basename(
+                entrypoint_segy_filepath.decode("utf-8")
+            ).split(".")[0]
+            entrypoint_shape = f"({entrypoint_shape.replace('-',',')})"
+            metadata_dict[b"entrypoint_shape"] = entrypoint_shape.encode("utf-8")
+
+        new_metadata = {k: v for k, v in metadata_dict.items()}
+        new_schema = table.schema.with_metadata(new_metadata)
+        new_table = pa.Table.from_arrays(table.columns, schema=new_schema)
+
+        pq.write_table(new_table, session)
 
 
 if __name__ == "__main__":
