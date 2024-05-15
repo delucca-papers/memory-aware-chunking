@@ -25,6 +25,7 @@ def to_memory_usage_evolution(
         "unix_timestamp",
         "function",
         "source",
+        "event",
     ],
 ) -> pd.DataFrame:
     memory_usage_profile = profile.copy()

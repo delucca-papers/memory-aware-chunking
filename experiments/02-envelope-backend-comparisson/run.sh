@@ -15,22 +15,22 @@ export UNIT
 export LOG_LEVEL
 #
 # For development
+#NUM_INLINES="100"
+#NUM_CROSSLINES="100"
+#NUM_SAMPLES="100"
+#OUTPUT_DIR="${SCRIPT_DIR}/output/${TIMESTAMP}"
+#SESSION_ID_PREFIX="${TIMESTAMP}"
+#UNIT="mb"
+#LOG_LEVEL="DEBUG"
+#
+# For production
 NUM_INLINES="100"
-NUM_CROSSLINES="100"
-NUM_SAMPLES="100"
+NUM_CROSSLINES="600"
+NUM_SAMPLES="1000"
 OUTPUT_DIR="${SCRIPT_DIR}/output/${TIMESTAMP}"
 SESSION_ID_PREFIX="${TIMESTAMP}"
 UNIT="mb"
-LOG_LEVEL="DEBUG"
-#
-# For production
-# NUM_INLINES="100"
-# NUM_CROSSLINES="600"
-# NUM_SAMPLES="1000"
-# OUTPUT_DIR="${SCRIPT_DIR}/output/${TIMESTAMP}"
-# SESSION_ID_PREFIX="${TIMESTAMP}"
-# UNIT="mb"
-# LOG_LEVEL="INFO"
+LOG_LEVEL="INFO"
 #
 ################################################################################
 

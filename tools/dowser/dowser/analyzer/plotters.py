@@ -19,7 +19,7 @@ def plot_memory_usage_comparison(data_dict: dict, output_dir: str) -> None:
         unit = data.iloc[0]["unit"].upper()
 
         hover_text = data.apply(
-            lambda row: f"<b>Function:</b> {row['function']}<br><b>Source:</b> {row['source']}<br><b>Sample Index:</b> {row.name}<br><b>Memory Usage:</b> {row['value']} {unit}",
+            lambda row: f"{row['value']:.2f} {unit} <b>{row['event']}</b> {row['source']} - {row['function']}",
             axis=1,
         )
 
@@ -30,7 +30,7 @@ def plot_memory_usage_comparison(data_dict: dict, output_dir: str) -> None:
                 mode="lines+markers",
                 name=name,
                 text=hover_text,
-                hoverinfo="text",
+                hovertemplate="%{text}",
             )
         )
 
@@ -40,6 +40,7 @@ def plot_memory_usage_comparison(data_dict: dict, output_dir: str) -> None:
         yaxis_title=f"Memory Usage ({unit})",
         font=dict(family="Courier New, monospace", size=12),
         margin=dict(l=30, r=30, t=30, b=30),
+        hovermode="x",
         legend=dict(
             x=0.01,
             y=0.99,
