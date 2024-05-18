@@ -4,7 +4,7 @@ import inspect
 import importlib.util
 
 from pydantic import BaseModel, FilePath, field_validator
-from typing import Optional, List, Any
+from typing import Optional, Literal, List, Any
 from enum import Enum
 
 
@@ -61,6 +61,7 @@ class ProfilerConfig(BaseModel):
     session_id: str = str(uuid.uuid4())
     enabled_metrics: List[Metric] = [Metric.MEMORY_USAGE, Metric.TIME]
     memory_usage: MemoryUsageConfig
+    strategy: Literal["instrumentation", "sampling"] = "sampling"
     filepath: Optional[FilePath] = None
     entrypoint: Optional[str] = None
     signature: Optional[List[FunctionParameter]] = None

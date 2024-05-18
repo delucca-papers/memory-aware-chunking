@@ -1,0 +1,15 @@
+2024-05-18 11:45:49.652 | INFO     | __main__:run_experiment:10 - Starting experiment with Session ID: 20240518_114529-tracemalloc
+2024-05-18 11:45:49.652 | INFO     | dowser.profiler.main:run_profiler:18 - Starting profiler
+2024-05-18 11:45:49.653 | INFO     | dowser.profiler.metrics.memory_usage.builders:build_trace_hooks:12 - Enabled memory usage backends: "[<MemoryUsageBackend.TRACEMALLOC: 'TRACEMALLOC'>]"
+2024-05-18 11:45:49.654 | INFO     | dowser.profiler.main:run_profiler:46 - Starting profiler execution for "/home/delucca/src/msc/seismic-attributes-memory-profile/experiments/01-backend-comparisson/experiment/tasks.py"
+2024-05-18 11:45:49.658 | INFO     | dowser.profiler.handlers:execute_file:19 - Starting new profiler session for file "/home/delucca/src/msc/seismic-attributes-memory-profile/experiments/01-backend-comparisson/experiment/tasks.py" with entrypoint set to: "consume_large_memory"
+2024-05-18 11:45:49.659 | INFO     | dowser.profiler.handlers:execute_file:38 - Executing file: /home/delucca/src/msc/seismic-attributes-memory-profile/experiments/01-backend-comparisson/experiment/tasks.py
+2024-05-18 11:45:49.659 | INFO     | dowser.profiler.handlers:execute_file:42 - Compiling code
+2024-05-18 11:45:49.660 | INFO     | dowser.profiler.handlers:execute_file:45 - Profiling execution
+2024-05-18 11:45:49.660 | INFO     | dowser.profiler.strategies.instrumentation.tracers:start_tracer:14 - Starting profile tracer
+2024-05-18 11:46:09.738 | INFO     | __main__.sub:consume_large_memory:9 - Consumed 10000000 elements
+2024-05-18 11:46:10.303 | INFO     | dowser.profiler.strategies.instrumentation.tracers:stop_tracer:25 - Profile tracer stopped
+2024-05-18 11:46:10.303 | INFO     | dowser.profiler.handlers:execute_file:55 - File "/home/delucca/src/msc/seismic-attributes-memory-profile/experiments/01-backend-comparisson/experiment/tasks.py" finished execution
+2024-05-18 11:46:10.316 | INFO     | dowser.profiler.main:run_profiler:50 - Profiler execution finished
+2024-05-18 11:46:10.317 | INFO     | dowser.profiler.main:run_profiler:52 - Saving profile data
+2024-05-18 11:46:10.318 | INFO     | dowser.profiler.main:run_profiler:63 - Profiler output saved to: /home/delucca/src/msc/seismic-attributes-memory-profile/experiments/01-backend-comparisson/output/20240518_114529/tracemalloc

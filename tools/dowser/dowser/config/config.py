@@ -24,6 +24,7 @@ initial_config = {
     },
     "profiler": {
         "enabled_metrics": ["MEMORY_USAGE", "TIME"],
+        "strategy": "sampling",
         "memory_usage": {
             "enabled_backends": ["KERNEL"],
         },
@@ -60,6 +61,7 @@ class Config(BaseModel):
                 "enable_metric": str_as_list(os.environ.get("DOWSER_ENABLE_METRIC")),
                 "unit": os.environ.get("DOWSER_UNIT"),
                 "profiler_depth": os.environ.get("DOWSER_PROFILER_DEPTH"),
+                "profiler_strategy": os.environ.get("DOWSER_PROFILER_STRATEGY"),
                 "enable_mem_backend": str_as_list(
                     os.environ.get("DOWSER_ENABLE_MEM_BACKEND")
                 ),
@@ -115,6 +117,7 @@ class Config(BaseModel):
                 "profiler": {
                     "session_id": flat_config.get("profiler_session_id"),
                     "enabled_metrics": flat_config.get("enable_metric"),
+                    "strategy": flat_config.get("profiler_strategy"),
                     "filepath": flat_config.get("filepath"),
                     "entrypoint": flat_config.get("entrypoint"),
                     "args": flat_config.get("args"),

@@ -39,6 +39,12 @@ def attach_args(subparsers: _SubParsersAction) -> _SubParsersAction:
         help="Define the depth of the profiler when using the instrumentation strategy (default: 3, use -1 to disable depth limit)",
     )
 
+    profile_parser.add_argument(
+        "-s",
+        "--profiler-strategy",
+        help="Define the strategy to use for the profiler (default: sampling)",
+    )
+
     profile_parser.add_argument("filepath", help="Path to the Python file to execute")
 
     profile_parser.add_argument(
