@@ -17,9 +17,11 @@ def plot_memory_usage_comparison(data_dict: dict, output_dir: str) -> None:
     for name, data in data_dict.items():
         logger.debug(f"Plotting for {name}")
         unit = data.iloc[0]["unit"].upper()
+        peak = data["value"].max()
+        print(peak)
 
         hover_text = data.apply(
-            lambda row: f"{row['value']:.2f} {unit} <b>{row['event']}</b> {row['source']} - {row['function']}",
+            lambda row: f"{row['value']:.2f} {unit} {row['source']} - {row['function']}() - <b>{row['event']}</b>",
             axis=1,
         )
 
@@ -27,7 +29,7 @@ def plot_memory_usage_comparison(data_dict: dict, output_dir: str) -> None:
             go.Scatter(
                 x=data.index,
                 y=data["value"],
-                mode="lines+markers",
+                mode="lines",
                 name=name,
                 text=hover_text,
                 hovertemplate="%{text}",

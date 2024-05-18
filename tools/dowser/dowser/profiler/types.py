@@ -1,4 +1,4 @@
-from typing import Callable, TypedDict, List, Any, Tuple, Optional, Literal
+from typing import Callable, TypedDict, List, Any, Tuple, Optional, Literal, Dict
 from types import FrameType
 
 
@@ -12,6 +12,7 @@ __all__ = [
     "Function",
     "Event",
     "ExecutorHooks",
+    "Profile",
 ]
 
 
@@ -37,6 +38,11 @@ class Trace(TypedDict):
 
 
 TraceList = List[Trace]
+
+
+class Profile(TypedDict):
+    metadata: Dict
+    data: TraceList
 
 
 class TraceHooks(TypedDict):

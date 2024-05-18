@@ -29,7 +29,6 @@ initial_config = {
         },
         "instrumentation": {
             "depth": "3",
-            "socket_path": "/tmp/dowser.sock",
         },
     },
     "analyzer": {
@@ -61,7 +60,6 @@ class Config(BaseModel):
                 "enable_metric": str_as_list(os.environ.get("DOWSER_ENABLE_METRIC")),
                 "unit": os.environ.get("DOWSER_UNIT"),
                 "profiler_depth": os.environ.get("DOWSER_PROFILER_DEPTH"),
-                "profiler_socket_path": os.environ.get("DOWSER_PROFILER_SOCKET_PATH"),
                 "enable_mem_backend": str_as_list(
                     os.environ.get("DOWSER_ENABLE_MEM_BACKEND")
                 ),
@@ -130,7 +128,6 @@ class Config(BaseModel):
                     },
                     "instrumentation": {
                         "depth": flat_config.get("profiler_depth"),
-                        "socket_path": flat_config.get("profiler_socket_path"),
                     },
                 },
                 "analyzer": {

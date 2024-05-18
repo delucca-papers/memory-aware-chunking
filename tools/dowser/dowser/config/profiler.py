@@ -1,4 +1,3 @@
-import os
 import uuid
 import importlib
 import inspect
@@ -52,19 +51,10 @@ class FunctionParameter(BaseModel):
 
 class InstrumentationConfig(BaseModel):
     depth: int = 10
-    socket_path: str = "/tmp/dowser.sock"
 
     @field_validator("depth", mode="before")
     def transform_depth_to_int(cls, v: Any) -> int:
         return int(v)
-
-    @field_validator("socket_path", mode="before")
-    def clear_socket_path(cls, v: Any) -> str:
-        socket_path = str(v)
-        if os.path.exists(socket_path):
-            os.unlink(socket_path)
-
-        return socket_path
 
 
 class ProfilerConfig(BaseModel):

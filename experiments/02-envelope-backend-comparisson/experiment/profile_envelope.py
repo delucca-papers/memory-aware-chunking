@@ -3,6 +3,13 @@ import dowser
 
 from seismic.attributes import envelope
 
+"""
+with open("/sys/fs/cgroup/memory/dowser/memory.limit_in_bytes", "w") as f:
+    f.write(str(2307072000))
+
+with open("/sys/fs/cgroup/memory/dowser/cgroup.procs", "w") as f:
+    f.write(str(os.getpid()))
+"""
 
 def run_experiment(experiment_data_dir: str) -> None:
     logger = dowser.get_logger()

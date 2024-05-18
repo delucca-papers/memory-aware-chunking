@@ -1,10 +1,10 @@
 from toolz import compose
 from dowser.common.logger import logger
 from dowser.config import Config
-from .loaders import load_session
 from .transformers import (
     column_to_unit,
     to_memory_usage_evolution,
+    profile_to_dataframe,
 )
 from .plotters import plot_memory_usage_comparison, plot_execution_time_comparison
 
@@ -26,7 +26,7 @@ def compare_profiles(config: Config) -> None:
                 "tracemalloc_memory_usage",
             ]
         ),
-        load_session,
+        profile_to_dataframe,
     )
 
     logger.info("Parsing collected profiles")

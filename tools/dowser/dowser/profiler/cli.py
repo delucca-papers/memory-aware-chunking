@@ -36,12 +36,7 @@ def attach_args(subparsers: _SubParsersAction) -> _SubParsersAction:
     profile_parser.add_argument(
         "-d",
         "--profiler-depth",
-        help="Define the depth of the profiler when using the instrumentation strategy (default: 3)",
-    )
-
-    profile_parser.add_argument(
-        "--profiler-socket-path",
-        help="Define the socket path to use for the profiler (default: /tmp/dowser.socket)",
+        help="Define the depth of the profiler when using the instrumentation strategy (default: 3, use -1 to disable depth limit)",
     )
 
     profile_parser.add_argument("filepath", help="Path to the Python file to execute")

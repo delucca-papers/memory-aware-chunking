@@ -3,11 +3,14 @@ import pandas as pd
 from typing import List, Literal
 from toolz import curry
 from dowser.common.transformers import convert_to_unit
+from dowser.common.logger import logger
+from dowser.profiler.loaders import load_profile
 
 
 __all__ = [
     "to_unit",
     "to_memory_usage_evolution",
+    "profile_to_dataframe",
 ]
 
 
@@ -66,3 +69,19 @@ def column_to_unit(column_name: str, unit: str, profile: pd.DataFrame) -> pd.Dat
     profile.attrs[f"{column_name}_unit"] = unit
 
     return profile
+
+
+def profile_to_dataframe(file_path: str) -> pd.DataFrame:
+    logger.debug(f"Loading profile data from {file_path} as DataFrame")
+
+    profile_data = load_profile(file_path)
+    metadata = profile_data.get("metadata", {})
+    trace_data = profile_data.get("data", [])
+
+    logger.debug(f"Using metadata: {metadata}")
+
+    df = pd.DataFrame(trace_data)
+    for key, value in metadata.items():
+        df.attrs[key] = value
+
+    return df

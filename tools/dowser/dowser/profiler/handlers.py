@@ -42,7 +42,8 @@ def execute_file(
         logger.info("Compiling code")
         compiled_code = compile(file_content, str(filepath), "exec")
 
-        logger.info("Running before hooks and executing code")
+        logger.info("Profiling execution")
+
         before()
         exec(compiled_code, exec_globals)
         function = exec_globals.get(function_name)
