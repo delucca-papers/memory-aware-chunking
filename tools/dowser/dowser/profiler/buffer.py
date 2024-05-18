@@ -3,7 +3,6 @@ import msgpack
 
 from tempfile import TemporaryDirectory
 from typing import List
-from dowser.common.logger import logger
 from .types import TraceList, Source, Function, Event, CapturedTrace
 
 
@@ -13,7 +12,7 @@ __all__ = ["Buffer"]
 class Buffer:
     data: TraceList = []
     current_depth = 0
-    buffer_size: int = 10000
+    buffer_size: int = 100000
     buffered_files: int = 0
     temp_dir: TemporaryDirectory = TemporaryDirectory()
     ignore_pattern = re.compile(r"^(dowser)")
@@ -49,8 +48,6 @@ class Buffer:
         return self.ignore_pattern.match(module_name) is not None
 
     def flush(self) -> None:
-        logger.debug("Flushing buffer")
-
         self.buffer_traces()
         self.data = []
 
@@ -64,6 +61,3 @@ class Buffer:
         )
         with open(buffer_file_path, "wb") as buffer_file:
             buffer_file.write(packed_traces)
-
-        logger.debug(f"Buffered traces to {buffer_file_path}")
-        logger.debug(f"Amount of buffered files: {self.buffered_files}")

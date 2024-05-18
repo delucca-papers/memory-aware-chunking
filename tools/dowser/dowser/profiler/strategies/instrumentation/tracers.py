@@ -38,8 +38,8 @@ def build_tracer(max_depth: int, buffer: Buffer, hooks: TraceHooks) -> TraceFunc
             module_name = frame.f_globals.get("__name__", frame.f_code.co_filename)
             source = f"{module_name}:{frame.f_code.co_firstlineno}"
             event_hooks = hooks.get(event_key)
-            captured_traces = execute_hooks(event_hooks, event_key, frame, event, arg)
 
+            captured_traces = execute_hooks(event_hooks, event_key, frame, event, arg)
             buffer.append(source, function, event, captured_traces)
 
         buffer.new_event(event)

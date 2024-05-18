@@ -1,5 +1,5 @@
-import pandas as pd
 import plotly.graph_objects as go
+from plotly_resampler import FigureResampler
 
 from dowser.common.logger import logger
 from dowser.common.transformers import convert_to_unit
@@ -11,14 +11,12 @@ __all__ = ["plot_memory_usage_comparison", "plot_execution_time_comparison"]
 
 def plot_memory_usage_comparison(data_dict: dict, output_dir: str) -> None:
     logger.info("Plotting memory usage comparison")
-    fig = go.Figure()
+    fig = FigureResampler(go.Figure())
     metadata = build_metadata_annotation(next(iter(data_dict.values())))
 
     for name, data in data_dict.items():
         logger.debug(f"Plotting for {name}")
         unit = data.iloc[0]["unit"].upper()
-        peak = data["value"].max()
-        print(peak)
 
         hover_text = data.apply(
             lambda row: f"{row['value']:.2f} {unit} {row['source']} - {row['function']}() - <b>{row['event']}</b>",

@@ -1,0 +1,15 @@
+2024-05-18 11:21:21.175 | INFO     | __main__:run_experiment:17 - Starting experiment with Session ID: 20240518_112108-psutil
+2024-05-18 11:21:21.175 | INFO     | __main__:run_experiment:28 - Input data file: /home/delucca/src/msc/seismic-attributes-memory-profile/experiments/02-envelope-backend-comparisson/output/20240518_112108/data/100-600-1000.segy
+2024-05-18 11:21:21.176 | INFO     | dowser.profiler.main:run_profiler:18 - Starting profiler
+2024-05-18 11:21:21.176 | INFO     | dowser.profiler.metrics.memory_usage.builders:build_trace_hooks:12 - Enabled memory usage backends: "[<MemoryUsageBackend.PSUTIL: 'PSUTIL'>]"
+2024-05-18 11:21:21.183 | INFO     | dowser.profiler.main:run_profiler:46 - Starting profiler execution for "/home/delucca/src/msc/seismic-attributes-memory-profile/experiments/02-envelope-backend-comparisson/experiment/seismic/attributes/envelope.py"
+2024-05-18 11:21:21.188 | INFO     | dowser.profiler.handlers:execute_file:19 - Starting new profiler session for file "/home/delucca/src/msc/seismic-attributes-memory-profile/experiments/02-envelope-backend-comparisson/experiment/seismic/attributes/envelope.py" with entrypoint set to: "run"
+2024-05-18 11:21:21.189 | INFO     | dowser.profiler.handlers:execute_file:38 - Executing file: /home/delucca/src/msc/seismic-attributes-memory-profile/experiments/02-envelope-backend-comparisson/experiment/seismic/attributes/envelope.py
+2024-05-18 11:21:21.189 | INFO     | dowser.profiler.handlers:execute_file:42 - Compiling code
+2024-05-18 11:21:21.189 | INFO     | dowser.profiler.handlers:execute_file:45 - Profiling execution
+2024-05-18 11:21:21.190 | INFO     | dowser.profiler.strategies.instrumentation.tracers:start_tracer:14 - Starting profile tracer
+2024-05-18 11:22:38.408 | INFO     | dowser.profiler.strategies.instrumentation.tracers:stop_tracer:25 - Profile tracer stopped
+2024-05-18 11:22:38.409 | INFO     | dowser.profiler.handlers:execute_file:55 - File "/home/delucca/src/msc/seismic-attributes-memory-profile/experiments/02-envelope-backend-comparisson/experiment/seismic/attributes/envelope.py" finished execution
+2024-05-18 11:22:38.424 | INFO     | dowser.profiler.main:run_profiler:50 - Profiler execution finished
+2024-05-18 11:22:38.425 | INFO     | dowser.profiler.main:run_profiler:52 - Saving profile data
+2024-05-18 11:22:52.970 | INFO     | dowser.profiler.main:run_profiler:63 - Profiler output saved to: /home/delucca/src/msc/seismic-attributes-memory-profile/experiments/02-envelope-backend-comparisson/output/20240518_112108/psutil

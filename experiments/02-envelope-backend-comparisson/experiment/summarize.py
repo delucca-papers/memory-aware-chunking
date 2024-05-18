@@ -5,15 +5,20 @@ import dowser
 
 from typing import List
 from dowser.profiler.loaders import load_profile
+from dowser.common.logger import logger
 
 
 def save_plots(directory_path: str, unit: str) -> None:
+    logger.info("Starting to create experiment summary")
+
     sessions = get_sessions(directory_path)
     normalize_metadata(sessions)
 
+    logger.debug("Getting session names and building zipped sessions")
     session_names = get_session_names(sessions)
     zipped_sessions = zip(session_names, sessions)
 
+    logger.info("Comparing profiles")
     dowser.compare_profiles(
         {session_name: session for session_name, session in zipped_sessions},
         unit,
@@ -55,7 +60,9 @@ def find_profiles(directory: str) -> List[str]:
 
 
 def normalize_metadata(sessions: List[str]) -> None:
+    logger.info("Normalizing metadata")
     for session in sessions:
+        logger.debug(f"Normalizing metadata for session: {session}")
         profile = load_profile(session)
 
         metadata = profile["metadata"]
