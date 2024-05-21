@@ -3,7 +3,7 @@ import tracemalloc
 from dowser.profiler.types import CapturedTrace
 
 
-__all__ = ["before", "on_call", "on_return", "after"]
+__all__ = ["before", "on_call", "on_return", "on_sample", "after"]
 
 
 def get_memory_usage() -> float:
@@ -21,3 +21,4 @@ before = tracemalloc.start
 after = tracemalloc.stop
 on_call = capture_trace
 on_return = capture_trace
+on_sample = capture_trace

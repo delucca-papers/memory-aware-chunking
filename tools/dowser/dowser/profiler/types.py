@@ -48,6 +48,7 @@ class Profile(TypedDict):
 class TraceHooks(TypedDict):
     on_call: List[TraceFunction]
     on_return: List[TraceFunction]
+    on_sample: List[TraceFunction]
 
 
 class ExecutorHooks(TypedDict):

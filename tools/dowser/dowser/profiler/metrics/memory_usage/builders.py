@@ -15,6 +15,7 @@ def build_trace_hooks(enabled_backends: MemoryUsageBackend) -> TraceHooks:
         "before": [],
         "on_call": [],
         "on_return": [],
+        "on_sample": [],
         "after": [],
     }
 

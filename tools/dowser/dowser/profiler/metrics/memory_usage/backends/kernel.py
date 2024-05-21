@@ -4,7 +4,7 @@ from dowser.common.synchronization import passthrough
 from dowser.profiler.types import CapturedTrace
 
 
-__all__ = ["before", "on_call", "on_return", "after"]
+__all__ = ["before", "on_call", "on_return", "on_sample", "after"]
 
 
 status_file = open("/proc/self/status", "r")
@@ -30,3 +30,4 @@ def before() -> None:
 after = passthrough
 on_call = capture_trace
 on_return = capture_trace
+on_sample = capture_trace

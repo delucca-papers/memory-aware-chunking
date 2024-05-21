@@ -25,7 +25,9 @@ def run_profiler(config: Config) -> None:
     executor_hooks = build_executor_hooks(
         trace_hooks,
         buffer,
+        strategy=config.profiler.strategy,
         instrumentation_config=config.profiler.instrumentation,
+        sampling_config=config.profiler.sampling,
     )
 
     target_args = (

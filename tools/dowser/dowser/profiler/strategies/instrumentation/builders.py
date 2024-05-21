@@ -11,13 +11,13 @@ __all__ = ["build_executor_hooks"]
 
 @curry
 def build_executor_hooks(
-    instrumentation_config: ProfilerInstrumentationConfig,
+    config: ProfilerInstrumentationConfig,
     buffer: Buffer,
     trace_hooks: TraceHooks,
 ) -> ExecutorHooks:
     return {
         "before": lazy(start_tracer)(
-            depth=instrumentation_config.depth,
+            depth=config.depth,
             buffer=buffer,
             **trace_hooks,
         ),

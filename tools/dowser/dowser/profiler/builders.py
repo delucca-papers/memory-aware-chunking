@@ -7,6 +7,7 @@ from dowser.config import (
     ProfilerMetric,
     FunctionParameter,
     ProfilerInstrumentationConfig,
+    ProfilerSamplingConfig,
 )
 from dowser.common.transformers import deep_merge
 from dowser.common.logger import logger
@@ -14,6 +15,9 @@ from .metrics.memory_usage import build_trace_hooks as build_memory_usage_trace_
 from .metrics.time import build_trace_hooks as build_time_trace_hooks
 from .strategies.instrumentation.builders import (
     build_executor_hooks as build_instrumentation_executor_hooks,
+)
+from .strategies.sampling.builders import (
+    build_executor_hooks as build_sampling_executor_hooks,
 )
 from .buffer import Buffer
 from .loaders import load_buffer
@@ -48,12 +52,14 @@ def build_executor_hooks(
     trace_hooks: TraceHooks,
     buffer: Buffer,
     instrumentation_config: ProfilerInstrumentationConfig,
-    strategy: Literal["instrumentation"] = "instrumentation",
+    sampling_config: ProfilerSamplingConfig,
+    strategy: Literal["instrumentation", "sampling"] = "sampling",
 ) -> ExecutorHooks:
     logger.debug(f"Building executor hooks using strategy: {strategy}")
 
     strategy_builders = {
         "instrumentation": build_instrumentation_executor_hooks(instrumentation_config),
+        "sampling": build_sampling_executor_hooks(sampling_config),
     }
 
     builder = strategy_builders[strategy]

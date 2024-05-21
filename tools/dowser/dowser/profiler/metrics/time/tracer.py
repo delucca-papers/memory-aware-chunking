@@ -5,7 +5,7 @@ from dowser.profiler.types import CapturedTrace
 from .types import TimeUnit
 
 
-__all__ = ["on_call", "on_return"]
+__all__ = ["on_call", "on_return", "on_sample"]
 
 
 def get_unix_timestamp(unit: TimeUnit = "ms") -> float:
@@ -21,3 +21,4 @@ def capture_trace(*_) -> CapturedTrace:
 
 on_call = capture_trace
 on_return = capture_trace
+on_sample = capture_trace

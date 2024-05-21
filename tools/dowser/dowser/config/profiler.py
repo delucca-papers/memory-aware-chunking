@@ -3,7 +3,8 @@ import importlib
 import inspect
 import importlib.util
 
-from pydantic import BaseModel, FilePath, field_validator
+from pydantic import BaseModel, FilePath, field_validator, model_validator
+from pydantic_core import PydanticCustomError
 from typing import Optional, Literal, List, Any
 from enum import Enum
 
@@ -14,6 +15,7 @@ __all__ = [
     "MemoryUsageBackend",
     "FunctionParameter",
     "InstrumentationConfig",
+    "SamplingConfig",
 ]
 
 
@@ -57,6 +59,18 @@ class InstrumentationConfig(BaseModel):
         return int(v)
 
 
+class SamplingConfig(BaseModel):
+    precision: float = 2
+
+    @field_validator("precision", mode="before")
+    def transform_precision_to_float(cls, v: Any) -> float:
+        if isinstance(v, float):
+            return v
+
+        precision = int(v)
+        return float(1 * 10**-precision)
+
+
 class ProfilerConfig(BaseModel):
     session_id: str = str(uuid.uuid4())
     enabled_metrics: List[Metric] = [Metric.MEMORY_USAGE, Metric.TIME]
@@ -68,6 +82,7 @@ class ProfilerConfig(BaseModel):
     args: tuple = tuple()
     kwargs: dict = {}
     instrumentation: InstrumentationConfig
+    sampling: SamplingConfig
 
     @field_validator("enabled_metrics", mode="before")
     def uppercase_enabled_transports(cls, v: Any) -> List[Metric]:
@@ -148,3 +163,23 @@ class ProfilerConfig(BaseModel):
             position += 1
 
         return [FunctionParameter(**p) for p in parameters]
+
+    @model_validator(mode="after")
+    def check_sampling_with_backend(cls, values):
+        invalid_backends = [MemoryUsageBackend.RESOURCE, MemoryUsageBackend.TRACEMALLOC]
+
+        if values.strategy == "sampling" and any(
+            backend in invalid_backends
+            for backend in values.memory_usage.enabled_backends
+        ):
+            enabled_invalid_backends = [
+                backend.value
+                for backend in values.memory_usage.enabled_backends
+                if backend in invalid_backends
+            ]
+            raise PydanticCustomError(
+                "Invalid configuration",
+                f"{', '.join(enabled_invalid_backends)} backend{'s' if len(enabled_invalid_backends) > 1 else ''} cannot be used with sampling strategy",
+            )
+
+        return values

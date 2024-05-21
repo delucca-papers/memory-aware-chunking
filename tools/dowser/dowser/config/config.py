@@ -31,6 +31,9 @@ initial_config = {
         "instrumentation": {
             "depth": "3",
         },
+        "sampling": {
+            "precision": "2",
+        },
     },
     "analyzer": {
         "unit": "mb",
@@ -62,6 +65,7 @@ class Config(BaseModel):
                 "unit": os.environ.get("DOWSER_UNIT"),
                 "profiler_depth": os.environ.get("DOWSER_PROFILER_DEPTH"),
                 "profiler_strategy": os.environ.get("DOWSER_PROFILER_STRATEGY"),
+                "profiler_precision": os.environ.get("DOWSER_PROFILER_PRECISION"),
                 "enable_mem_backend": str_as_list(
                     os.environ.get("DOWSER_ENABLE_MEM_BACKEND")
                 ),
@@ -131,6 +135,9 @@ class Config(BaseModel):
                     },
                     "instrumentation": {
                         "depth": flat_config.get("profiler_depth"),
+                    },
+                    "sampling": {
+                        "precision": flat_config.get("profiler_precision"),
                     },
                 },
                 "analyzer": {

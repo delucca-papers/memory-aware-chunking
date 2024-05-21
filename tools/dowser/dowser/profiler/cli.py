@@ -45,6 +45,11 @@ def attach_args(subparsers: _SubParsersAction) -> _SubParsersAction:
         help="Define the strategy to use for the profiler (default: sampling)",
     )
 
+    profile_parser.add_argument(
+        "--profiler-precision",
+        help="Define the precision to use for the profiler (default: 2)",
+    )
+
     profile_parser.add_argument("filepath", help="Path to the Python file to execute")
 
     profile_parser.add_argument(

@@ -5,6 +5,7 @@ from .profiler import (
     MemoryUsageBackend,
     FunctionParameter,
     InstrumentationConfig as ProfilerInstrumentationConfig,
+    SamplingConfig as ProfilerSamplingConfig,
 )
 from .analyzer import Sessions as AnalyzerSessions, MemoryUsageUnit
 
@@ -18,4 +19,5 @@ __all__ = [
     "MemoryUsageUnit",
     "FunctionParameter",
     "ProfilerInstrumentationConfig",
+    "ProfilerSamplingConfig",
 ]

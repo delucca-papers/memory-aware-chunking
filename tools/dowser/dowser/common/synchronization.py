@@ -1,9 +1,10 @@
-from typing import Callable
+from typing import Callable, List, Any
 from functools import wraps
 from multiprocessing import Process
+from .logger import logger
 
 
-__all__ = ["lazy", "passthrough", "run_subprocess"]
+__all__ = ["lazy", "passthrough", "run_subprocess", "do_many"]
 
 
 def lazy(func: Callable):
@@ -36,3 +37,16 @@ def run_subprocess(
         process.join()
 
     return process
+
+
+def do_many(fns: List[Callable], *args, **kwargs) -> List[Any]:
+    results = []
+
+    for fn in fns:
+        try:
+            result = fn(*args, **kwargs)
+            results.append(result)
+        except Exception as e:
+            logger.error(f"Error executing function: {e}")
+
+    return results

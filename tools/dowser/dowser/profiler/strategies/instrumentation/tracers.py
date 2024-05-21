@@ -1,8 +1,9 @@
 import sys
 
-from typing import Any, Callable, Optional, List
+from typing import Any, Optional
 from types import FrameType
 from dowser.common.logger import logger
+from dowser.common.synchronization import do_many
 from dowser.profiler.types import TraceHooks, TraceFunction
 from dowser.profiler.buffer import Buffer
 
@@ -15,7 +16,7 @@ def start_tracer(depth: int, buffer: Buffer, **hooks: TraceHooks) -> None:
 
     tracer = build_tracer(depth, buffer, hooks)
 
-    execute_hooks(hooks.get("before", []), "before")
+    do_many(hooks.get("before", []))
     sys.setprofile(tracer)
 
 
@@ -23,7 +24,7 @@ def stop_tracer(buffer: Buffer, **hooks: TraceHooks) -> None:
     sys.setprofile(None)
     buffer.flush()
     logger.info("Profile tracer stopped")
-    execute_hooks(hooks.get("after", []), "after")
+    do_many(hooks.get("after", []))
 
 
 def build_tracer(max_depth: int, buffer: Buffer, hooks: TraceHooks) -> TraceFunction:
@@ -39,7 +40,7 @@ def build_tracer(max_depth: int, buffer: Buffer, hooks: TraceHooks) -> TraceFunc
             source = f"{module_name}:{frame.f_code.co_firstlineno}"
             event_hooks = hooks.get(event_key)
 
-            captured_traces = execute_hooks(event_hooks, event_key, frame, event, arg)
+            captured_traces = do_many(event_hooks, frame, event, arg)
             buffer.append(source, function, event, captured_traces)
 
         buffer.new_event(event)
@@ -47,16 +48,3 @@ def build_tracer(max_depth: int, buffer: Buffer, hooks: TraceHooks) -> TraceFunc
         return tracer
 
     return tracer
-
-
-def execute_hooks(hooks: List[Callable], hook_type: str, *args, **kwargs) -> List[Any]:
-    hook_results = []
-
-    for hook in hooks:
-        try:
-            result = hook(*args, **kwargs)
-            hook_results.append(result)
-        except Exception as e:
-            logger.error(f'Error executing "{hook_type}" hook: {e}')
-
-    return hook_results
