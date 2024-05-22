@@ -1,10 +1,8 @@
-from io import TextIOWrapper
 from dowser.common.file_handling import get_line_with_keyword, go_to_pointer
-from dowser.common.synchronization import passthrough
 from dowser.profiler.types import CapturedTrace
 
 
-__all__ = ["before", "on_call", "on_return", "on_sample", "after"]
+__all__ = ["before", "on_sample"]
 
 
 status_file = open("/proc/self/status", "r")
@@ -18,7 +16,7 @@ def get_memory_usage() -> float:
     return float(memory_usage)
 
 
-def capture_trace(*_) -> CapturedTrace:
+def capture_trace() -> CapturedTrace:
     memory_usage = get_memory_usage()
     return "kernel_memory_usage", memory_usage
 
@@ -27,7 +25,4 @@ def before() -> None:
     globals()["status_file"] = open("/proc/self/status", "r")
 
 
-after = passthrough
-on_call = capture_trace
-on_return = capture_trace
 on_sample = capture_trace

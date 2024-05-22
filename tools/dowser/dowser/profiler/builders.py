@@ -1,35 +1,17 @@
 import msgpack
 import gzip
 
-from typing import List, Literal, Dict, Tuple
-from dowser.config import (
-    MemoryUsageBackend,
-    ProfilerMetric,
-    FunctionParameter,
-    ProfilerInstrumentationConfig,
-    ProfilerSamplingConfig,
-)
+from typing import List, Dict, Tuple
+from dowser.config import MemoryUsageBackend, ProfilerMetric, FunctionParameter
 from dowser.common.transformers import deep_merge
 from dowser.common.logger import logger
 from .metrics.memory_usage import build_trace_hooks as build_memory_usage_trace_hooks
 from .metrics.time import build_trace_hooks as build_time_trace_hooks
-from .strategies.instrumentation.builders import (
-    build_executor_hooks as build_instrumentation_executor_hooks,
-)
-from .strategies.sampling.builders import (
-    build_executor_hooks as build_sampling_executor_hooks,
-)
-from .buffer import Buffer
-from .loaders import load_buffer
-from .types import TraceHooks, ExecutorHooks, TraceList
+from .types import TraceHooks, TraceList
 
 
-__all__ = [
-    "build_trace_hooks",
-    "build_executor_hooks",
-    "build_profile",
-    "build_metadata",
-]
+__all__ = ["build_trace_hooks", "build_profile", "build_metadata"]
+
 
 def build_trace_hooks(
     enabled_metrics: List[ProfilerMetric],
@@ -46,25 +28,6 @@ def build_trace_hooks(
         build_time_trace_hooks() if ProfilerMetric.TIME in enabled_metrics else {}
     )
     return deep_merge(memory_usage_hooks, time_hooks, append=True)
-
-
-def build_executor_hooks(
-    trace_hooks: TraceHooks,
-    buffer: Buffer,
-    instrumentation_config: ProfilerInstrumentationConfig,
-    sampling_config: ProfilerSamplingConfig,
-    strategy: Literal["instrumentation", "sampling"] = "sampling",
-) -> ExecutorHooks:
-    logger.debug(f"Building executor hooks using strategy: {strategy}")
-
-    strategy_builders = {
-        "instrumentation": build_instrumentation_executor_hooks(instrumentation_config),
-        "sampling": build_sampling_executor_hooks(sampling_config),
-    }
-
-    builder = strategy_builders[strategy]
-
-    return builder(buffer, trace_hooks)
 
 
 def build_metadata(
@@ -95,12 +58,11 @@ def build_metadata(
 
 def build_profile(
     metadata: Dict,
-    buffer_dir: str,
+    trace_list: TraceList,
     output_file: str,
 ) -> None:
-    logger.debug(f"Building profile using buffer directory: {buffer_dir}")
+    logger.debug("Building profile")
 
-    trace_list = load_buffer(buffer_dir)
     data = build_profile_data(trace_list)
 
     profile = {
@@ -115,9 +77,7 @@ def build_profile(
 
 def build_profile_data(trace_list: TraceList) -> list:
     default_value = {
-        "source": "UNKNOWN",
-        "function": "UNKNOWN",
-        "event": "UNKNOWN",
+        "signature": "UNKNOWN",
         "kernel_memory_usage": 0,
         "psutil_memory_usage": 0,
         "resource_memory_usage": 0,

@@ -42,13 +42,17 @@ def execute_file(
         logger.info("Compiling code")
         compiled_code = compile(file_content, str(filepath), "exec")
 
-        logger.info("Profiling execution")
-
+        logger.info("Running execution before hook")
         before()
+
+        logger.info("Executing code file")
         exec(compiled_code, exec_globals)
         function = exec_globals.get(function_name)
         if function:
+            logger.info(f"Running function: {function_name}")
             function(*args, **kwargs)
+
+        logger.info("Running execution after hook")
         after()
     finally:
         sys.argv = original_argv

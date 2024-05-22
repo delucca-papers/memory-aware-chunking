@@ -13,8 +13,6 @@ def build_trace_hooks(enabled_backends: MemoryUsageBackend) -> TraceHooks:
 
     hooks = {
         "before": [],
-        "on_call": [],
-        "on_return": [],
         "on_sample": [],
         "after": [],
     }
@@ -36,9 +34,10 @@ def build_trace_hooks(enabled_backends: MemoryUsageBackend) -> TraceHooks:
             logger.debug(f'Checking if backend has "{hook_name}" function')
 
             if not hasattr(backend_module, hook_name):
-                raise AttributeError(
+                logger.warning(
                     f'Backend "{backend_name}" does not have "{hook_name}" function'
                 )
+                continue
 
             hooks[hook_name].append(getattr(backend_module, hook_name))
             logger.debug(f'Added "{hook_name}" from "{backend_name}" to hooks')

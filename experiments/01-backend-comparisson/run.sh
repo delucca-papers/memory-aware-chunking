@@ -36,6 +36,8 @@ function main {
 
     run_with_backend "psutil"
     run_with_backend "kernel"
+    run_with_backend "tracemalloc"
+    run_with_backend "resource"
 
     summarize_experiment
 }

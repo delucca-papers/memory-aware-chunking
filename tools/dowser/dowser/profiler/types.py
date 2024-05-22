@@ -1,5 +1,4 @@
 from typing import Callable, TypedDict, List, Any, Tuple, Optional, Literal, Dict
-from types import FrameType
 
 
 __all__ = [
@@ -8,28 +7,22 @@ __all__ = [
     "TraceList",
     "Trace",
     "CapturedTrace",
-    "Source",
-    "Function",
-    "Event",
+    "SignedCapturedTrace",
     "ExecutorHooks",
     "Profile",
+    "Strategy",
 ]
 
-
+Strategy = Literal["thread", "process"]
 TraceKey = str
+Signature = str
 CapturedTrace = Tuple[TraceKey, Any]
-
-Source = str
-Function = str
-Event = Literal["call", "return"]
-
-TraceFunction = Callable[[FrameType, Event, Any], CapturedTrace]
+SignedCapturedTrace = Tuple[Signature, CapturedTrace]
+TraceFunction = Callable[[], CapturedTrace]
 
 
 class Trace(TypedDict):
-    source: Source
-    function: Function
-    event: Event
+    signature: Signature
     kernel_memory_usage: Optional[float]
     psutil_memory_usage: Optional[float]
     resource_memory_usage: Optional[float]
@@ -46,9 +39,9 @@ class Profile(TypedDict):
 
 
 class TraceHooks(TypedDict):
-    on_call: List[TraceFunction]
-    on_return: List[TraceFunction]
+    before: List[TraceFunction]
     on_sample: List[TraceFunction]
+    after: List[TraceFunction]
 
 
 class ExecutorHooks(TypedDict):

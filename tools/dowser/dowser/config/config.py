@@ -24,15 +24,10 @@ initial_config = {
     },
     "profiler": {
         "enabled_metrics": ["MEMORY_USAGE", "TIME"],
-        "strategy": "sampling",
+        "sign_traces": "false",
+        "precision": "2",
         "memory_usage": {
             "enabled_backends": ["KERNEL"],
-        },
-        "instrumentation": {
-            "depth": "3",
-        },
-        "sampling": {
-            "precision": "2",
         },
     },
     "analyzer": {
@@ -63,8 +58,7 @@ class Config(BaseModel):
                 "log_transport": str_as_list(os.environ.get("DOWSER_LOG_TRANSPORT")),
                 "enable_metric": str_as_list(os.environ.get("DOWSER_ENABLE_METRIC")),
                 "unit": os.environ.get("DOWSER_UNIT"),
-                "profiler_depth": os.environ.get("DOWSER_PROFILER_DEPTH"),
-                "profiler_strategy": os.environ.get("DOWSER_PROFILER_STRATEGY"),
+                "profiler_sign_traces": os.environ.get("DOWSER_PROFILER_SIGN_TRACES"),
                 "profiler_precision": os.environ.get("DOWSER_PROFILER_PRECISION"),
                 "enable_mem_backend": str_as_list(
                     os.environ.get("DOWSER_ENABLE_MEM_BACKEND")
@@ -121,7 +115,8 @@ class Config(BaseModel):
                 "profiler": {
                     "session_id": flat_config.get("profiler_session_id"),
                     "enabled_metrics": flat_config.get("enable_metric"),
-                    "strategy": flat_config.get("profiler_strategy"),
+                    "sign_traces": flat_config.get("profiler_sign_traces"),
+                    "precision": flat_config.get("profiler_precision"),
                     "filepath": flat_config.get("filepath"),
                     "entrypoint": flat_config.get("entrypoint"),
                     "args": flat_config.get("args"),
@@ -132,12 +127,6 @@ class Config(BaseModel):
                     ],
                     "memory_usage": {
                         "enabled_backends": flat_config.get("enable_mem_backend"),
-                    },
-                    "instrumentation": {
-                        "depth": flat_config.get("profiler_depth"),
-                    },
-                    "sampling": {
-                        "precision": flat_config.get("profiler_precision"),
                     },
                 },
                 "analyzer": {

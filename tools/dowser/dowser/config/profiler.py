@@ -4,7 +4,6 @@ import inspect
 import importlib.util
 
 from pydantic import BaseModel, FilePath, field_validator, model_validator
-from pydantic_core import PydanticCustomError
 from typing import Optional, Literal, List, Any
 from enum import Enum
 
@@ -14,8 +13,6 @@ __all__ = [
     "Metric",
     "MemoryUsageBackend",
     "FunctionParameter",
-    "InstrumentationConfig",
-    "SamplingConfig",
 ]
 
 
@@ -51,16 +48,25 @@ class FunctionParameter(BaseModel):
     default: str = None
 
 
-class InstrumentationConfig(BaseModel):
-    depth: int = 10
-
-    @field_validator("depth", mode="before")
-    def transform_depth_to_int(cls, v: Any) -> int:
-        return int(v)
-
-
-class SamplingConfig(BaseModel):
+class ProfilerConfig(BaseModel):
+    session_id: str = str(uuid.uuid4())
+    enabled_metrics: List[Metric] = [Metric.MEMORY_USAGE, Metric.TIME]
+    memory_usage: MemoryUsageConfig
+    filepath: Optional[FilePath] = None
+    entrypoint: Optional[str] = None
+    signature: Optional[List[FunctionParameter]] = None
+    args: tuple = tuple()
+    kwargs: dict = {}
     precision: float = 2
+    sign_traces: bool = False
+    strategy: Literal["thread", "process"] = "process"
+
+    @field_validator("sign_traces", mode="before")
+    def transform_is_trace_enabled(cls, v: Any) -> bool:
+        if isinstance(v, bool):
+            return v
+
+        return v.lower() == "true"
 
     @field_validator("precision", mode="before")
     def transform_precision_to_float(cls, v: Any) -> float:
@@ -69,20 +75,6 @@ class SamplingConfig(BaseModel):
 
         precision = int(v)
         return float(1 * 10**-precision)
-
-
-class ProfilerConfig(BaseModel):
-    session_id: str = str(uuid.uuid4())
-    enabled_metrics: List[Metric] = [Metric.MEMORY_USAGE, Metric.TIME]
-    memory_usage: MemoryUsageConfig
-    strategy: Literal["instrumentation", "sampling"] = "sampling"
-    filepath: Optional[FilePath] = None
-    entrypoint: Optional[str] = None
-    signature: Optional[List[FunctionParameter]] = None
-    args: tuple = tuple()
-    kwargs: dict = {}
-    instrumentation: InstrumentationConfig
-    sampling: SamplingConfig
 
     @field_validator("enabled_metrics", mode="before")
     def uppercase_enabled_transports(cls, v: Any) -> List[Metric]:
@@ -165,21 +157,15 @@ class ProfilerConfig(BaseModel):
         return [FunctionParameter(**p) for p in parameters]
 
     @model_validator(mode="after")
-    def check_sampling_with_backend(cls, values):
-        invalid_backends = [MemoryUsageBackend.RESOURCE, MemoryUsageBackend.TRACEMALLOC]
-
-        if values.strategy == "sampling" and any(
-            backend in invalid_backends
-            for backend in values.memory_usage.enabled_backends
+    def define_strategy(cls, values):
+        threaded_backends = [
+            MemoryUsageBackend.RESOURCE,
+            MemoryUsageBackend.TRACEMALLOC,
+        ]
+        if any(
+            backend in values.memory_usage.enabled_backends
+            for backend in threaded_backends
         ):
-            enabled_invalid_backends = [
-                backend.value
-                for backend in values.memory_usage.enabled_backends
-                if backend in invalid_backends
-            ]
-            raise PydanticCustomError(
-                "Invalid configuration",
-                f"{', '.join(enabled_invalid_backends)} backend{'s' if len(enabled_invalid_backends) > 1 else ''} cannot be used with sampling strategy",
-            )
+            values.strategy = "thread"
 
         return values

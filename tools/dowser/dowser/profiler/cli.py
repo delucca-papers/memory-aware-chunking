@@ -34,15 +34,9 @@ def attach_args(subparsers: _SubParsersAction) -> _SubParsersAction:
     )
 
     profile_parser.add_argument(
-        "-d",
-        "--profiler-depth",
-        help="Define the depth of the profiler when using the instrumentation strategy (default: 3, use -1 to disable depth limit)",
-    )
-
-    profile_parser.add_argument(
         "-s",
-        "--profiler-strategy",
-        help="Define the strategy to use for the profiler (default: sampling)",
+        "--profiler-sign-traces",
+        help="Define if the tracer should introspect to fetch function data and sign traces. This options adds a considerable overhead to the execution time (default: False)",
     )
 
     profile_parser.add_argument(

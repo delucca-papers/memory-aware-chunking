@@ -1,10 +1,11 @@
 from typing import Callable, List, Any
 from functools import wraps
 from multiprocessing import Process
+from threading import Thread
 from .logger import logger
 
 
-__all__ = ["lazy", "passthrough", "run_subprocess", "do_many"]
+__all__ = ["lazy", "passthrough", "run_subprocess", "run_thread", "do_many"]
 
 
 def lazy(func: Callable):
@@ -37,6 +38,22 @@ def run_subprocess(
         process.join()
 
     return process
+
+
+def run_thread(
+    target: Callable,
+    *target_args,
+    sync: bool = False,
+    **target_kwargs,
+) -> Thread:
+    thread = Thread(target=target, args=target_args, kwargs=target_kwargs)
+
+    thread.start()
+
+    if sync:
+        thread.join()
+
+    return thread
 
 
 def do_many(fns: List[Callable], *args, **kwargs) -> List[Any]:

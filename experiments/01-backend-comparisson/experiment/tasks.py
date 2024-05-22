@@ -12,4 +12,4 @@ def consume_large_memory(num_elements: int) -> float:
 
 
 if __name__ == "__main__":
-    consume_large_memory(1_000_000)
+    consume_large_memory(10_000_000)

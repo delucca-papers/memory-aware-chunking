@@ -1,10 +1,9 @@
 import resource
 
-from dowser.common.synchronization import passthrough
 from dowser.profiler.types import CapturedTrace
 
 
-__all__ = ["before", "on_call", "on_return", "on_sample", "after"]
+__all__ = ["on_sample"]
 
 
 def get_memory_usage() -> float:
@@ -13,13 +12,9 @@ def get_memory_usage() -> float:
     return float(memory_usage)
 
 
-def capture_trace(*_) -> CapturedTrace:
+def capture_trace() -> CapturedTrace:
     memory_usage = get_memory_usage()
     return "resource_memory_usage", memory_usage
 
 
-before = passthrough
-after = passthrough
-on_call = capture_trace
-on_return = capture_trace
 on_sample = capture_trace

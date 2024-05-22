@@ -18,18 +18,13 @@ def plot_memory_usage_comparison(data_dict: dict, output_dir: str) -> None:
         logger.debug(f"Plotting for {name}")
         unit = data.iloc[0]["unit"].upper()
 
-        hover_text = data.apply(
-            lambda row: f"{row['value']:.2f} {unit} {row['source']} - {row['function']}() - <b>{row['event']}</b>",
-            axis=1,
-        )
-
         fig.add_trace(
             go.Scatter(
                 x=data.index,
                 y=data["value"],
                 mode="lines",
                 name=name,
-                text=hover_text,
+                text=data["signature"],
                 hovertemplate="%{text}",
             )
         )
