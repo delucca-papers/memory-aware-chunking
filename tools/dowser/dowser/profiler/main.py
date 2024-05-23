@@ -23,6 +23,7 @@ def run_profiler(config: Config) -> None:
         config.profiler.precision,
         config.profiler.sign_traces,
         config.profiler.strategy,
+        config.profiler.depth,
     )
 
     target_args = (

@@ -1,10 +1,11 @@
 import sys
 import time
 import random
+import re
 
 from multiprocessing import shared_memory, Manager, Process
 from threading import Thread, Event
-from typing import Any, Optional, List, Literal
+from typing import Any, Optional, List
 from types import FrameType
 from dowser.common.logger import logger
 from dowser.common.synchronization import do_many, run_subprocess, run_thread
@@ -25,6 +26,8 @@ class Tracer:
     captured_traces: List[SignedCapturedTrace]
 
     __sign_traces: bool
+    __current_depth: int = 0
+    __max_depth: int = 3
     __strategy: Strategy
     __precision: float
     __trace_hooks: TraceHooks
@@ -45,11 +48,13 @@ class Tracer:
         precision: float,
         sign_traces: bool,
         strategy: Strategy,
+        max_depth: int,
     ) -> None:
         self.__sign_traces = sign_traces
         self.__precision = precision
         self.__trace_hooks = trace_hooks
         self.__strategy = strategy
+        self.__max_depth = max_depth
 
         self.__shm = shared_memory.SharedMemory(create=True, size=self.__shm_size)
         self.set_signature(self.__default_signature)
@@ -57,6 +62,8 @@ class Tracer:
 
     @property
     def executor_hooks(self) -> ExecutorHooks:
+        logger.debug(f"Using executor hooks: {self.__trace_hooks}")
+
         return {
             "before": self.before_executor,
             "after": self.after_executor,
@@ -73,6 +80,8 @@ class Tracer:
         ]
 
     def before_executor(self) -> None:
+        logger.debug("Running before executor hooks")
+
         do_many(self.__trace_hooks.get("before", []))
 
         if self.__sign_traces:
@@ -81,6 +90,8 @@ class Tracer:
         self.start_sampler()
 
     def after_executor(self) -> None:
+        logger.debug("Running after executor hooks")
+
         do_many(self.__trace_hooks.get("after", []))
 
         if self.__sign_traces:
@@ -91,13 +102,18 @@ class Tracer:
 
     def start_tracer(self) -> None:
         logger.info("Starting profile tracer")
+        count = 0
 
         def tracer(frame: FrameType, event: str, _: Any) -> Optional[TraceFunction]:
             if "c_" in event:
                 return None
 
-            function = frame.f_code.co_name
+            self.new_event(event)
+            if self.__current_depth >= self.__max_depth:
+                return None
+
             module_name = frame.f_globals.get("__name__", frame.f_code.co_filename)
+            function = frame.f_code.co_name
             source = f"{module_name}:{frame.f_code.co_firstlineno}"
             signature = f"{event}::{source}::{function}"
             self.set_signature(signature)
@@ -105,6 +121,12 @@ class Tracer:
             return tracer
 
         sys.setprofile(tracer)
+
+    def new_event(self, event: str) -> None:
+        if event == "call":
+            self.__current_depth += 1
+        elif event == "return":
+            self.__current_depth -= 1
 
     def stop_tracer(self) -> None:
         sys.setprofile(None)
@@ -127,6 +149,9 @@ class Tracer:
 
     def start_sampler(self) -> None:
         logger.info("Starting profile sampler")
+        logger.info(
+            f"Using precision of {self.__precision}s and {self.__strategy} strategy"
+        )
 
         hooks = self.__trace_hooks.get("on_sample", [])
         strategy_handler = self.__strategy_handlers.get(self.__strategy)

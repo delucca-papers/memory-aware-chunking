@@ -57,6 +57,7 @@ class ProfilerConfig(BaseModel):
     signature: Optional[List[FunctionParameter]] = None
     args: tuple = tuple()
     kwargs: dict = {}
+    depth: int = 3
     precision: float = 2
     sign_traces: bool = False
     strategy: Literal["thread", "process"] = "process"
@@ -67,6 +68,13 @@ class ProfilerConfig(BaseModel):
             return v
 
         return v.lower() == "true"
+
+    @field_validator("depth", mode="before")
+    def transform_depth_to_int(cls, v: Any) -> int:
+        if isinstance(v, int):
+            return v
+
+        return int(v)
 
     @field_validator("precision", mode="before")
     def transform_precision_to_float(cls, v: Any) -> float:

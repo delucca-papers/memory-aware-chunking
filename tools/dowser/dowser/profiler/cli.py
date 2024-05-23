@@ -40,6 +40,11 @@ def attach_args(subparsers: _SubParsersAction) -> _SubParsersAction:
     )
 
     profile_parser.add_argument(
+        "--profiler-depth",
+        help="Define the maximum depth of the profiler (default: 3)",
+    )
+
+    profile_parser.add_argument(
         "--profiler-precision",
         help="Define the precision to use for the profiler (default: 2)",
     )

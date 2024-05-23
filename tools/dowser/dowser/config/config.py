@@ -25,6 +25,7 @@ initial_config = {
     "profiler": {
         "enabled_metrics": ["MEMORY_USAGE", "TIME"],
         "sign_traces": "false",
+        "depth": "3",
         "precision": "2",
         "memory_usage": {
             "enabled_backends": ["KERNEL"],
@@ -59,6 +60,7 @@ class Config(BaseModel):
                 "enable_metric": str_as_list(os.environ.get("DOWSER_ENABLE_METRIC")),
                 "unit": os.environ.get("DOWSER_UNIT"),
                 "profiler_sign_traces": os.environ.get("DOWSER_PROFILER_SIGN_TRACES"),
+                "profiler_depth": os.environ.get("DOWSER_PROFILER_DEPTH"),
                 "profiler_precision": os.environ.get("DOWSER_PROFILER_PRECISION"),
                 "enable_mem_backend": str_as_list(
                     os.environ.get("DOWSER_ENABLE_MEM_BACKEND")
@@ -116,6 +118,7 @@ class Config(BaseModel):
                     "session_id": flat_config.get("profiler_session_id"),
                     "enabled_metrics": flat_config.get("enable_metric"),
                     "sign_traces": flat_config.get("profiler_sign_traces"),
+                    "depth": flat_config.get("profiler_depth"),
                     "precision": flat_config.get("profiler_precision"),
                     "filepath": flat_config.get("filepath"),
                     "entrypoint": flat_config.get("entrypoint"),
