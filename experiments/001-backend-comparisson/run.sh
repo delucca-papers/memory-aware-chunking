@@ -13,15 +13,17 @@ export OUTPUT_DIR
 export SESSION_ID_PREFIX
 export UNIT
 export LOG_LEVEL
+export SIGN_TRACES
 #
 # For development
-#NUM_INLINES="100"
-#NUM_CROSSLINES="100"
-#NUM_SAMPLES="100"
-#OUTPUT_DIR="${SCRIPT_DIR}/output/${TIMESTAMP}"
-#SESSION_ID_PREFIX="${TIMESTAMP}"
-#UNIT="mb"
-#LOG_LEVEL="DEBUG"
+# NUM_INLINES="100"
+# NUM_CROSSLINES="100"
+# NUM_SAMPLES="100"
+# OUTPUT_DIR="${SCRIPT_DIR}/output/${TIMESTAMP}"
+# SESSION_ID_PREFIX="${TIMESTAMP}"
+# UNIT="mb"
+# LOG_LEVEL="DEBUG"
+# SIGN_TRACES="true"
 #
 # For production
 NUM_INLINES="100"
@@ -31,6 +33,7 @@ OUTPUT_DIR="${SCRIPT_DIR}/output/${TIMESTAMP}"
 SESSION_ID_PREFIX="${TIMESTAMP}"
 UNIT="mb"
 LOG_LEVEL="INFO"
+SIGN_TRACES="true"
 #
 ################################################################################
 
@@ -62,6 +65,7 @@ function generate_synthetic_data {
         EXPERIMENT_NUM_SAMPLES="${NUM_SAMPLES}" \
         EXPERIMENT_OUTPUT_DIR="${OUTPUT_DIR}/data" \
         EXPERIMENT_LOGGING_LEVEL="${LOG_LEVEL}" \
+        EXPERIMENT_SIGN_TRACES="${SIGN_TRACES}" \
         python3 experiment/generate_data.py
     echo
 }
@@ -75,7 +79,7 @@ function run_with_backend {
         EXPERIMENT_DATA_DIR="${OUTPUT_DIR}/data" \
         EXPERIMENT_OUTPUT_DIR="${OUTPUT_DIR}/${backend_name}" \
         EXPERIMENT_LOGGING_LEVEL="${LOG_LEVEL}" \
-        python3 experiment/profile_envelope.py
+        python3 experiment/profile_gst3d.py
     echo
 }
 

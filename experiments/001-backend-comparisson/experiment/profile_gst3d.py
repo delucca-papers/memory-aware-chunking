@@ -1,15 +1,8 @@
 import os
 import dowser
 
-from seismic.attributes import envelope
+from seismic.attributes import gst_3d_dip
 
-"""
-with open("/sys/fs/cgroup/memory/dowser/memory.limit_in_bytes", "w") as f:
-    f.write(str(2307072000))
-
-with open("/sys/fs/cgroup/memory/dowser/cgroup.procs", "w") as f:
-    f.write(str(os.getpid()))
-"""
 
 def run_experiment(experiment_data_dir: str) -> None:
     logger = dowser.get_logger()
@@ -27,7 +20,7 @@ def run_experiment(experiment_data_dir: str) -> None:
     input_data_filepath = os.path.join(experiment_data_dir, input_data_segy_files[0])
     logger.info(f"Input data file: {input_data_filepath}")
 
-    dowser.profile(envelope.run, input_data_filepath)
+    dowser.profile(gst_3d_dip.run, input_data_filepath)
 
 
 if __name__ == "__main__":
@@ -36,6 +29,7 @@ if __name__ == "__main__":
     experiment_output_dir = os.environ.get("EXPERIMENT_OUTPUT_DIR", "./output")
     experiment_data_dir = os.environ.get("EXPERIMENT_DATA_DIR", "./output/data")
     experiment_logging_level = os.environ.get("EXPERIMENT_LOGGING_LEVEL", "DEBUG")
+    experiment_sign_traces = os.environ.get("EXPERIMENT_SIGN_TRACES", "false")
     experiment_logging_transports = os.environ.get(
         "EXPERIMENT_LOGGING_TRANSPORTS", "CONSOLE,FILE"
     ).split(",")
@@ -54,6 +48,7 @@ if __name__ == "__main__":
             },
             "profiler": {
                 "session_id": experiment_session_id,
+                "sign_traces": experiment_sign_traces,
                 "memory_usage": {
                     "enabled_backends": [experiment_backend_name],
                 },
