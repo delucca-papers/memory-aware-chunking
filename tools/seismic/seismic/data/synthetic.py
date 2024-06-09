@@ -127,7 +127,7 @@ def generate_and_save_synthetic_data(
         )
         return filepath
 
-    logger.debug(
+    logger.info(
         f"Generating synthetic data for shape ({num_inlines}, {num_crosslines}, {num_samples})"
     )
 

@@ -2,11 +2,12 @@ import inspect
 
 from typing import Callable
 from dowser.profiler import run_profiler
+from dowser.profiler.loaders import load_profile
 from .config import load_config
 from .context import context
 
 
-__all__ = ["profile"]
+__all__ = ["profile", "load_profile"]
 
 
 def profile(function: Callable, *args, **kwargs) -> None:

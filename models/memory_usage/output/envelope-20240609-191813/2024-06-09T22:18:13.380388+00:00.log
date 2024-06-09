@@ -1,0 +1,412 @@
+2024-06-09 19:18:13.382 | INFO     | __main__:run:25 - Starting data collection
+2024-06-09 19:18:13.382 | INFO     | data_collection:_generate_many_evenly_spaced:55 - Generating 8 sets of synthetic data with distributed shapes within max bounds (400, 400, 400)
+2024-06-09 19:18:13.382 | INFO     | data_collection:_generate_many_evenly_spaced:70 - Calculated 8 shapes to evenly generate data for
+2024-06-09 19:18:13.383 | INFO     | data_collection:_generate_many_evenly_spaced:77 - Generating synthetic data 1/8 with shape (100, 100, 100)
+2024-06-09 19:18:13.383 | INFO     | seismic.data.synthetic:generate_and_save_synthetic_data:130 - Generating synthetic data for shape (100, 100, 100)
+2024-06-09 19:18:14.326 | INFO     | data_collection:_generate_many_evenly_spaced:90 - Finished generating synthetic data 1/8. Data stored on: ../output/envelope-20240609-191813/data/100-100-100.segy
+2024-06-09 19:18:14.326 | INFO     | data_collection:_generate_many_evenly_spaced:77 - Generating synthetic data 2/8 with shape (100, 100, 400)
+2024-06-09 19:18:14.326 | INFO     | seismic.data.synthetic:generate_and_save_synthetic_data:130 - Generating synthetic data for shape (100, 100, 400)
+2024-06-09 19:18:15.679 | INFO     | data_collection:_generate_many_evenly_spaced:90 - Finished generating synthetic data 2/8. Data stored on: ../output/envelope-20240609-191813/data/100-100-400.segy
+2024-06-09 19:18:15.679 | INFO     | data_collection:_generate_many_evenly_spaced:77 - Generating synthetic data 3/8 with shape (100, 400, 100)
+2024-06-09 19:18:15.680 | INFO     | seismic.data.synthetic:generate_and_save_synthetic_data:130 - Generating synthetic data for shape (100, 400, 100)
+2024-06-09 19:18:19.115 | INFO     | data_collection:_generate_many_evenly_spaced:90 - Finished generating synthetic data 3/8. Data stored on: ../output/envelope-20240609-191813/data/100-400-100.segy
+2024-06-09 19:18:19.115 | INFO     | data_collection:_generate_many_evenly_spaced:77 - Generating synthetic data 4/8 with shape (100, 400, 400)
+2024-06-09 19:18:19.116 | INFO     | seismic.data.synthetic:generate_and_save_synthetic_data:130 - Generating synthetic data for shape (100, 400, 400)
+2024-06-09 19:18:22.174 | INFO     | data_collection:_generate_many_evenly_spaced:90 - Finished generating synthetic data 4/8. Data stored on: ../output/envelope-20240609-191813/data/100-400-400.segy
+2024-06-09 19:18:22.174 | INFO     | data_collection:_generate_many_evenly_spaced:77 - Generating synthetic data 5/8 with shape (400, 100, 100)
+2024-06-09 19:18:22.175 | INFO     | seismic.data.synthetic:generate_and_save_synthetic_data:130 - Generating synthetic data for shape (400, 100, 100)
+2024-06-09 19:18:26.058 | INFO     | data_collection:_generate_many_evenly_spaced:90 - Finished generating synthetic data 5/8. Data stored on: ../output/envelope-20240609-191813/data/400-100-100.segy
+2024-06-09 19:18:26.059 | INFO     | data_collection:_generate_many_evenly_spaced:77 - Generating synthetic data 6/8 with shape (400, 100, 400)
+2024-06-09 19:18:26.059 | INFO     | seismic.data.synthetic:generate_and_save_synthetic_data:130 - Generating synthetic data for shape (400, 100, 400)
+2024-06-09 19:18:31.023 | INFO     | data_collection:_generate_many_evenly_spaced:90 - Finished generating synthetic data 6/8. Data stored on: ../output/envelope-20240609-191813/data/400-100-400.segy
+2024-06-09 19:18:31.023 | INFO     | data_collection:_generate_many_evenly_spaced:77 - Generating synthetic data 7/8 with shape (400, 400, 100)
+2024-06-09 19:18:31.024 | INFO     | seismic.data.synthetic:generate_and_save_synthetic_data:130 - Generating synthetic data for shape (400, 400, 100)
+2024-06-09 19:18:44.337 | INFO     | data_collection:_generate_many_evenly_spaced:90 - Finished generating synthetic data 7/8. Data stored on: ../output/envelope-20240609-191813/data/400-400-100.segy
+2024-06-09 19:18:44.337 | INFO     | data_collection:_generate_many_evenly_spaced:77 - Generating synthetic data 8/8 with shape (400, 400, 400)
+2024-06-09 19:18:44.338 | INFO     | seismic.data.synthetic:generate_and_save_synthetic_data:130 - Generating synthetic data for shape (400, 400, 400)
+2024-06-09 19:18:57.220 | INFO     | data_collection:_generate_many_evenly_spaced:90 - Finished generating synthetic data 8/8. Data stored on: ../output/envelope-20240609-191813/data/400-400-400.segy
+2024-06-09 19:18:57.221 | INFO     | data_collection:_generate_many_evenly_spaced:94 - All synthetic data generated
+2024-06-09 19:18:57.221 | INFO     | data_collection:_get_attribute_handler:173 - Loading attribute handler for "envelope"
+2024-06-09 19:18:57.222 | DEBUG    | data_collection:_get_attribute_handler:177 - Attribute handler loaded: <function run at 0x7fa3196304c0>
+2024-06-09 19:18:57.223 | INFO     | data_collection:_profile_datasets:131 - Profiling datasets with handler "seismic.attributes.envelope.run"
+2024-06-09 19:18:57.223 | DEBUG    | data_collection:_profile_datasets:137 - Profiling dataset with path ../output/envelope-20240609-191813/data/100-100-100.segy. Dataset 1/8
+2024-06-09 19:18:57.223 | DEBUG    | data_collection:_profile_single:152 - Profiling dataset with handler "seismic.attributes.envelope.run" using path "../output/envelope-20240609-191813/data/100-100-100.segy"
+2024-06-09 19:18:57.223 | DEBUG    | data_collection:_profile_single:155 - Session ID: 100-100-100
+2024-06-09 19:18:57.224 | INFO     | dowser.profiler.main:run_profiler:15 - Starting profiler
+2024-06-09 19:18:57.225 | DEBUG    | dowser.profiler.builders:build_trace_hooks:20 - Building trace hooks for enabled metrics: [<Metric.MEMORY_USAGE: 'MEMORY_USAGE'>, <Metric.TIME: 'TIME'>]
+2024-06-09 19:18:57.225 | INFO     | dowser.profiler.metrics.memory_usage.builders:build_trace_hooks:12 - Enabled memory usage backends: "[<MemoryUsageBackend.KERNEL: 'KERNEL'>]"
+2024-06-09 19:18:57.225 | DEBUG    | dowser.profiler.metrics.memory_usage.builders:build_trace_hooks:23 - Loading backend: "kernel"
+2024-06-09 19:18:57.226 | DEBUG    | dowser.profiler.metrics.memory_usage.builders:build_trace_hooks:31 - Loaded backend: "<module 'dowser.profiler.metrics.memory_usage.backends.kernel' from '/home/delucca/src/msc/seismic-attributes-memory-profile/tools/dowser/dowser/profiler/metrics/memory_usage/backends/kernel.py'>"
+2024-06-09 19:18:57.226 | DEBUG    | dowser.profiler.metrics.memory_usage.builders:build_trace_hooks:34 - Checking if backend has "before" function
+2024-06-09 19:18:57.226 | DEBUG    | dowser.profiler.metrics.memory_usage.builders:build_trace_hooks:43 - Added "before" from "kernel" to hooks
+2024-06-09 19:18:57.226 | DEBUG    | dowser.profiler.metrics.memory_usage.builders:build_trace_hooks:34 - Checking if backend has "on_sample" function
+2024-06-09 19:18:57.227 | DEBUG    | dowser.profiler.metrics.memory_usage.builders:build_trace_hooks:43 - Added "on_sample" from "kernel" to hooks
+2024-06-09 19:18:57.227 | DEBUG    | dowser.profiler.metrics.memory_usage.builders:build_trace_hooks:34 - Checking if backend has "after" function
+2024-06-09 19:18:57.227 | WARNING  | dowser.profiler.metrics.memory_usage.builders:build_trace_hooks:37 - Backend "kernel" does not have "after" function
+2024-06-09 19:18:57.248 | DEBUG    | dowser.profiler.tracer:executor_hooks:65 - Using executor hooks: {'before': [<function before at 0x7fa319630af0>], 'on_sample': [<function capture_trace at 0x7fa319630a60>, <function capture_trace at 0x7fa379644ca0>], 'after': []}
+2024-06-09 19:18:57.249 | DEBUG    | dowser.profiler.main:run_profiler:39 - Using config: output_dir=PosixPath('../output/envelope-20240609-191813/profiles') logger=LoggerConfig(enabled_transports=[<Transport.CONSOLE: 'CONSOLE'>, <Transport.FILE: 'FILE'>], level=<Level.DEBUG: 'DEBUG'>) profiler=ProfilerConfig(session_id='100-100-100', enabled_metrics=[<Metric.MEMORY_USAGE: 'MEMORY_USAGE'>, <Metric.TIME: 'TIME'>], memory_usage=MemoryUsageConfig(enabled_backends=[<MemoryUsageBackend.KERNEL: 'KERNEL'>]), filepath=PosixPath('/home/delucca/src/msc/seismic-attributes-memory-profile/tools/seismic/seismic/attributes/envelope.py'), entrypoint='run', signature=[FunctionParameter(name='segy_filepath', type='str', position=0, default='None'), FunctionParameter(name='n_workers', type='int', position=1, default='1'), FunctionParameter(name='single_threaded', type='bool', position=2, default='True')], args=('../output/envelope-20240609-191813/data/100-100-100.segy',), kwargs={}, depth=3, precision=0.1, sign_traces=False, strategy='process') analyzer=AnalyzerConfig(sessions={}, unit=<MemoryUsageUnit.MB: 'mb'>)
+2024-06-09 19:18:57.250 | DEBUG    | dowser.profiler.main:run_profiler:40 - Enabled trace hooks: dict_keys(['before', 'on_sample', 'after'])
+2024-06-09 19:18:57.250 | DEBUG    | dowser.profiler.main:run_profiler:41 - Enabled metrics: [<Metric.MEMORY_USAGE: 'MEMORY_USAGE'>, <Metric.TIME: 'TIME'>]
+2024-06-09 19:18:57.250 | DEBUG    | dowser.profiler.main:run_profiler:42 - Using args: ('../output/envelope-20240609-191813/data/100-100-100.segy',)
+2024-06-09 19:18:57.251 | DEBUG    | dowser.profiler.main:run_profiler:43 - Using kwargs: {}
+2024-06-09 19:18:57.251 | DEBUG    | dowser.profiler.main:run_profiler:44 - Using entrypoint: run
+2024-06-09 19:18:57.251 | INFO     | dowser.profiler.main:run_profiler:46 - Starting profiler execution for "/home/delucca/src/msc/seismic-attributes-memory-profile/tools/seismic/seismic/attributes/envelope.py"
+2024-06-09 19:18:57.258 | INFO     | dowser.profiler.handlers:execute_file:19 - Starting new profiler session for file "/home/delucca/src/msc/seismic-attributes-memory-profile/tools/seismic/seismic/attributes/envelope.py" with entrypoint set to: "run"
+2024-06-09 19:18:57.259 | DEBUG    | dowser.profiler.handlers:execute_file:22 - Using args: ('../output/envelope-20240609-191813/data/100-100-100.segy',)
+2024-06-09 19:18:57.259 | DEBUG    | dowser.profiler.handlers:execute_file:23 - Using kwargs: {}
+2024-06-09 19:18:57.260 | INFO     | dowser.profiler.handlers:execute_file:38 - Executing file: /home/delucca/src/msc/seismic-attributes-memory-profile/tools/seismic/seismic/attributes/envelope.py
+2024-06-09 19:18:57.260 | DEBUG    | dowser.profiler.handlers:execute_file:40 - Using function "run" as entrypoint
+2024-06-09 19:18:57.260 | INFO     | dowser.profiler.handlers:execute_file:42 - Compiling code
+2024-06-09 19:18:57.261 | INFO     | dowser.profiler.handlers:execute_file:45 - Running execution before hook
+2024-06-09 19:18:57.261 | DEBUG    | dowser.profiler.tracer:before_executor:83 - Running before executor hooks
+2024-06-09 19:18:57.261 | INFO     | dowser.profiler.tracer:start_sampler:151 - Starting profile sampler
+2024-06-09 19:18:57.261 | INFO     | dowser.profiler.tracer:start_sampler:152 - Using precision of 0.1s and process strategy
+2024-06-09 19:18:57.265 | INFO     | dowser.profiler.handlers:execute_file:48 - Executing code file
+2024-06-09 19:18:57.265 | INFO     | dowser.profiler.handlers:execute_file:52 - Running function: run
+2024-06-09 19:19:00.106 | DEBUG    | seismic.cluster:run_attribute:14 - Running attribute Envelope
+2024-06-09 19:19:00.127 | INFO     | dowser.profiler.handlers:execute_file:55 - Running execution after hook
+2024-06-09 19:19:00.127 | DEBUG    | dowser.profiler.tracer:after_executor:93 - Running after executor hooks
+2024-06-09 19:19:00.198 | INFO     | dowser.profiler.tracer:stop_sampler:169 - Profile sampler stopped
+2024-06-09 19:19:00.199 | INFO     | dowser.profiler.handlers:execute_file:59 - File "/home/delucca/src/msc/seismic-attributes-memory-profile/tools/seismic/seismic/attributes/envelope.py" finished execution
+2024-06-09 19:19:00.215 | INFO     | dowser.profiler.main:run_profiler:50 - Profiler execution finished
+2024-06-09 19:19:00.217 | DEBUG    | dowser.profiler.main:run_profiler:51 - Amount of captured traces: 29
+2024-06-09 19:19:00.217 | INFO     | dowser.profiler.main:run_profiler:52 - Saving profile data
+2024-06-09 19:19:00.217 | DEBUG    | dowser.profiler.main:run_profiler:59 - Using metadata: {'entrypoint_segy_filepath': '../output/envelope-20240609-191813/data/100-100-100.segy', 'kernel_memory_usage_unit': 'kb', 'psutil_memory_usage_unit': 'b', 'resource_memory_usage_unit': 'kb', 'tracemalloc_memory_usage_unit': 'b', 'unix_timestamp_unit': 'ms'}
+2024-06-09 19:19:00.223 | DEBUG    | dowser.profiler.main:run_profiler:63 - Sample captured trace: {'signature': 'unknown::unknown:0::unknown', 'kernel_memory_usage': 187108.0, 'unix_timestamp': 31683572}
+2024-06-09 19:19:00.223 | DEBUG    | dowser.profiler.builders:build_profile:64 - Building profile
+2024-06-09 19:19:00.224 | INFO     | dowser.profiler.main:run_profiler:66 - Profiler output saved to: ../output/envelope-20240609-191813/profiles
+2024-06-09 19:19:00.230 | DEBUG    | data_collection:_profile_datasets:137 - Profiling dataset with path ../output/envelope-20240609-191813/data/100-100-400.segy. Dataset 2/8
+2024-06-09 19:19:00.231 | DEBUG    | data_collection:_profile_single:152 - Profiling dataset with handler "seismic.attributes.envelope.run" using path "../output/envelope-20240609-191813/data/100-100-400.segy"
+2024-06-09 19:19:00.231 | DEBUG    | data_collection:_profile_single:155 - Session ID: 100-100-400
+2024-06-09 19:19:00.231 | INFO     | dowser.profiler.main:run_profiler:15 - Starting profiler
+2024-06-09 19:19:00.232 | DEBUG    | dowser.profiler.builders:build_trace_hooks:20 - Building trace hooks for enabled metrics: [<Metric.MEMORY_USAGE: 'MEMORY_USAGE'>, <Metric.TIME: 'TIME'>]
+2024-06-09 19:19:00.232 | INFO     | dowser.profiler.metrics.memory_usage.builders:build_trace_hooks:12 - Enabled memory usage backends: "[<MemoryUsageBackend.KERNEL: 'KERNEL'>]"
+2024-06-09 19:19:00.232 | DEBUG    | dowser.profiler.metrics.memory_usage.builders:build_trace_hooks:23 - Loading backend: "kernel"
+2024-06-09 19:19:00.232 | DEBUG    | dowser.profiler.metrics.memory_usage.builders:build_trace_hooks:31 - Loaded backend: "<module 'dowser.profiler.metrics.memory_usage.backends.kernel' from '/home/delucca/src/msc/seismic-attributes-memory-profile/tools/dowser/dowser/profiler/metrics/memory_usage/backends/kernel.py'>"
+2024-06-09 19:19:00.232 | DEBUG    | dowser.profiler.metrics.memory_usage.builders:build_trace_hooks:34 - Checking if backend has "before" function
+2024-06-09 19:19:00.233 | DEBUG    | dowser.profiler.metrics.memory_usage.builders:build_trace_hooks:43 - Added "before" from "kernel" to hooks
+2024-06-09 19:19:00.233 | DEBUG    | dowser.profiler.metrics.memory_usage.builders:build_trace_hooks:34 - Checking if backend has "on_sample" function
+2024-06-09 19:19:00.233 | DEBUG    | dowser.profiler.metrics.memory_usage.builders:build_trace_hooks:43 - Added "on_sample" from "kernel" to hooks
+2024-06-09 19:19:00.233 | DEBUG    | dowser.profiler.metrics.memory_usage.builders:build_trace_hooks:34 - Checking if backend has "after" function
+2024-06-09 19:19:00.233 | WARNING  | dowser.profiler.metrics.memory_usage.builders:build_trace_hooks:37 - Backend "kernel" does not have "after" function
+2024-06-09 19:19:00.242 | DEBUG    | dowser.profiler.tracer:executor_hooks:65 - Using executor hooks: {'before': [<function before at 0x7fa319630af0>], 'on_sample': [<function capture_trace at 0x7fa319630a60>, <function capture_trace at 0x7fa379644ca0>], 'after': []}
+2024-06-09 19:19:00.243 | DEBUG    | dowser.profiler.main:run_profiler:39 - Using config: output_dir=PosixPath('../output/envelope-20240609-191813/profiles') logger=LoggerConfig(enabled_transports=[<Transport.CONSOLE: 'CONSOLE'>, <Transport.FILE: 'FILE'>], level=<Level.DEBUG: 'DEBUG'>) profiler=ProfilerConfig(session_id='100-100-400', enabled_metrics=[<Metric.MEMORY_USAGE: 'MEMORY_USAGE'>, <Metric.TIME: 'TIME'>], memory_usage=MemoryUsageConfig(enabled_backends=[<MemoryUsageBackend.KERNEL: 'KERNEL'>]), filepath=PosixPath('/home/delucca/src/msc/seismic-attributes-memory-profile/tools/seismic/seismic/attributes/envelope.py'), entrypoint='run', signature=[FunctionParameter(name='segy_filepath', type='str', position=0, default='None'), FunctionParameter(name='n_workers', type='int', position=1, default='1'), FunctionParameter(name='single_threaded', type='bool', position=2, default='True')], args=('../output/envelope-20240609-191813/data/100-100-400.segy',), kwargs={}, depth=3, precision=0.1, sign_traces=False, strategy='process') analyzer=AnalyzerConfig(sessions={}, unit=<MemoryUsageUnit.MB: 'mb'>)
+2024-06-09 19:19:00.243 | DEBUG    | dowser.profiler.main:run_profiler:40 - Enabled trace hooks: dict_keys(['before', 'on_sample', 'after'])
+2024-06-09 19:19:00.243 | DEBUG    | dowser.profiler.main:run_profiler:41 - Enabled metrics: [<Metric.MEMORY_USAGE: 'MEMORY_USAGE'>, <Metric.TIME: 'TIME'>]
+2024-06-09 19:19:00.244 | DEBUG    | dowser.profiler.main:run_profiler:42 - Using args: ('../output/envelope-20240609-191813/data/100-100-400.segy',)
+2024-06-09 19:19:00.244 | DEBUG    | dowser.profiler.main:run_profiler:43 - Using kwargs: {}
+2024-06-09 19:19:00.244 | DEBUG    | dowser.profiler.main:run_profiler:44 - Using entrypoint: run
+2024-06-09 19:19:00.244 | INFO     | dowser.profiler.main:run_profiler:46 - Starting profiler execution for "/home/delucca/src/msc/seismic-attributes-memory-profile/tools/seismic/seismic/attributes/envelope.py"
+2024-06-09 19:19:00.249 | INFO     | dowser.profiler.handlers:execute_file:19 - Starting new profiler session for file "/home/delucca/src/msc/seismic-attributes-memory-profile/tools/seismic/seismic/attributes/envelope.py" with entrypoint set to: "run"
+2024-06-09 19:19:00.250 | DEBUG    | dowser.profiler.handlers:execute_file:22 - Using args: ('../output/envelope-20240609-191813/data/100-100-400.segy',)
+2024-06-09 19:19:00.250 | DEBUG    | dowser.profiler.handlers:execute_file:23 - Using kwargs: {}
+2024-06-09 19:19:00.251 | INFO     | dowser.profiler.handlers:execute_file:38 - Executing file: /home/delucca/src/msc/seismic-attributes-memory-profile/tools/seismic/seismic/attributes/envelope.py
+2024-06-09 19:19:00.251 | DEBUG    | dowser.profiler.handlers:execute_file:40 - Using function "run" as entrypoint
+2024-06-09 19:19:00.251 | INFO     | dowser.profiler.handlers:execute_file:42 - Compiling code
+2024-06-09 19:19:00.251 | INFO     | dowser.profiler.handlers:execute_file:45 - Running execution before hook
+2024-06-09 19:19:00.252 | DEBUG    | dowser.profiler.tracer:before_executor:83 - Running before executor hooks
+2024-06-09 19:19:00.252 | INFO     | dowser.profiler.tracer:start_sampler:151 - Starting profile sampler
+2024-06-09 19:19:00.252 | INFO     | dowser.profiler.tracer:start_sampler:152 - Using precision of 0.1s and process strategy
+2024-06-09 19:19:00.255 | INFO     | dowser.profiler.handlers:execute_file:48 - Executing code file
+2024-06-09 19:19:00.256 | INFO     | dowser.profiler.handlers:execute_file:52 - Running function: run
+2024-06-09 19:19:03.032 | DEBUG    | seismic.cluster:run_attribute:14 - Running attribute Envelope
+2024-06-09 19:19:03.114 | INFO     | dowser.profiler.handlers:execute_file:55 - Running execution after hook
+2024-06-09 19:19:03.115 | DEBUG    | dowser.profiler.tracer:after_executor:93 - Running after executor hooks
+2024-06-09 19:19:03.188 | INFO     | dowser.profiler.tracer:stop_sampler:169 - Profile sampler stopped
+2024-06-09 19:19:03.189 | INFO     | dowser.profiler.handlers:execute_file:59 - File "/home/delucca/src/msc/seismic-attributes-memory-profile/tools/seismic/seismic/attributes/envelope.py" finished execution
+2024-06-09 19:19:03.205 | INFO     | dowser.profiler.main:run_profiler:50 - Profiler execution finished
+2024-06-09 19:19:03.207 | DEBUG    | dowser.profiler.main:run_profiler:51 - Amount of captured traces: 29
+2024-06-09 19:19:03.208 | INFO     | dowser.profiler.main:run_profiler:52 - Saving profile data
+2024-06-09 19:19:03.208 | DEBUG    | dowser.profiler.main:run_profiler:59 - Using metadata: {'entrypoint_segy_filepath': '../output/envelope-20240609-191813/data/100-100-400.segy', 'kernel_memory_usage_unit': 'kb', 'psutil_memory_usage_unit': 'b', 'resource_memory_usage_unit': 'kb', 'tracemalloc_memory_usage_unit': 'b', 'unix_timestamp_unit': 'ms'}
+2024-06-09 19:19:03.213 | DEBUG    | dowser.profiler.main:run_profiler:63 - Sample captured trace: {'signature': 'unknown::unknown:0::unknown', 'kernel_memory_usage': 187128.0, 'unix_timestamp': 31686561}
+2024-06-09 19:19:03.214 | DEBUG    | dowser.profiler.builders:build_profile:64 - Building profile
+2024-06-09 19:19:03.214 | INFO     | dowser.profiler.main:run_profiler:66 - Profiler output saved to: ../output/envelope-20240609-191813/profiles
+2024-06-09 19:19:03.223 | DEBUG    | data_collection:_profile_datasets:137 - Profiling dataset with path ../output/envelope-20240609-191813/data/100-400-100.segy. Dataset 3/8
+2024-06-09 19:19:03.224 | DEBUG    | data_collection:_profile_single:152 - Profiling dataset with handler "seismic.attributes.envelope.run" using path "../output/envelope-20240609-191813/data/100-400-100.segy"
+2024-06-09 19:19:03.224 | DEBUG    | data_collection:_profile_single:155 - Session ID: 100-400-100
+2024-06-09 19:19:03.225 | INFO     | dowser.profiler.main:run_profiler:15 - Starting profiler
+2024-06-09 19:19:03.225 | DEBUG    | dowser.profiler.builders:build_trace_hooks:20 - Building trace hooks for enabled metrics: [<Metric.MEMORY_USAGE: 'MEMORY_USAGE'>, <Metric.TIME: 'TIME'>]
+2024-06-09 19:19:03.225 | INFO     | dowser.profiler.metrics.memory_usage.builders:build_trace_hooks:12 - Enabled memory usage backends: "[<MemoryUsageBackend.KERNEL: 'KERNEL'>]"
+2024-06-09 19:19:03.225 | DEBUG    | dowser.profiler.metrics.memory_usage.builders:build_trace_hooks:23 - Loading backend: "kernel"
+2024-06-09 19:19:03.226 | DEBUG    | dowser.profiler.metrics.memory_usage.builders:build_trace_hooks:31 - Loaded backend: "<module 'dowser.profiler.metrics.memory_usage.backends.kernel' from '/home/delucca/src/msc/seismic-attributes-memory-profile/tools/dowser/dowser/profiler/metrics/memory_usage/backends/kernel.py'>"
+2024-06-09 19:19:03.226 | DEBUG    | dowser.profiler.metrics.memory_usage.builders:build_trace_hooks:34 - Checking if backend has "before" function
+2024-06-09 19:19:03.226 | DEBUG    | dowser.profiler.metrics.memory_usage.builders:build_trace_hooks:43 - Added "before" from "kernel" to hooks
+2024-06-09 19:19:03.226 | DEBUG    | dowser.profiler.metrics.memory_usage.builders:build_trace_hooks:34 - Checking if backend has "on_sample" function
+2024-06-09 19:19:03.226 | DEBUG    | dowser.profiler.metrics.memory_usage.builders:build_trace_hooks:43 - Added "on_sample" from "kernel" to hooks
+2024-06-09 19:19:03.227 | DEBUG    | dowser.profiler.metrics.memory_usage.builders:build_trace_hooks:34 - Checking if backend has "after" function
+2024-06-09 19:19:03.227 | WARNING  | dowser.profiler.metrics.memory_usage.builders:build_trace_hooks:37 - Backend "kernel" does not have "after" function
+2024-06-09 19:19:03.239 | DEBUG    | dowser.profiler.tracer:executor_hooks:65 - Using executor hooks: {'before': [<function before at 0x7fa319630af0>], 'on_sample': [<function capture_trace at 0x7fa319630a60>, <function capture_trace at 0x7fa379644ca0>], 'after': []}
+2024-06-09 19:19:03.240 | DEBUG    | dowser.profiler.main:run_profiler:39 - Using config: output_dir=PosixPath('../output/envelope-20240609-191813/profiles') logger=LoggerConfig(enabled_transports=[<Transport.CONSOLE: 'CONSOLE'>, <Transport.FILE: 'FILE'>], level=<Level.DEBUG: 'DEBUG'>) profiler=ProfilerConfig(session_id='100-400-100', enabled_metrics=[<Metric.MEMORY_USAGE: 'MEMORY_USAGE'>, <Metric.TIME: 'TIME'>], memory_usage=MemoryUsageConfig(enabled_backends=[<MemoryUsageBackend.KERNEL: 'KERNEL'>]), filepath=PosixPath('/home/delucca/src/msc/seismic-attributes-memory-profile/tools/seismic/seismic/attributes/envelope.py'), entrypoint='run', signature=[FunctionParameter(name='segy_filepath', type='str', position=0, default='None'), FunctionParameter(name='n_workers', type='int', position=1, default='1'), FunctionParameter(name='single_threaded', type='bool', position=2, default='True')], args=('../output/envelope-20240609-191813/data/100-400-100.segy',), kwargs={}, depth=3, precision=0.1, sign_traces=False, strategy='process') analyzer=AnalyzerConfig(sessions={}, unit=<MemoryUsageUnit.MB: 'mb'>)
+2024-06-09 19:19:03.241 | DEBUG    | dowser.profiler.main:run_profiler:40 - Enabled trace hooks: dict_keys(['before', 'on_sample', 'after'])
+2024-06-09 19:19:03.241 | DEBUG    | dowser.profiler.main:run_profiler:41 - Enabled metrics: [<Metric.MEMORY_USAGE: 'MEMORY_USAGE'>, <Metric.TIME: 'TIME'>]
+2024-06-09 19:19:03.241 | DEBUG    | dowser.profiler.main:run_profiler:42 - Using args: ('../output/envelope-20240609-191813/data/100-400-100.segy',)
+2024-06-09 19:19:03.241 | DEBUG    | dowser.profiler.main:run_profiler:43 - Using kwargs: {}
+2024-06-09 19:19:03.242 | DEBUG    | dowser.profiler.main:run_profiler:44 - Using entrypoint: run
+2024-06-09 19:19:03.242 | INFO     | dowser.profiler.main:run_profiler:46 - Starting profiler execution for "/home/delucca/src/msc/seismic-attributes-memory-profile/tools/seismic/seismic/attributes/envelope.py"
+2024-06-09 19:19:03.251 | INFO     | dowser.profiler.handlers:execute_file:19 - Starting new profiler session for file "/home/delucca/src/msc/seismic-attributes-memory-profile/tools/seismic/seismic/attributes/envelope.py" with entrypoint set to: "run"
+2024-06-09 19:19:03.253 | DEBUG    | dowser.profiler.handlers:execute_file:22 - Using args: ('../output/envelope-20240609-191813/data/100-400-100.segy',)
+2024-06-09 19:19:03.253 | DEBUG    | dowser.profiler.handlers:execute_file:23 - Using kwargs: {}
+2024-06-09 19:19:03.254 | INFO     | dowser.profiler.handlers:execute_file:38 - Executing file: /home/delucca/src/msc/seismic-attributes-memory-profile/tools/seismic/seismic/attributes/envelope.py
+2024-06-09 19:19:03.254 | DEBUG    | dowser.profiler.handlers:execute_file:40 - Using function "run" as entrypoint
+2024-06-09 19:19:03.254 | INFO     | dowser.profiler.handlers:execute_file:42 - Compiling code
+2024-06-09 19:19:03.255 | INFO     | dowser.profiler.handlers:execute_file:45 - Running execution before hook
+2024-06-09 19:19:03.255 | DEBUG    | dowser.profiler.tracer:before_executor:83 - Running before executor hooks
+2024-06-09 19:19:03.255 | INFO     | dowser.profiler.tracer:start_sampler:151 - Starting profile sampler
+2024-06-09 19:19:03.256 | INFO     | dowser.profiler.tracer:start_sampler:152 - Using precision of 0.1s and process strategy
+2024-06-09 19:19:03.259 | INFO     | dowser.profiler.handlers:execute_file:48 - Executing code file
+2024-06-09 19:19:03.260 | INFO     | dowser.profiler.handlers:execute_file:52 - Running function: run
+2024-06-09 19:19:06.077 | DEBUG    | seismic.cluster:run_attribute:14 - Running attribute Envelope
+2024-06-09 19:19:06.147 | INFO     | dowser.profiler.handlers:execute_file:55 - Running execution after hook
+2024-06-09 19:19:06.147 | DEBUG    | dowser.profiler.tracer:after_executor:93 - Running after executor hooks
+2024-06-09 19:19:06.194 | INFO     | dowser.profiler.tracer:stop_sampler:169 - Profile sampler stopped
+2024-06-09 19:19:06.194 | INFO     | dowser.profiler.handlers:execute_file:59 - File "/home/delucca/src/msc/seismic-attributes-memory-profile/tools/seismic/seismic/attributes/envelope.py" finished execution
+2024-06-09 19:19:06.211 | INFO     | dowser.profiler.main:run_profiler:50 - Profiler execution finished
+2024-06-09 19:19:06.213 | DEBUG    | dowser.profiler.main:run_profiler:51 - Amount of captured traces: 29
+2024-06-09 19:19:06.213 | INFO     | dowser.profiler.main:run_profiler:52 - Saving profile data
+2024-06-09 19:19:06.213 | DEBUG    | dowser.profiler.main:run_profiler:59 - Using metadata: {'entrypoint_segy_filepath': '../output/envelope-20240609-191813/data/100-400-100.segy', 'kernel_memory_usage_unit': 'kb', 'psutil_memory_usage_unit': 'b', 'resource_memory_usage_unit': 'kb', 'tracemalloc_memory_usage_unit': 'b', 'unix_timestamp_unit': 'ms'}
+2024-06-09 19:19:06.219 | DEBUG    | dowser.profiler.main:run_profiler:63 - Sample captured trace: {'signature': 'unknown::unknown:0::unknown', 'kernel_memory_usage': 245748.0, 'unix_timestamp': 31690272}
+2024-06-09 19:19:06.219 | DEBUG    | dowser.profiler.builders:build_profile:64 - Building profile
+2024-06-09 19:19:06.220 | INFO     | dowser.profiler.main:run_profiler:66 - Profiler output saved to: ../output/envelope-20240609-191813/profiles
+2024-06-09 19:19:06.226 | DEBUG    | data_collection:_profile_datasets:137 - Profiling dataset with path ../output/envelope-20240609-191813/data/100-400-400.segy. Dataset 4/8
+2024-06-09 19:19:06.227 | DEBUG    | data_collection:_profile_single:152 - Profiling dataset with handler "seismic.attributes.envelope.run" using path "../output/envelope-20240609-191813/data/100-400-400.segy"
+2024-06-09 19:19:06.227 | DEBUG    | data_collection:_profile_single:155 - Session ID: 100-400-400
+2024-06-09 19:19:06.228 | INFO     | dowser.profiler.main:run_profiler:15 - Starting profiler
+2024-06-09 19:19:06.228 | DEBUG    | dowser.profiler.builders:build_trace_hooks:20 - Building trace hooks for enabled metrics: [<Metric.MEMORY_USAGE: 'MEMORY_USAGE'>, <Metric.TIME: 'TIME'>]
+2024-06-09 19:19:06.228 | INFO     | dowser.profiler.metrics.memory_usage.builders:build_trace_hooks:12 - Enabled memory usage backends: "[<MemoryUsageBackend.KERNEL: 'KERNEL'>]"
+2024-06-09 19:19:06.228 | DEBUG    | dowser.profiler.metrics.memory_usage.builders:build_trace_hooks:23 - Loading backend: "kernel"
+2024-06-09 19:19:06.229 | DEBUG    | dowser.profiler.metrics.memory_usage.builders:build_trace_hooks:31 - Loaded backend: "<module 'dowser.profiler.metrics.memory_usage.backends.kernel' from '/home/delucca/src/msc/seismic-attributes-memory-profile/tools/dowser/dowser/profiler/metrics/memory_usage/backends/kernel.py'>"
+2024-06-09 19:19:06.229 | DEBUG    | dowser.profiler.metrics.memory_usage.builders:build_trace_hooks:34 - Checking if backend has "before" function
+2024-06-09 19:19:06.229 | DEBUG    | dowser.profiler.metrics.memory_usage.builders:build_trace_hooks:43 - Added "before" from "kernel" to hooks
+2024-06-09 19:19:06.229 | DEBUG    | dowser.profiler.metrics.memory_usage.builders:build_trace_hooks:34 - Checking if backend has "on_sample" function
+2024-06-09 19:19:06.229 | DEBUG    | dowser.profiler.metrics.memory_usage.builders:build_trace_hooks:43 - Added "on_sample" from "kernel" to hooks
+2024-06-09 19:19:06.229 | DEBUG    | dowser.profiler.metrics.memory_usage.builders:build_trace_hooks:34 - Checking if backend has "after" function
+2024-06-09 19:19:06.230 | WARNING  | dowser.profiler.metrics.memory_usage.builders:build_trace_hooks:37 - Backend "kernel" does not have "after" function
+2024-06-09 19:19:06.241 | DEBUG    | dowser.profiler.tracer:executor_hooks:65 - Using executor hooks: {'before': [<function before at 0x7fa319630af0>], 'on_sample': [<function capture_trace at 0x7fa319630a60>, <function capture_trace at 0x7fa379644ca0>], 'after': []}
+2024-06-09 19:19:06.242 | DEBUG    | dowser.profiler.main:run_profiler:39 - Using config: output_dir=PosixPath('../output/envelope-20240609-191813/profiles') logger=LoggerConfig(enabled_transports=[<Transport.CONSOLE: 'CONSOLE'>, <Transport.FILE: 'FILE'>], level=<Level.DEBUG: 'DEBUG'>) profiler=ProfilerConfig(session_id='100-400-400', enabled_metrics=[<Metric.MEMORY_USAGE: 'MEMORY_USAGE'>, <Metric.TIME: 'TIME'>], memory_usage=MemoryUsageConfig(enabled_backends=[<MemoryUsageBackend.KERNEL: 'KERNEL'>]), filepath=PosixPath('/home/delucca/src/msc/seismic-attributes-memory-profile/tools/seismic/seismic/attributes/envelope.py'), entrypoint='run', signature=[FunctionParameter(name='segy_filepath', type='str', position=0, default='None'), FunctionParameter(name='n_workers', type='int', position=1, default='1'), FunctionParameter(name='single_threaded', type='bool', position=2, default='True')], args=('../output/envelope-20240609-191813/data/100-400-400.segy',), kwargs={}, depth=3, precision=0.1, sign_traces=False, strategy='process') analyzer=AnalyzerConfig(sessions={}, unit=<MemoryUsageUnit.MB: 'mb'>)
+2024-06-09 19:19:06.242 | DEBUG    | dowser.profiler.main:run_profiler:40 - Enabled trace hooks: dict_keys(['before', 'on_sample', 'after'])
+2024-06-09 19:19:06.243 | DEBUG    | dowser.profiler.main:run_profiler:41 - Enabled metrics: [<Metric.MEMORY_USAGE: 'MEMORY_USAGE'>, <Metric.TIME: 'TIME'>]
+2024-06-09 19:19:06.243 | DEBUG    | dowser.profiler.main:run_profiler:42 - Using args: ('../output/envelope-20240609-191813/data/100-400-400.segy',)
+2024-06-09 19:19:06.243 | DEBUG    | dowser.profiler.main:run_profiler:43 - Using kwargs: {}
+2024-06-09 19:19:06.243 | DEBUG    | dowser.profiler.main:run_profiler:44 - Using entrypoint: run
+2024-06-09 19:19:06.244 | INFO     | dowser.profiler.main:run_profiler:46 - Starting profiler execution for "/home/delucca/src/msc/seismic-attributes-memory-profile/tools/seismic/seismic/attributes/envelope.py"
+2024-06-09 19:19:06.251 | INFO     | dowser.profiler.handlers:execute_file:19 - Starting new profiler session for file "/home/delucca/src/msc/seismic-attributes-memory-profile/tools/seismic/seismic/attributes/envelope.py" with entrypoint set to: "run"
+2024-06-09 19:19:06.253 | DEBUG    | dowser.profiler.handlers:execute_file:22 - Using args: ('../output/envelope-20240609-191813/data/100-400-400.segy',)
+2024-06-09 19:19:06.253 | DEBUG    | dowser.profiler.handlers:execute_file:23 - Using kwargs: {}
+2024-06-09 19:19:06.253 | INFO     | dowser.profiler.handlers:execute_file:38 - Executing file: /home/delucca/src/msc/seismic-attributes-memory-profile/tools/seismic/seismic/attributes/envelope.py
+2024-06-09 19:19:06.253 | DEBUG    | dowser.profiler.handlers:execute_file:40 - Using function "run" as entrypoint
+2024-06-09 19:19:06.254 | INFO     | dowser.profiler.handlers:execute_file:42 - Compiling code
+2024-06-09 19:19:06.255 | INFO     | dowser.profiler.handlers:execute_file:45 - Running execution before hook
+2024-06-09 19:19:06.255 | DEBUG    | dowser.profiler.tracer:before_executor:83 - Running before executor hooks
+2024-06-09 19:19:06.256 | INFO     | dowser.profiler.tracer:start_sampler:151 - Starting profile sampler
+2024-06-09 19:19:06.256 | INFO     | dowser.profiler.tracer:start_sampler:152 - Using precision of 0.1s and process strategy
+2024-06-09 19:19:06.259 | INFO     | dowser.profiler.handlers:execute_file:48 - Executing code file
+2024-06-09 19:19:06.261 | INFO     | dowser.profiler.handlers:execute_file:52 - Running function: run
+2024-06-09 19:19:09.148 | DEBUG    | seismic.cluster:run_attribute:14 - Running attribute Envelope
+2024-06-09 19:19:09.450 | INFO     | dowser.profiler.handlers:execute_file:55 - Running execution after hook
+2024-06-09 19:19:09.451 | DEBUG    | dowser.profiler.tracer:after_executor:93 - Running after executor hooks
+2024-06-09 19:19:09.499 | INFO     | dowser.profiler.tracer:stop_sampler:169 - Profile sampler stopped
+2024-06-09 19:19:09.500 | INFO     | dowser.profiler.handlers:execute_file:59 - File "/home/delucca/src/msc/seismic-attributes-memory-profile/tools/seismic/seismic/attributes/envelope.py" finished execution
+2024-06-09 19:19:09.525 | INFO     | dowser.profiler.main:run_profiler:50 - Profiler execution finished
+2024-06-09 19:19:09.528 | DEBUG    | dowser.profiler.main:run_profiler:51 - Amount of captured traces: 32
+2024-06-09 19:19:09.528 | INFO     | dowser.profiler.main:run_profiler:52 - Saving profile data
+2024-06-09 19:19:09.529 | DEBUG    | dowser.profiler.main:run_profiler:59 - Using metadata: {'entrypoint_segy_filepath': '../output/envelope-20240609-191813/data/100-400-400.segy', 'kernel_memory_usage_unit': 'kb', 'psutil_memory_usage_unit': 'b', 'resource_memory_usage_unit': 'kb', 'tracemalloc_memory_usage_unit': 'b', 'unix_timestamp_unit': 'ms'}
+2024-06-09 19:19:09.535 | DEBUG    | dowser.profiler.main:run_profiler:63 - Sample captured trace: {'signature': 'unknown::unknown:0::unknown', 'kernel_memory_usage': 187132.0, 'unix_timestamp': 31692567}
+2024-06-09 19:19:09.536 | DEBUG    | dowser.profiler.builders:build_profile:64 - Building profile
+2024-06-09 19:19:09.537 | INFO     | dowser.profiler.main:run_profiler:66 - Profiler output saved to: ../output/envelope-20240609-191813/profiles
+2024-06-09 19:19:09.548 | DEBUG    | data_collection:_profile_datasets:137 - Profiling dataset with path ../output/envelope-20240609-191813/data/400-100-100.segy. Dataset 5/8
+2024-06-09 19:19:09.548 | DEBUG    | data_collection:_profile_single:152 - Profiling dataset with handler "seismic.attributes.envelope.run" using path "../output/envelope-20240609-191813/data/400-100-100.segy"
+2024-06-09 19:19:09.549 | DEBUG    | data_collection:_profile_single:155 - Session ID: 400-100-100
+2024-06-09 19:19:09.550 | INFO     | dowser.profiler.main:run_profiler:15 - Starting profiler
+2024-06-09 19:19:09.550 | DEBUG    | dowser.profiler.builders:build_trace_hooks:20 - Building trace hooks for enabled metrics: [<Metric.MEMORY_USAGE: 'MEMORY_USAGE'>, <Metric.TIME: 'TIME'>]
+2024-06-09 19:19:09.551 | INFO     | dowser.profiler.metrics.memory_usage.builders:build_trace_hooks:12 - Enabled memory usage backends: "[<MemoryUsageBackend.KERNEL: 'KERNEL'>]"
+2024-06-09 19:19:09.551 | DEBUG    | dowser.profiler.metrics.memory_usage.builders:build_trace_hooks:23 - Loading backend: "kernel"
+2024-06-09 19:19:09.551 | DEBUG    | dowser.profiler.metrics.memory_usage.builders:build_trace_hooks:31 - Loaded backend: "<module 'dowser.profiler.metrics.memory_usage.backends.kernel' from '/home/delucca/src/msc/seismic-attributes-memory-profile/tools/dowser/dowser/profiler/metrics/memory_usage/backends/kernel.py'>"
+2024-06-09 19:19:09.552 | DEBUG    | dowser.profiler.metrics.memory_usage.builders:build_trace_hooks:34 - Checking if backend has "before" function
+2024-06-09 19:19:09.552 | DEBUG    | dowser.profiler.metrics.memory_usage.builders:build_trace_hooks:43 - Added "before" from "kernel" to hooks
+2024-06-09 19:19:09.552 | DEBUG    | dowser.profiler.metrics.memory_usage.builders:build_trace_hooks:34 - Checking if backend has "on_sample" function
+2024-06-09 19:19:09.552 | DEBUG    | dowser.profiler.metrics.memory_usage.builders:build_trace_hooks:43 - Added "on_sample" from "kernel" to hooks
+2024-06-09 19:19:09.553 | DEBUG    | dowser.profiler.metrics.memory_usage.builders:build_trace_hooks:34 - Checking if backend has "after" function
+2024-06-09 19:19:09.553 | WARNING  | dowser.profiler.metrics.memory_usage.builders:build_trace_hooks:37 - Backend "kernel" does not have "after" function
+2024-06-09 19:19:09.568 | DEBUG    | dowser.profiler.tracer:executor_hooks:65 - Using executor hooks: {'before': [<function before at 0x7fa319630af0>], 'on_sample': [<function capture_trace at 0x7fa319630a60>, <function capture_trace at 0x7fa379644ca0>], 'after': []}
+2024-06-09 19:19:09.570 | DEBUG    | dowser.profiler.main:run_profiler:39 - Using config: output_dir=PosixPath('../output/envelope-20240609-191813/profiles') logger=LoggerConfig(enabled_transports=[<Transport.CONSOLE: 'CONSOLE'>, <Transport.FILE: 'FILE'>], level=<Level.DEBUG: 'DEBUG'>) profiler=ProfilerConfig(session_id='400-100-100', enabled_metrics=[<Metric.MEMORY_USAGE: 'MEMORY_USAGE'>, <Metric.TIME: 'TIME'>], memory_usage=MemoryUsageConfig(enabled_backends=[<MemoryUsageBackend.KERNEL: 'KERNEL'>]), filepath=PosixPath('/home/delucca/src/msc/seismic-attributes-memory-profile/tools/seismic/seismic/attributes/envelope.py'), entrypoint='run', signature=[FunctionParameter(name='segy_filepath', type='str', position=0, default='None'), FunctionParameter(name='n_workers', type='int', position=1, default='1'), FunctionParameter(name='single_threaded', type='bool', position=2, default='True')], args=('../output/envelope-20240609-191813/data/400-100-100.segy',), kwargs={}, depth=3, precision=0.1, sign_traces=False, strategy='process') analyzer=AnalyzerConfig(sessions={}, unit=<MemoryUsageUnit.MB: 'mb'>)
+2024-06-09 19:19:09.570 | DEBUG    | dowser.profiler.main:run_profiler:40 - Enabled trace hooks: dict_keys(['before', 'on_sample', 'after'])
+2024-06-09 19:19:09.570 | DEBUG    | dowser.profiler.main:run_profiler:41 - Enabled metrics: [<Metric.MEMORY_USAGE: 'MEMORY_USAGE'>, <Metric.TIME: 'TIME'>]
+2024-06-09 19:19:09.571 | DEBUG    | dowser.profiler.main:run_profiler:42 - Using args: ('../output/envelope-20240609-191813/data/400-100-100.segy',)
+2024-06-09 19:19:09.571 | DEBUG    | dowser.profiler.main:run_profiler:43 - Using kwargs: {}
+2024-06-09 19:19:09.571 | DEBUG    | dowser.profiler.main:run_profiler:44 - Using entrypoint: run
+2024-06-09 19:19:09.571 | INFO     | dowser.profiler.main:run_profiler:46 - Starting profiler execution for "/home/delucca/src/msc/seismic-attributes-memory-profile/tools/seismic/seismic/attributes/envelope.py"
+2024-06-09 19:19:09.579 | INFO     | dowser.profiler.handlers:execute_file:19 - Starting new profiler session for file "/home/delucca/src/msc/seismic-attributes-memory-profile/tools/seismic/seismic/attributes/envelope.py" with entrypoint set to: "run"
+2024-06-09 19:19:09.581 | DEBUG    | dowser.profiler.handlers:execute_file:22 - Using args: ('../output/envelope-20240609-191813/data/400-100-100.segy',)
+2024-06-09 19:19:09.581 | DEBUG    | dowser.profiler.handlers:execute_file:23 - Using kwargs: {}
+2024-06-09 19:19:09.581 | INFO     | dowser.profiler.handlers:execute_file:38 - Executing file: /home/delucca/src/msc/seismic-attributes-memory-profile/tools/seismic/seismic/attributes/envelope.py
+2024-06-09 19:19:09.582 | DEBUG    | dowser.profiler.handlers:execute_file:40 - Using function "run" as entrypoint
+2024-06-09 19:19:09.582 | INFO     | dowser.profiler.handlers:execute_file:42 - Compiling code
+2024-06-09 19:19:09.583 | INFO     | dowser.profiler.handlers:execute_file:45 - Running execution before hook
+2024-06-09 19:19:09.583 | DEBUG    | dowser.profiler.tracer:before_executor:83 - Running before executor hooks
+2024-06-09 19:19:09.584 | INFO     | dowser.profiler.tracer:start_sampler:151 - Starting profile sampler
+2024-06-09 19:19:09.584 | INFO     | dowser.profiler.tracer:start_sampler:152 - Using precision of 0.1s and process strategy
+2024-06-09 19:19:09.589 | INFO     | dowser.profiler.handlers:execute_file:48 - Executing code file
+2024-06-09 19:19:09.591 | INFO     | dowser.profiler.handlers:execute_file:52 - Running function: run
+2024-06-09 19:19:12.940 | DEBUG    | seismic.cluster:run_attribute:14 - Running attribute Envelope
+2024-06-09 19:19:13.017 | INFO     | dowser.profiler.handlers:execute_file:55 - Running execution after hook
+2024-06-09 19:19:13.018 | DEBUG    | dowser.profiler.tracer:after_executor:93 - Running after executor hooks
+2024-06-09 19:19:13.029 | INFO     | dowser.profiler.tracer:stop_sampler:169 - Profile sampler stopped
+2024-06-09 19:19:13.030 | INFO     | dowser.profiler.handlers:execute_file:59 - File "/home/delucca/src/msc/seismic-attributes-memory-profile/tools/seismic/seismic/attributes/envelope.py" finished execution
+2024-06-09 19:19:13.048 | INFO     | dowser.profiler.main:run_profiler:50 - Profiler execution finished
+2024-06-09 19:19:13.049 | DEBUG    | dowser.profiler.main:run_profiler:51 - Amount of captured traces: 34
+2024-06-09 19:19:13.050 | INFO     | dowser.profiler.main:run_profiler:52 - Saving profile data
+2024-06-09 19:19:13.050 | DEBUG    | dowser.profiler.main:run_profiler:59 - Using metadata: {'entrypoint_segy_filepath': '../output/envelope-20240609-191813/data/400-100-100.segy', 'kernel_memory_usage_unit': 'kb', 'psutil_memory_usage_unit': 'b', 'resource_memory_usage_unit': 'kb', 'tracemalloc_memory_usage_unit': 'b', 'unix_timestamp_unit': 'ms'}
+2024-06-09 19:19:13.054 | DEBUG    | dowser.profiler.main:run_profiler:63 - Sample captured trace: {'signature': 'unknown::unknown:0::unknown', 'kernel_memory_usage': 581000.0, 'unix_timestamp': 31697915}
+2024-06-09 19:19:13.054 | DEBUG    | dowser.profiler.builders:build_profile:64 - Building profile
+2024-06-09 19:19:13.055 | INFO     | dowser.profiler.main:run_profiler:66 - Profiler output saved to: ../output/envelope-20240609-191813/profiles
+2024-06-09 19:19:13.062 | DEBUG    | data_collection:_profile_datasets:137 - Profiling dataset with path ../output/envelope-20240609-191813/data/400-100-400.segy. Dataset 6/8
+2024-06-09 19:19:13.063 | DEBUG    | data_collection:_profile_single:152 - Profiling dataset with handler "seismic.attributes.envelope.run" using path "../output/envelope-20240609-191813/data/400-100-400.segy"
+2024-06-09 19:19:13.063 | DEBUG    | data_collection:_profile_single:155 - Session ID: 400-100-400
+2024-06-09 19:19:13.064 | INFO     | dowser.profiler.main:run_profiler:15 - Starting profiler
+2024-06-09 19:19:13.064 | DEBUG    | dowser.profiler.builders:build_trace_hooks:20 - Building trace hooks for enabled metrics: [<Metric.MEMORY_USAGE: 'MEMORY_USAGE'>, <Metric.TIME: 'TIME'>]
+2024-06-09 19:19:13.065 | INFO     | dowser.profiler.metrics.memory_usage.builders:build_trace_hooks:12 - Enabled memory usage backends: "[<MemoryUsageBackend.KERNEL: 'KERNEL'>]"
+2024-06-09 19:19:13.065 | DEBUG    | dowser.profiler.metrics.memory_usage.builders:build_trace_hooks:23 - Loading backend: "kernel"
+2024-06-09 19:19:13.065 | DEBUG    | dowser.profiler.metrics.memory_usage.builders:build_trace_hooks:31 - Loaded backend: "<module 'dowser.profiler.metrics.memory_usage.backends.kernel' from '/home/delucca/src/msc/seismic-attributes-memory-profile/tools/dowser/dowser/profiler/metrics/memory_usage/backends/kernel.py'>"
+2024-06-09 19:19:13.065 | DEBUG    | dowser.profiler.metrics.memory_usage.builders:build_trace_hooks:34 - Checking if backend has "before" function
+2024-06-09 19:19:13.065 | DEBUG    | dowser.profiler.metrics.memory_usage.builders:build_trace_hooks:43 - Added "before" from "kernel" to hooks
+2024-06-09 19:19:13.065 | DEBUG    | dowser.profiler.metrics.memory_usage.builders:build_trace_hooks:34 - Checking if backend has "on_sample" function
+2024-06-09 19:19:13.066 | DEBUG    | dowser.profiler.metrics.memory_usage.builders:build_trace_hooks:43 - Added "on_sample" from "kernel" to hooks
+2024-06-09 19:19:13.066 | DEBUG    | dowser.profiler.metrics.memory_usage.builders:build_trace_hooks:34 - Checking if backend has "after" function
+2024-06-09 19:19:13.066 | WARNING  | dowser.profiler.metrics.memory_usage.builders:build_trace_hooks:37 - Backend "kernel" does not have "after" function
+2024-06-09 19:19:13.076 | DEBUG    | dowser.profiler.tracer:executor_hooks:65 - Using executor hooks: {'before': [<function before at 0x7fa319630af0>], 'on_sample': [<function capture_trace at 0x7fa319630a60>, <function capture_trace at 0x7fa379644ca0>], 'after': []}
+2024-06-09 19:19:13.077 | DEBUG    | dowser.profiler.main:run_profiler:39 - Using config: output_dir=PosixPath('../output/envelope-20240609-191813/profiles') logger=LoggerConfig(enabled_transports=[<Transport.CONSOLE: 'CONSOLE'>, <Transport.FILE: 'FILE'>], level=<Level.DEBUG: 'DEBUG'>) profiler=ProfilerConfig(session_id='400-100-400', enabled_metrics=[<Metric.MEMORY_USAGE: 'MEMORY_USAGE'>, <Metric.TIME: 'TIME'>], memory_usage=MemoryUsageConfig(enabled_backends=[<MemoryUsageBackend.KERNEL: 'KERNEL'>]), filepath=PosixPath('/home/delucca/src/msc/seismic-attributes-memory-profile/tools/seismic/seismic/attributes/envelope.py'), entrypoint='run', signature=[FunctionParameter(name='segy_filepath', type='str', position=0, default='None'), FunctionParameter(name='n_workers', type='int', position=1, default='1'), FunctionParameter(name='single_threaded', type='bool', position=2, default='True')], args=('../output/envelope-20240609-191813/data/400-100-400.segy',), kwargs={}, depth=3, precision=0.1, sign_traces=False, strategy='process') analyzer=AnalyzerConfig(sessions={}, unit=<MemoryUsageUnit.MB: 'mb'>)
+2024-06-09 19:19:13.077 | DEBUG    | dowser.profiler.main:run_profiler:40 - Enabled trace hooks: dict_keys(['before', 'on_sample', 'after'])
+2024-06-09 19:19:13.078 | DEBUG    | dowser.profiler.main:run_profiler:41 - Enabled metrics: [<Metric.MEMORY_USAGE: 'MEMORY_USAGE'>, <Metric.TIME: 'TIME'>]
+2024-06-09 19:19:13.078 | DEBUG    | dowser.profiler.main:run_profiler:42 - Using args: ('../output/envelope-20240609-191813/data/400-100-400.segy',)
+2024-06-09 19:19:13.078 | DEBUG    | dowser.profiler.main:run_profiler:43 - Using kwargs: {}
+2024-06-09 19:19:13.079 | DEBUG    | dowser.profiler.main:run_profiler:44 - Using entrypoint: run
+2024-06-09 19:19:13.079 | INFO     | dowser.profiler.main:run_profiler:46 - Starting profiler execution for "/home/delucca/src/msc/seismic-attributes-memory-profile/tools/seismic/seismic/attributes/envelope.py"
+2024-06-09 19:19:13.085 | INFO     | dowser.profiler.handlers:execute_file:19 - Starting new profiler session for file "/home/delucca/src/msc/seismic-attributes-memory-profile/tools/seismic/seismic/attributes/envelope.py" with entrypoint set to: "run"
+2024-06-09 19:19:13.086 | DEBUG    | dowser.profiler.handlers:execute_file:22 - Using args: ('../output/envelope-20240609-191813/data/400-100-400.segy',)
+2024-06-09 19:19:13.086 | DEBUG    | dowser.profiler.handlers:execute_file:23 - Using kwargs: {}
+2024-06-09 19:19:13.087 | INFO     | dowser.profiler.handlers:execute_file:38 - Executing file: /home/delucca/src/msc/seismic-attributes-memory-profile/tools/seismic/seismic/attributes/envelope.py
+2024-06-09 19:19:13.087 | DEBUG    | dowser.profiler.handlers:execute_file:40 - Using function "run" as entrypoint
+2024-06-09 19:19:13.087 | INFO     | dowser.profiler.handlers:execute_file:42 - Compiling code
+2024-06-09 19:19:13.088 | INFO     | dowser.profiler.handlers:execute_file:45 - Running execution before hook
+2024-06-09 19:19:13.088 | DEBUG    | dowser.profiler.tracer:before_executor:83 - Running before executor hooks
+2024-06-09 19:19:13.088 | INFO     | dowser.profiler.tracer:start_sampler:151 - Starting profile sampler
+2024-06-09 19:19:13.089 | INFO     | dowser.profiler.tracer:start_sampler:152 - Using precision of 0.1s and process strategy
+2024-06-09 19:19:13.092 | INFO     | dowser.profiler.handlers:execute_file:48 - Executing code file
+2024-06-09 19:19:13.093 | INFO     | dowser.profiler.handlers:execute_file:52 - Running function: run
+2024-06-09 19:19:15.759 | DEBUG    | seismic.cluster:run_attribute:14 - Running attribute Envelope
+2024-06-09 19:19:16.072 | INFO     | dowser.profiler.handlers:execute_file:55 - Running execution after hook
+2024-06-09 19:19:16.073 | DEBUG    | dowser.profiler.tracer:after_executor:93 - Running after executor hooks
+2024-06-09 19:19:16.129 | INFO     | dowser.profiler.tracer:stop_sampler:169 - Profile sampler stopped
+2024-06-09 19:19:16.130 | INFO     | dowser.profiler.handlers:execute_file:59 - File "/home/delucca/src/msc/seismic-attributes-memory-profile/tools/seismic/seismic/attributes/envelope.py" finished execution
+2024-06-09 19:19:16.150 | INFO     | dowser.profiler.main:run_profiler:50 - Profiler execution finished
+2024-06-09 19:19:16.152 | DEBUG    | dowser.profiler.main:run_profiler:51 - Amount of captured traces: 30
+2024-06-09 19:19:16.153 | INFO     | dowser.profiler.main:run_profiler:52 - Saving profile data
+2024-06-09 19:19:16.153 | DEBUG    | dowser.profiler.main:run_profiler:59 - Using metadata: {'entrypoint_segy_filepath': '../output/envelope-20240609-191813/data/400-100-400.segy', 'kernel_memory_usage_unit': 'kb', 'psutil_memory_usage_unit': 'b', 'resource_memory_usage_unit': 'kb', 'tracemalloc_memory_usage_unit': 'b', 'unix_timestamp_unit': 'ms'}
+2024-06-09 19:19:16.159 | DEBUG    | dowser.profiler.main:run_profiler:63 - Sample captured trace: {'signature': 'unknown::unknown:0::unknown', 'kernel_memory_usage': 285408.0, 'unix_timestamp': 31700508}
+2024-06-09 19:19:16.159 | DEBUG    | dowser.profiler.builders:build_profile:64 - Building profile
+2024-06-09 19:19:16.160 | INFO     | dowser.profiler.main:run_profiler:66 - Profiler output saved to: ../output/envelope-20240609-191813/profiles
+2024-06-09 19:19:16.169 | DEBUG    | data_collection:_profile_datasets:137 - Profiling dataset with path ../output/envelope-20240609-191813/data/400-400-100.segy. Dataset 7/8
+2024-06-09 19:19:16.169 | DEBUG    | data_collection:_profile_single:152 - Profiling dataset with handler "seismic.attributes.envelope.run" using path "../output/envelope-20240609-191813/data/400-400-100.segy"
+2024-06-09 19:19:16.170 | DEBUG    | data_collection:_profile_single:155 - Session ID: 400-400-100
+2024-06-09 19:19:16.171 | INFO     | dowser.profiler.main:run_profiler:15 - Starting profiler
+2024-06-09 19:19:16.171 | DEBUG    | dowser.profiler.builders:build_trace_hooks:20 - Building trace hooks for enabled metrics: [<Metric.MEMORY_USAGE: 'MEMORY_USAGE'>, <Metric.TIME: 'TIME'>]
+2024-06-09 19:19:16.171 | INFO     | dowser.profiler.metrics.memory_usage.builders:build_trace_hooks:12 - Enabled memory usage backends: "[<MemoryUsageBackend.KERNEL: 'KERNEL'>]"
+2024-06-09 19:19:16.171 | DEBUG    | dowser.profiler.metrics.memory_usage.builders:build_trace_hooks:23 - Loading backend: "kernel"
+2024-06-09 19:19:16.172 | DEBUG    | dowser.profiler.metrics.memory_usage.builders:build_trace_hooks:31 - Loaded backend: "<module 'dowser.profiler.metrics.memory_usage.backends.kernel' from '/home/delucca/src/msc/seismic-attributes-memory-profile/tools/dowser/dowser/profiler/metrics/memory_usage/backends/kernel.py'>"
+2024-06-09 19:19:16.172 | DEBUG    | dowser.profiler.metrics.memory_usage.builders:build_trace_hooks:34 - Checking if backend has "before" function
+2024-06-09 19:19:16.172 | DEBUG    | dowser.profiler.metrics.memory_usage.builders:build_trace_hooks:43 - Added "before" from "kernel" to hooks
+2024-06-09 19:19:16.172 | DEBUG    | dowser.profiler.metrics.memory_usage.builders:build_trace_hooks:34 - Checking if backend has "on_sample" function
+2024-06-09 19:19:16.172 | DEBUG    | dowser.profiler.metrics.memory_usage.builders:build_trace_hooks:43 - Added "on_sample" from "kernel" to hooks
+2024-06-09 19:19:16.173 | DEBUG    | dowser.profiler.metrics.memory_usage.builders:build_trace_hooks:34 - Checking if backend has "after" function
+2024-06-09 19:19:16.173 | WARNING  | dowser.profiler.metrics.memory_usage.builders:build_trace_hooks:37 - Backend "kernel" does not have "after" function
+2024-06-09 19:19:16.184 | DEBUG    | dowser.profiler.tracer:executor_hooks:65 - Using executor hooks: {'before': [<function before at 0x7fa319630af0>], 'on_sample': [<function capture_trace at 0x7fa319630a60>, <function capture_trace at 0x7fa379644ca0>], 'after': []}
+2024-06-09 19:19:16.185 | DEBUG    | dowser.profiler.main:run_profiler:39 - Using config: output_dir=PosixPath('../output/envelope-20240609-191813/profiles') logger=LoggerConfig(enabled_transports=[<Transport.CONSOLE: 'CONSOLE'>, <Transport.FILE: 'FILE'>], level=<Level.DEBUG: 'DEBUG'>) profiler=ProfilerConfig(session_id='400-400-100', enabled_metrics=[<Metric.MEMORY_USAGE: 'MEMORY_USAGE'>, <Metric.TIME: 'TIME'>], memory_usage=MemoryUsageConfig(enabled_backends=[<MemoryUsageBackend.KERNEL: 'KERNEL'>]), filepath=PosixPath('/home/delucca/src/msc/seismic-attributes-memory-profile/tools/seismic/seismic/attributes/envelope.py'), entrypoint='run', signature=[FunctionParameter(name='segy_filepath', type='str', position=0, default='None'), FunctionParameter(name='n_workers', type='int', position=1, default='1'), FunctionParameter(name='single_threaded', type='bool', position=2, default='True')], args=('../output/envelope-20240609-191813/data/400-400-100.segy',), kwargs={}, depth=3, precision=0.1, sign_traces=False, strategy='process') analyzer=AnalyzerConfig(sessions={}, unit=<MemoryUsageUnit.MB: 'mb'>)
+2024-06-09 19:19:16.185 | DEBUG    | dowser.profiler.main:run_profiler:40 - Enabled trace hooks: dict_keys(['before', 'on_sample', 'after'])
+2024-06-09 19:19:16.185 | DEBUG    | dowser.profiler.main:run_profiler:41 - Enabled metrics: [<Metric.MEMORY_USAGE: 'MEMORY_USAGE'>, <Metric.TIME: 'TIME'>]
+2024-06-09 19:19:16.186 | DEBUG    | dowser.profiler.main:run_profiler:42 - Using args: ('../output/envelope-20240609-191813/data/400-400-100.segy',)
+2024-06-09 19:19:16.186 | DEBUG    | dowser.profiler.main:run_profiler:43 - Using kwargs: {}
+2024-06-09 19:19:16.186 | DEBUG    | dowser.profiler.main:run_profiler:44 - Using entrypoint: run
+2024-06-09 19:19:16.186 | INFO     | dowser.profiler.main:run_profiler:46 - Starting profiler execution for "/home/delucca/src/msc/seismic-attributes-memory-profile/tools/seismic/seismic/attributes/envelope.py"
+2024-06-09 19:19:16.193 | INFO     | dowser.profiler.handlers:execute_file:19 - Starting new profiler session for file "/home/delucca/src/msc/seismic-attributes-memory-profile/tools/seismic/seismic/attributes/envelope.py" with entrypoint set to: "run"
+2024-06-09 19:19:16.194 | DEBUG    | dowser.profiler.handlers:execute_file:22 - Using args: ('../output/envelope-20240609-191813/data/400-400-100.segy',)
+2024-06-09 19:19:16.194 | DEBUG    | dowser.profiler.handlers:execute_file:23 - Using kwargs: {}
+2024-06-09 19:19:16.195 | INFO     | dowser.profiler.handlers:execute_file:38 - Executing file: /home/delucca/src/msc/seismic-attributes-memory-profile/tools/seismic/seismic/attributes/envelope.py
+2024-06-09 19:19:16.195 | DEBUG    | dowser.profiler.handlers:execute_file:40 - Using function "run" as entrypoint
+2024-06-09 19:19:16.195 | INFO     | dowser.profiler.handlers:execute_file:42 - Compiling code
+2024-06-09 19:19:16.196 | INFO     | dowser.profiler.handlers:execute_file:45 - Running execution before hook
+2024-06-09 19:19:16.196 | DEBUG    | dowser.profiler.tracer:before_executor:83 - Running before executor hooks
+2024-06-09 19:19:16.197 | INFO     | dowser.profiler.tracer:start_sampler:151 - Starting profile sampler
+2024-06-09 19:19:16.197 | INFO     | dowser.profiler.tracer:start_sampler:152 - Using precision of 0.1s and process strategy
+2024-06-09 19:19:16.201 | INFO     | dowser.profiler.handlers:execute_file:48 - Executing code file
+2024-06-09 19:19:16.202 | INFO     | dowser.profiler.handlers:execute_file:52 - Running function: run
+2024-06-09 19:19:19.062 | DEBUG    | seismic.cluster:run_attribute:14 - Running attribute Envelope
+2024-06-09 19:19:19.333 | INFO     | dowser.profiler.handlers:execute_file:55 - Running execution after hook
+2024-06-09 19:19:19.334 | DEBUG    | dowser.profiler.tracer:after_executor:93 - Running after executor hooks
+2024-06-09 19:19:19.438 | INFO     | dowser.profiler.tracer:stop_sampler:169 - Profile sampler stopped
+2024-06-09 19:19:19.438 | INFO     | dowser.profiler.handlers:execute_file:59 - File "/home/delucca/src/msc/seismic-attributes-memory-profile/tools/seismic/seismic/attributes/envelope.py" finished execution
+2024-06-09 19:19:19.454 | INFO     | dowser.profiler.main:run_profiler:50 - Profiler execution finished
+2024-06-09 19:19:19.457 | DEBUG    | dowser.profiler.main:run_profiler:51 - Amount of captured traces: 32
+2024-06-09 19:19:19.457 | INFO     | dowser.profiler.main:run_profiler:52 - Saving profile data
+2024-06-09 19:19:19.457 | DEBUG    | dowser.profiler.main:run_profiler:59 - Using metadata: {'entrypoint_segy_filepath': '../output/envelope-20240609-191813/data/400-400-100.segy', 'kernel_memory_usage_unit': 'kb', 'psutil_memory_usage_unit': 'b', 'resource_memory_usage_unit': 'kb', 'tracemalloc_memory_usage_unit': 'b', 'unix_timestamp_unit': 'ms'}
+2024-06-09 19:19:19.461 | DEBUG    | dowser.profiler.main:run_profiler:63 - Sample captured trace: {'signature': 'unknown::unknown:0::unknown', 'kernel_memory_usage': 606752.0, 'unix_timestamp': 31704827}
+2024-06-09 19:19:19.462 | DEBUG    | dowser.profiler.builders:build_profile:64 - Building profile
+2024-06-09 19:19:19.462 | INFO     | dowser.profiler.main:run_profiler:66 - Profiler output saved to: ../output/envelope-20240609-191813/profiles
+2024-06-09 19:19:19.471 | DEBUG    | data_collection:_profile_datasets:137 - Profiling dataset with path ../output/envelope-20240609-191813/data/400-400-400.segy. Dataset 8/8
+2024-06-09 19:19:19.471 | DEBUG    | data_collection:_profile_single:152 - Profiling dataset with handler "seismic.attributes.envelope.run" using path "../output/envelope-20240609-191813/data/400-400-400.segy"
+2024-06-09 19:19:19.472 | DEBUG    | data_collection:_profile_single:155 - Session ID: 400-400-400
+2024-06-09 19:19:19.472 | INFO     | dowser.profiler.main:run_profiler:15 - Starting profiler
+2024-06-09 19:19:19.473 | DEBUG    | dowser.profiler.builders:build_trace_hooks:20 - Building trace hooks for enabled metrics: [<Metric.MEMORY_USAGE: 'MEMORY_USAGE'>, <Metric.TIME: 'TIME'>]
+2024-06-09 19:19:19.473 | INFO     | dowser.profiler.metrics.memory_usage.builders:build_trace_hooks:12 - Enabled memory usage backends: "[<MemoryUsageBackend.KERNEL: 'KERNEL'>]"
+2024-06-09 19:19:19.473 | DEBUG    | dowser.profiler.metrics.memory_usage.builders:build_trace_hooks:23 - Loading backend: "kernel"
+2024-06-09 19:19:19.473 | DEBUG    | dowser.profiler.metrics.memory_usage.builders:build_trace_hooks:31 - Loaded backend: "<module 'dowser.profiler.metrics.memory_usage.backends.kernel' from '/home/delucca/src/msc/seismic-attributes-memory-profile/tools/dowser/dowser/profiler/metrics/memory_usage/backends/kernel.py'>"
+2024-06-09 19:19:19.473 | DEBUG    | dowser.profiler.metrics.memory_usage.builders:build_trace_hooks:34 - Checking if backend has "before" function
+2024-06-09 19:19:19.474 | DEBUG    | dowser.profiler.metrics.memory_usage.builders:build_trace_hooks:43 - Added "before" from "kernel" to hooks
+2024-06-09 19:19:19.474 | DEBUG    | dowser.profiler.metrics.memory_usage.builders:build_trace_hooks:34 - Checking if backend has "on_sample" function
+2024-06-09 19:19:19.474 | DEBUG    | dowser.profiler.metrics.memory_usage.builders:build_trace_hooks:43 - Added "on_sample" from "kernel" to hooks
+2024-06-09 19:19:19.474 | DEBUG    | dowser.profiler.metrics.memory_usage.builders:build_trace_hooks:34 - Checking if backend has "after" function
+2024-06-09 19:19:19.474 | WARNING  | dowser.profiler.metrics.memory_usage.builders:build_trace_hooks:37 - Backend "kernel" does not have "after" function
+2024-06-09 19:19:19.484 | DEBUG    | dowser.profiler.tracer:executor_hooks:65 - Using executor hooks: {'before': [<function before at 0x7fa319630af0>], 'on_sample': [<function capture_trace at 0x7fa319630a60>, <function capture_trace at 0x7fa379644ca0>], 'after': []}
+2024-06-09 19:19:19.486 | DEBUG    | dowser.profiler.main:run_profiler:39 - Using config: output_dir=PosixPath('../output/envelope-20240609-191813/profiles') logger=LoggerConfig(enabled_transports=[<Transport.CONSOLE: 'CONSOLE'>, <Transport.FILE: 'FILE'>], level=<Level.DEBUG: 'DEBUG'>) profiler=ProfilerConfig(session_id='400-400-400', enabled_metrics=[<Metric.MEMORY_USAGE: 'MEMORY_USAGE'>, <Metric.TIME: 'TIME'>], memory_usage=MemoryUsageConfig(enabled_backends=[<MemoryUsageBackend.KERNEL: 'KERNEL'>]), filepath=PosixPath('/home/delucca/src/msc/seismic-attributes-memory-profile/tools/seismic/seismic/attributes/envelope.py'), entrypoint='run', signature=[FunctionParameter(name='segy_filepath', type='str', position=0, default='None'), FunctionParameter(name='n_workers', type='int', position=1, default='1'), FunctionParameter(name='single_threaded', type='bool', position=2, default='True')], args=('../output/envelope-20240609-191813/data/400-400-400.segy',), kwargs={}, depth=3, precision=0.1, sign_traces=False, strategy='process') analyzer=AnalyzerConfig(sessions={}, unit=<MemoryUsageUnit.MB: 'mb'>)
+2024-06-09 19:19:19.486 | DEBUG    | dowser.profiler.main:run_profiler:40 - Enabled trace hooks: dict_keys(['before', 'on_sample', 'after'])
+2024-06-09 19:19:19.486 | DEBUG    | dowser.profiler.main:run_profiler:41 - Enabled metrics: [<Metric.MEMORY_USAGE: 'MEMORY_USAGE'>, <Metric.TIME: 'TIME'>]
+2024-06-09 19:19:19.486 | DEBUG    | dowser.profiler.main:run_profiler:42 - Using args: ('../output/envelope-20240609-191813/data/400-400-400.segy',)
+2024-06-09 19:19:19.486 | DEBUG    | dowser.profiler.main:run_profiler:43 - Using kwargs: {}
+2024-06-09 19:19:19.486 | DEBUG    | dowser.profiler.main:run_profiler:44 - Using entrypoint: run
+2024-06-09 19:19:19.487 | INFO     | dowser.profiler.main:run_profiler:46 - Starting profiler execution for "/home/delucca/src/msc/seismic-attributes-memory-profile/tools/seismic/seismic/attributes/envelope.py"
+2024-06-09 19:19:19.493 | INFO     | dowser.profiler.handlers:execute_file:19 - Starting new profiler session for file "/home/delucca/src/msc/seismic-attributes-memory-profile/tools/seismic/seismic/attributes/envelope.py" with entrypoint set to: "run"
+2024-06-09 19:19:19.494 | DEBUG    | dowser.profiler.handlers:execute_file:22 - Using args: ('../output/envelope-20240609-191813/data/400-400-400.segy',)
+2024-06-09 19:19:19.494 | DEBUG    | dowser.profiler.handlers:execute_file:23 - Using kwargs: {}
+2024-06-09 19:19:19.494 | INFO     | dowser.profiler.handlers:execute_file:38 - Executing file: /home/delucca/src/msc/seismic-attributes-memory-profile/tools/seismic/seismic/attributes/envelope.py
+2024-06-09 19:19:19.495 | DEBUG    | dowser.profiler.handlers:execute_file:40 - Using function "run" as entrypoint
+2024-06-09 19:19:19.495 | INFO     | dowser.profiler.handlers:execute_file:42 - Compiling code
+2024-06-09 19:19:19.495 | INFO     | dowser.profiler.handlers:execute_file:45 - Running execution before hook
+2024-06-09 19:19:19.496 | DEBUG    | dowser.profiler.tracer:before_executor:83 - Running before executor hooks
+2024-06-09 19:19:19.496 | INFO     | dowser.profiler.tracer:start_sampler:151 - Starting profile sampler
+2024-06-09 19:19:19.496 | INFO     | dowser.profiler.tracer:start_sampler:152 - Using precision of 0.1s and process strategy
+2024-06-09 19:19:19.500 | INFO     | dowser.profiler.handlers:execute_file:48 - Executing code file
+2024-06-09 19:19:19.500 | INFO     | dowser.profiler.handlers:execute_file:52 - Running function: run
+2024-06-09 19:19:22.376 | DEBUG    | seismic.cluster:run_attribute:14 - Running attribute Envelope
+2024-06-09 19:19:23.601 | INFO     | dowser.profiler.handlers:execute_file:55 - Running execution after hook
+2024-06-09 19:19:23.601 | DEBUG    | dowser.profiler.tracer:after_executor:93 - Running after executor hooks
+2024-06-09 19:19:23.643 | INFO     | dowser.profiler.tracer:stop_sampler:169 - Profile sampler stopped
+2024-06-09 19:19:23.643 | INFO     | dowser.profiler.handlers:execute_file:59 - File "/home/delucca/src/msc/seismic-attributes-memory-profile/tools/seismic/seismic/attributes/envelope.py" finished execution
+2024-06-09 19:19:23.661 | INFO     | dowser.profiler.main:run_profiler:50 - Profiler execution finished
+2024-06-09 19:19:23.663 | DEBUG    | dowser.profiler.main:run_profiler:51 - Amount of captured traces: 41
+2024-06-09 19:19:23.663 | INFO     | dowser.profiler.main:run_profiler:52 - Saving profile data
+2024-06-09 19:19:23.663 | DEBUG    | dowser.profiler.main:run_profiler:59 - Using metadata: {'entrypoint_segy_filepath': '../output/envelope-20240609-191813/data/400-400-400.segy', 'kernel_memory_usage_unit': 'kb', 'psutil_memory_usage_unit': 'b', 'resource_memory_usage_unit': 'kb', 'tracemalloc_memory_usage_unit': 'b', 'unix_timestamp_unit': 'ms'}
+2024-06-09 19:19:23.668 | DEBUG    | dowser.profiler.main:run_profiler:63 - Sample captured trace: {'signature': 'unknown::unknown:0::unknown', 'kernel_memory_usage': 606220.0, 'unix_timestamp': 31708125}
+2024-06-09 19:19:23.668 | DEBUG    | dowser.profiler.builders:build_profile:64 - Building profile
+2024-06-09 19:19:23.669 | INFO     | dowser.profiler.main:run_profiler:66 - Profiler output saved to: ../output/envelope-20240609-191813/profiles
+2024-06-09 19:19:23.677 | INFO     | data_collection:_parse_profiles:201 - Parsing the peak data from profiles
+2024-06-09 19:19:23.678 | DEBUG    | data_collection:_parse_profiles:204 - Setting memory unit
+2024-06-09 19:19:23.678 | DEBUG    | data_collection:_parse_profiles:208 - Getting peak from profile with shape 100-100-100
+2024-06-09 19:19:23.678 | DEBUG    | data_collection:_parse_profiles:208 - Getting peak from profile with shape 100-100-400
+2024-06-09 19:19:23.678 | DEBUG    | data_collection:_parse_profiles:208 - Getting peak from profile with shape 100-400-100
+2024-06-09 19:19:23.679 | DEBUG    | data_collection:_parse_profiles:208 - Getting peak from profile with shape 100-400-400
+2024-06-09 19:19:23.679 | DEBUG    | data_collection:_parse_profiles:208 - Getting peak from profile with shape 400-100-100
+2024-06-09 19:19:23.679 | DEBUG    | data_collection:_parse_profiles:208 - Getting peak from profile with shape 400-100-400
+2024-06-09 19:19:23.679 | DEBUG    | data_collection:_parse_profiles:208 - Getting peak from profile with shape 400-400-100
+2024-06-09 19:19:23.679 | DEBUG    | data_collection:_parse_profiles:208 - Getting peak from profile with shape 400-400-400
+2024-06-09 19:19:23.679 | DEBUG    | data_collection:_store_collected_data:222 - Saving collected data to ../output/envelope-20240609-191813/collected_data.json
+2024-06-09 19:19:23.680 | INFO     | data_collection:collect_data:41 - Data collection finished
+2024-06-09 19:19:23.680 | DEBUG    | __main__:run:34 - Collected data Session ID: {'memory_unit': 'kb', 'peaks': {'100-100-100': 651568.0, '100-100-400': 711096.0, '100-400-100': 667800.0, '100-400-400': 1022048.0, '400-100-100': 651816.0, '400-100-400': 1048600.0, '400-400-100': 905008.0, '400-400-400': 2286924.0}}
