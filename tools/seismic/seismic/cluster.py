@@ -1,6 +1,6 @@
 from typing import Any
 from dasf_seismic.transforms.transforms import Transform
-from dowser import get_logger
+from traceq import get_logger
 from .data.loaders import load_segy
 
 

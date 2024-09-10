@@ -4,7 +4,7 @@ import os
 
 from scipy.signal import convolve
 from typing import Literal
-from dowser import get_logger
+from traceq import get_logger
 
 
 def build_dataset_paths(
