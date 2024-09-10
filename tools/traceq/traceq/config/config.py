@@ -11,7 +11,6 @@ from traceq.common.transformers import (
 )
 from .logger import LoggerConfig
 from .profiler import ProfilerConfig
-from .analyzer import AnalyzerConfig
 
 
 __all__ = ["Config"]
@@ -31,9 +30,6 @@ initial_config = {
             "enabled_backends": ["KERNEL"],
         },
     },
-    "analyzer": {
-        "unit": "mb",
-    },
 }
 
 
@@ -41,7 +37,6 @@ class Config(BaseModel):
     output_dir: DirectoryPath
     logger: LoggerConfig
     profiler: ProfilerConfig
-    analyzer: AnalyzerConfig
 
     @field_validator("output_dir", mode="before")
     def create_dir_if_not_exists(cls, v):
@@ -97,10 +92,6 @@ class Config(BaseModel):
                         ),
                     },
                 },
-                "analyzer": {
-                    **loaded_config.get("analyzer", {}),
-                    "sessions": from_key_value_string(loaded_config.get("session")),
-                },
             },
             allow_empty_lists=False,
         )
@@ -131,10 +122,6 @@ class Config(BaseModel):
                     "memory_usage": {
                         "enabled_backends": flat_config.get("enable_mem_backend"),
                     },
-                },
-                "analyzer": {
-                    "unit": flat_config.get("unit"),
-                    "sessions": from_key_value_string(flat_config.get("session")),
                 },
             },
             allow_empty_lists=False,

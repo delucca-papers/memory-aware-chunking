@@ -4,7 +4,6 @@ from .config import Config
 from .common.cli import AppendUnique
 from .common.logger import logger, setup_logger_from_config
 from .profiler import attach_args as attach_profiler_args
-from .analyzer import attach_args as attach_analyzer_args
 
 
 __all__ = ["cli"]
@@ -61,7 +60,6 @@ def to_namespace(parser: ArgumentParser) -> Namespace:
 
 attach_subparsers = curry(do)(
     compose(
-        attach_analyzer_args,
         attach_profiler_args,
         get_subparsers,
     )

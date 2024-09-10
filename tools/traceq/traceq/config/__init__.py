@@ -5,7 +5,6 @@ from .profiler import (
     MemoryUsageBackend,
     FunctionParameter,
 )
-from .analyzer import Sessions as AnalyzerSessions, MemoryUsageUnit
 
 
 __all__ = [
@@ -13,7 +12,5 @@ __all__ = [
     "LoggerTransport",
     "ProfilerMetric",
     "MemoryUsageBackend",
-    "AnalyzerSessions",
-    "MemoryUsageUnit",
     "FunctionParameter",
 ]
