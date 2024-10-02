@@ -1,14 +1,14 @@
 from setuptools import setup, find_packages
 
 setup(
-    name="seismic",
-    version="0.1.0",
+    name="helpers",
+    version="1.0.0",
     author="Daniel De Lucca Fonseca",
     author_email="daniel@delucca.dev",
-    description="Tools to simplify the execution of seismic experiments",
+    description="Tools to simplify the execution of our experiments",
     long_description=open("README.md").read(),
     long_description_content_type="text/markdown",
-    url="http://github.com/delucca/seismic-attributes-memory-profile",
+    url="http://github.com/delucca-papers/dask-auto-chunking",
     packages=find_packages(),
     install_requires=open("requirements.txt").read().splitlines(),
     classifiers=[
@@ -16,5 +16,5 @@ setup(
         "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
         "Operating System :: OS Independent",
     ],
-    python_requires=">=3.8.10",
+    python_requires=">=3.10.14",
 )
