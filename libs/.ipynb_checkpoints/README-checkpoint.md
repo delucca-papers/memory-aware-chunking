@@ -26,7 +26,7 @@ The libraries in this folder are used to support the experiments in the [`experi
 Below is an overview of the currently available libraries.
 Each of these libraries can be imported and reused in different contexts to streamline your experiments.
 
-    1. `chunking_utils.py`
+1. `chunking_utils.py`
 
 **Objective**:
 Provides utility functions for handling chunk sizes and strategies.

@@ -23,21 +23,21 @@ To get started with this repository, follow the steps below.
 
 Installation
 
-	1.	Clone the repository:
+1. Clone the repository:
 ```sh
 git clone https://github.com/[your-username]/dask-auto-chunking.git
 cd dask-auto-chunking
 ```
 
-	2.	Install the necessary dependencies (you may use conda, venv, or any other environment manager). Here’s an example using pip:
+2. Install the necessary dependencies (you may use conda, venv, or any other environment manager). Here’s an example using pip:
 ```sh
 pip install -r requirements.txt
 ```
 
 ## Repository Structure
 
-    - [`experiments/`](./experiments): This folder contains all the experiments designed to demonstrate the effects and performance of Dask Auto-Chunking in various scenarios.
-	- [`libs/`]: This folder contains shared code, utilities, and helper functions used across multiple experiments and tools. These libraries can be reused to facilitate new experiments or optimize existing workflows.
+- [`experiments/`](./experiments): This folder contains all the experiments designed to demonstrate the effects and performance of Dask Auto-Chunking in various scenarios.
+- [`libs/`]: This folder contains shared code, utilities, and helper functions used across multiple experiments and tools. These libraries can be reused to facilitate new experiments or optimize existing workflows.
 
 ## License
 
