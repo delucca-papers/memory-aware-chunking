@@ -19,9 +19,7 @@ This includes both theoretical analysis and practical code implementations.
 
 ## Getting Started
 
-To get started with this repository, follow the steps below.
-
-Installation
+To get started with this repository, follow the steps below:
 
 1. Clone the repository:
 ```sh
@@ -37,7 +35,7 @@ pip install -r requirements.txt
 ## Repository Structure
 
 - [`experiments/`](./experiments): This folder contains all the experiments designed to demonstrate the effects and performance of Dask Auto-Chunking in various scenarios.
-- [`libs/`]: This folder contains shared code, utilities, and helper functions used across multiple experiments and tools. These libraries can be reused to facilitate new experiments or optimize existing workflows.
+- [`libs/`](./libs): This folder contains shared code, utilities, and helper functions used across multiple experiments and tools. These libraries can be reused to facilitate new experiments or optimize existing workflows.
 
 ## License
 
