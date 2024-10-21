@@ -30,7 +30,7 @@ The goal is to identify the optimal chunk size that balances performance with re
 Investigate how Dask’s Auto-Chunking feature handles memory consumption during execution.
 This experiment will determine whether Auto-Chunking takes memory constraints into account, or if it prioritizes other performance factors.
 
-Key Questions:
+**Key Questions**:
 - Does Auto-Chunking optimize for memory usage, or are there scenarios where it overlooks memory constraints?
 - How does memory consumption vary between auto and manual chunking strategies?
 
