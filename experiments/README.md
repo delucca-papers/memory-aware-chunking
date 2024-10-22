@@ -43,6 +43,7 @@ We aim to identify patterns in memory usage across different types of tensorial 
 **Key Questions**:
 - Which algorithms consume the most memory, and why?
 - Is the memory usage directly related to the input shape, and how?
+- Does the memory usage change for real-world (not synthetic) data?
 
 4. [`004-predicting-memory-usage`](./004-predicting-memory-usage.ipynb)
 
@@ -53,6 +54,7 @@ The goal is to develop a reliable model that can provide accurate memory estimat
 **Key Questions**:
 - Can we accurately predict memory usage given only input shapes?
 - What factors influence the accuracy of these predictions?
+- Can we accurately predict memory usage using real-world data?
 
 5. [`005-best-chunk-size`](./005-best-chunk-size.ipynb)
 
