@@ -1,29 +1,21 @@
 import dask.array as da
-import numpy as np
 from datasets import load_segy
+from loggers import get_named_logger
 from scipy import ndimage as ndi
 
 __all__ = [
     "gaussian_filter_from_segy",
-    "gaussian_filter_from_ndarray",
-    "gaussian_filter_from_dask_array",
 ]
 
 
-def gaussian_filter_from_dask_array(dask_array: da.Array, sigma=(3, 3, 3)):
-    result = dask_array.map_blocks(
+def gaussian_filter_from_segy(segy_path, chunks="auto", sigma=(3, 3, 3), logger=get_named_logger('gaussian_filter')):
+    data = load_segy(segy_path)
+    dask_array = da.from_array(data, chunks=chunks)
+
+    logger.info(f"Calculating Gaussian Filter for {segy_path}")
+    logger.info(f"Data shape: {data.shape}")
+    logger.info(f"Data chunks: {dask_array.chunks}")
+
+    return dask_array.map_blocks(
         ndi.gaussian_filter, sigma=sigma, dtype=dask_array.dtype
     )
-
-    return result.compute()
-
-
-def gaussian_filter_from_ndarray(data: np.ndarray, sigma=(3, 3, 3)):
-    dask_array = da.from_array(data, chunks="auto")
-    return gaussian_filter_from_dask_array(dask_array, sigma)
-
-
-def gaussian_filter_from_segy(segy_path: str, sigma=(3, 3, 3)):
-    data = load_segy(segy_path)
-
-    return gaussian_filter_from_ndarray(data, sigma)

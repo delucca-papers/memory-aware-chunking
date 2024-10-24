@@ -1,16 +1,22 @@
 import dask.array as da
 import numpy as np
 from datasets import load_segy
+from loggers import get_named_logger
 from scipy import ndimage as ndi
 
 __all__ = [
     "gradient_structure_tensor_from_segy",
-    "gradient_structure_tensor_from_ndarray",
-    "gradient_structure_tensor_from_dask_array",
 ]
 
 
-def gradient_structure_tensor_from_dask_array(dask_array: da.Array, kernel=(3, 3, 3)):
+def gradient_structure_tensor_from_segy(segy_path, chunks="auto", kernel=(3, 3, 3), logger=get_named_logger('gst3d')):
+    data = load_segy(segy_path)
+    dask_array = da.from_array(data, chunks=chunks)
+
+    logger.info(f"Calculating GST3D for {segy_path}")
+    logger.info(f"Data shape: {data.shape}")
+    logger.info(f"Data chunks: {dask_array.chunks}")
+
     # Compute first derivatives along each axis using Dask array
     gi = __first_derivative(dask_array, axis=0)
     gj = __first_derivative(dask_array, axis=1)
@@ -22,31 +28,9 @@ def gradient_structure_tensor_from_dask_array(dask_array: da.Array, kernel=(3, 3
     )
 
     # Map the 3D dip computation across the Dask chunks
-    result = da.map_blocks(
+    return da.map_blocks(
         __compute_3d_dip, gi2, gj2, gk2, gigj, gigk, gjgk, dtype=dask_array.dtype
     )
-
-    return result.compute()
-
-
-def gradient_structure_tensor_from_ndarray(data: np.ndarray, kernel=(3, 3, 3)):
-    gi = __first_derivative(da.from_array(data, chunks="auto"), axis=0)
-    gj = __first_derivative(da.from_array(data, chunks="auto"), axis=1)
-    gk = __first_derivative(da.from_array(data, chunks="auto"), axis=2)
-
-    gi2, gj2, gk2, gigj, gigk, gjgk = __compute_gradient_structure_tensor(
-        gi, gj, gk, kernel
-    )
-    result = da.map_blocks(
-        __compute_3d_dip, gi2, gj2, gk2, gigj, gigk, gjgk, dtype=data.dtype
-    )
-
-    return result.compute()
-
-
-def gradient_structure_tensor_from_segy(segy_path: str, kernel=(3, 3, 3)):
-    data = load_segy(segy_path)
-    return gradient_structure_tensor_from_ndarray(data, kernel)
 
 
 def __first_derivative(X, axis=-1):
