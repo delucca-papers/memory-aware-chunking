@@ -1,48 +1,20 @@
 \chapter{Introduction}
+\label{ch:introduction}
 
-\DFADD{TODO: Começar com uma base da motivação e contexto}
 \DF{Vale a pena dividir em seções? Se sim, eu penso em ser: Motivação e Contexto, Background, Limitações do Auto-Chunking do Dask, Motivação para o Memory-Aware Chunking, Minha Contribuição, e Estrutura da Tese}
 
-\TODO{Na motivação e contexto, começar pela motivação geral, explicando o problema da gestão de memória para o processamento em larga escala de dados, focando em sistemas distribuídos}
+\DFTODO{Começar com uma base da motivação e contexto}
 
-\TODO{Explicar sobre o quão comum é esse tipo de aplicação usar o Dask para paralelizar cargas de trabalho}
+\DFTODO{Na motivação e contexto, começar pela motivação geral, explicando o problema da gestão de memória para o processamento em larga escala de dados, focando em sistemas distribuídos}
 
-\TODO{Explicar sobre os desafios para o gerenciamento de recursos. Aprofundar a motivação para explicar que alguns casos geram um grande consumo de memória e que, nesses casos, é necessário estimar o consumo de memória para definir o tamanho do chunk}
+\DFTODO{Explicar sobre o quão comum é esse tipo de aplicação usar o Dask para paralelizar cargas de trabalho}
 
-\TODO{Trazer o probleam base, dos problemas que um chunk definido de maneira não adequada pode trazer: o excesso de tentativa e erro, o uso subótimo dos recursos, o overhead do escalonador}
-`
+\DFTODO{Explicar sobre os desafios para o gerenciamento de recursos. Aprofundar a motivação para explicar que alguns casos geram um grande consumo de memória e que, nesses casos, é necessário estimar o consumo de memória para definir o tamanho do chunk}
 
-2. Background
+\DFTODO{Trazer o probleam base, dos problemas que um chunk definido de maneira não adequada pode trazer: o excesso de tentativa e erro, o uso subótimo dos recursos, o overhead do escalonador}
 
-	•	Dask Overview: Provide a brief overview of Dask, its purpose, and how it facilitates parallel computing in Python.
-	•	Emphasize Dask’s role in splitting large datasets into smaller chunks for distributed execution.
-	•	Auto-Chunking in Dask: Introduce Dask’s auto-chunking feature.
-	•	Explain that it was designed to break data into manageable chunks based on data size but lacks memory-awareness.
-	•	Mention the initial use case you explored (seismic data) to demonstrate how this feature worked in specific domains.
+\DFTODO{Trazer a motivação para o memory-aware chunking, explicando que é necessário considerar o consumo de memória para definir o tamanho do chunk ideal. Nesse ponto, citar que esse problema é particularmente relevante para algoritmos que consomem muita memória}
 
-3. Limitations of Dask’s Auto-Chunking
+\DFTODO{Trazer a motivação para a contribuição, explicando que o objetivo é criar um método para estimar o consumo de memória com poucas execuções. Esse método remove a necessidade de tentativa e erro e cria uma forma prática de definir o tamanho de chunk ideal}
 
-	•	Problem Identification: Explain the key limitations you identified during your work with Dask.
-	•	Lack of memory awareness in auto-chunking: Dask only considers input data size (in MB) but does not attempt to estimate memory consumption during chunk execution.
-	•	This approach can be particularly problematic for memory-intensive algorithms.
-	•	Complex Algorithm Example: Highlight GST3D or other complex algorithms that exacerbate this issue.
-	•	Explain how small chunks for such algorithms can result in unexpectedly high memory consumption, leading to task failures or inefficient execution.
-
-4. Motivation for Memory-Aware Chunking
-
-	•	The Need for Memory Awareness: Justify why it’s essential to account for memory usage when defining chunk sizes.
-	•	Describe the potential issues (e.g., out-of-memory errors, inefficient resource use, performance bottlenecks) that arise when memory requirements aren’t considered.
-	•	Tie this back to how efficient memory management is critical in distributed computing, especially when dealing with limited resources like worker memory.
-
-5. Your Contribution
-
-	•	Estimation Method: Introduce your main contribution—an approach to estimate memory usage with minimal executions.
-	•	Briefly describe the strategy you developed, which allows for predicting memory requirements by running a few sample executions.
-	•	Optimal Chunk Sizing: Explain how you leveraged this estimation to define the best chunk size based on available worker memory.
-	•	Mention how this approach is flexible and can work across different algorithms and data processing scenarios (not just seismic).
-
-6. Thesis Structure Overview
-
-	•	Provide an overview of the structure of the thesis and how the rest of the chapters are organized, giving the reader a roadmap for the work.
-	•	Example: “The remainder of this thesis is organized as follows. Chapter 2 reviews the related work in memory profiling and distributed computing. Chapter 3 presents the methodology used for memory estimation and optimal chunk sizing…”
-\DF{Preciso organizar a estrutura da introdução}
+\DFTODO{Trazer a estrutura da tese, explicando como os capítulos estão organizados}

@@ -1,2 +1,163 @@
 \chapter{Methods and Materials}
-\DF{Preciso organizar a estrutura dos métodos e materiais}
+\label{ch:methods-and-materials}
+
+\DF{Este capítulo pode ser dividido em seções para melhor organização. Penso em incluir: Visão Geral do Design Experimental, Desafios de Medição e Mitigação, Configuração do Ambiente Experimental, Geração e Preparação de Dados, Seleção e Implementação dos Algoritmos, Procedimento Experimental, Configuração de Tamanho de Chunk e Workers, Métricas Coletadas, Metodologia de Estimação de Consumo de Memória, Avaliação do Auto-Chunking do Dask, Experimentos Adicionais, Técnicas de Análise de Dados, Reprodutibilidade e Disponibilidade de Código, Considerações Éticas, e um Resumo dos Métodos.}
+
+
+\section{Overview of Experimental Design}
+\label{sec:design}
+
+\DFTODO{Apresentar os objetivos primários dos experimentos, como investigar o impacto do tamanho do chunk no tempo de execução e consumo de memória no Dask, e desenvolver um método para estimar o uso de memória para otimizar o dimensionamento dos chunks.}
+
+\DFTODO{Fornecer uma visão geral da abordagem experimental, incluindo os tipos de experimentos conduzidos e a justificativa por trás deles.}
+
+
+\section{Measurement Challenges and Mitigation}
+\label{sec:measurement}
+
+\DFTODO{Explicar que a medição precisa foi crítica nos experimentos para evitar introduzir vieses, como o acúmulo de memória entre execuções.}
+
+\DFTODO{Descrever as estratégias adotadas para garantir a precisão das medições, como isolar cada experimento em processos separados para evitar vazamentos de memória e garantir ambientes limpos.}
+
+
+\section{Experimental Environment Setup}
+\label{sec:environment}
+
+\DFTODO{Detalhar os recursos computacionais utilizados, incluindo especificações de hardware (CPU, RAM) e ambientes de software (versão do Python, versão do Dask).}
+
+\DFTODO{Explicar como o cluster Dask foi configurado localmente, incluindo o número de workers e limites de memória por worker.}
+
+
+\section{Data Generation and Preparation}
+\label{sec:data}
+
+\DFTODO{Descrever como os dados sintéticos sismológicos foram gerados para os experimentos, especificando as dimensões (número de inlines, crosslines, samples) e por que esses tamanhos foram escolhidos.}
+
+\DFTODO{Mencionar os formatos de armazenamento de dados utilizados (por exemplo, arquivos SEG-Y) e quaisquer etapas de pré-processamento realizadas antes de aplicar os algoritmos.}
+
+
+\section{Algorithm Selection and Implementation}
+\label{sec:algorithms}
+
+\DFTODO{Listar os algoritmos selecionados para os experimentos:}
+
+\DFTODO{- \textbf{Envelope}: Algoritmo simples e rápido com baixo consumo de memória.}
+
+\DFTODO{- \textbf{GST3D}: Algoritmo complexo e intensivo em memória.}
+
+\DFTODO{- \textbf{Filtro Gaussiano 3D}: Algoritmo de uso geral, não específico de dados sísmicos.}
+
+\DFTODO{Explicar por que esses algoritmos foram escolhidos para representar uma gama de características computacionais e de memória.}
+
+\DFTODO{Fornecer detalhes breves de implementação para cada algoritmo, incluindo quaisquer bibliotecas ou códigos personalizados utilizados.}
+
+
+\section{Experimental Procedure}
+\label{sec:procedure}
+
+\DFTODO{Descrever o procedimento geral seguido para cada experimento:}
+
+\DFTODO{- \textbf{Inicialização do Cluster}: Iniciando um cluster Dask em um processo separado.}
+
+\DFTODO{- \textbf{Carregamento de Dados}: Carregando os dados sintéticos em arrays Dask.}
+
+\DFTODO{- \textbf{Configuração dos Chunks}: Definindo diferentes tamanhos de chunk para cada experimento.}
+
+\DFTODO{- \textbf{Execução dos Algoritmos}: Executando os algoritmos nos dados.}
+
+\DFTODO{- \textbf{Repetição}: Repetindo o processo para diferentes algoritmos e tamanhos de chunk.}
+
+\DFTODO{Enfatizar como cada experimento foi isolado para prevenir que o acúmulo de memória afetasse as execuções subsequentes.}
+
+
+\section{Chunk Size and Worker Configuration}
+\label{sec:chunks_workers}
+
+\DFTODO{Explicar a gama de tamanhos de chunk testados, desde muito pequenos até grandes, e como eles foram determinados.}
+
+\DFTODO{Descrever como o número de workers no cluster foi variado para avaliar diferentes relações chunk-to-worker.}
+
+\DFTODO{Fornecer uma tabela ou descrição das combinações de tamanhos de chunk e contagens de workers testadas.}
+
+
+\section{Metrics Collected}
+\label{sec:metrics}
+
+\DFTODO{Listar e explicar as métricas coletadas em cada experimento:}
+
+\DFTODO{- \textbf{Tempo de Execução (T)}: Tempo total para completar a computação para cada experimento.}
+
+\DFTODO{- \textbf{Uso Máximo de Memória (M\_peak)}: Máximo de memória consumida por cada worker durante a execução.}
+
+\DFTODO{- \textbf{Overhead de Escalonamento (O\_sched)}: Tempo gasto pelo Dask escalonando tarefas.}
+
+\DFTODO{- \textbf{Número de Chunks (c)}: Total de chunks de dados processados.}
+
+\DFTODO{- \textbf{Relação Chunk-to-Worker (r)}: Razão de chunks para workers para entender a utilização de recursos.}
+
+\DFTODO{- \textbf{Tamanho Relativo do Chunk (s)}: Proporção do tamanho do dataset representada por cada chunk.}
+
+\DFTODO{Explicar como essas métricas foram registradas e quaisquer ferramentas ou plugins usados para monitoramento.}
+
+
+\section{Memory Usage Estimation Methodology}
+\label{sec:estimation}
+
+\DFTODO{Introduzir o objetivo de desenvolver um método para estimar o uso de memória com base em execuções mínimas.}
+
+\DFTODO{Detalhar a abordagem adotada para prever os requisitos de memória:}
+
+\DFTODO{- Executando execuções de amostra com diferentes entradas.}
+
+\DFTODO{- Coletando dados de uso de memória.}
+
+\DFTODO{- Analisando a relação entre o tamanho da entrada, tamanho do chunk e consumo de memória.}
+
+\DFTODO{Descrever como a validade do método de estimação foi testada em diferentes algoritmos e tamanhos de dados.}
+
+
+\section{Evaluation of Dask’s Auto-Chunking}
+\label{sec:auto_chunking}
+
+\DFTODO{Discutir como o comportamento padrão de auto-chunking do Dask foi avaliado em termos de consumo de memória.}
+
+\DFTODO{Destacar quaisquer limitações ou ineficiências descobertas, especialmente para algoritmos intensivos em memória como o GST3D.}
+
+\DFTODO{Explicar como o auto-chunking foi comparado com estratégias de chunking manual baseadas no seu método de estimação de memória.}
+
+
+\section{Additional Experiments}
+\label{sec:additional_experiments}
+
+\DFTODO{Descrever experimentos conduzidos para avaliar diferentes ferramentas de medição de consumo de memória e justificar a seleção das ferramentas utilizadas.}
+
+\DFTODO{Explicar os experimentos realizados para entender o comportamento do Python quando a memória disponível é menor do que a necessária pelas computações.}
+
+
+\section{Data Analysis Techniques}
+\label{sec:data_analysis}
+
+\DFTODO{Descrever como os dados coletados foram processados e analisados.}
+
+\DFTODO{Mencionar quaisquer ferramentas ou técnicas de visualização utilizadas para interpretar os resultados (por exemplo, plotagem do tempo de execução versus tamanho do chunk).}
+
+\DFTODO{Descrever quaisquer análises estatísticas realizadas para avaliar a significância dos resultados.}
+
+
+\section{Reproducibility and Code Availability}
+\label{sec:reproducibility}
+
+
+\DFTODO{Explicar como o código para os experimentos foi organizado (por exemplo, usando notebooks, scripts).}
+
+\DFTODO{Mencionar quaisquer sistemas de controle de versão utilizados (por exemplo, Git) para rastrear alterações.}
+
+\DFTODO{Indicar se o código e os dados estão disponíveis para replicação dos experimentos e fornecer links, se aplicável.}
+
+
+\section{Summary of Methods}
+\label{sec:summary}
+
+\DFTODO{Resumir os aspectos-chave dos métodos e materiais utilizados nos experimentos.}
+
+\DFTODO{Reforçar como o design experimental e a metodologia se alinham com os objetivos de pesquisa descritos na introdução.}
