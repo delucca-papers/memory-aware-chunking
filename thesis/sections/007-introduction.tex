@@ -1,20 +1,24 @@
 \chapter{Introduction}
 \label{ch:introduction}
 
-\DF{Vale a pena dividir em seções? Se sim, eu penso em ser: Motivação e Contexto, Background, Limitações do Auto-Chunking do Dask, Motivação para o Memory-Aware Chunking, Minha Contribuição, e Estrutura da Tese}
 
-\DFTODO{Começar com uma base da motivação e contexto}
+\section{Motivation}
+\label{sec:intro-motivation}
 
-\DFTODO{Na motivação e contexto, começar pela motivação geral, explicando o problema da gestão de memória para o processamento em larga escala de dados, focando em sistemas distribuídos}
+\DFTODO{Desafios no processamento de dados em larga escala, focando em sísmica}
+\DFTODO{Problemas com o gerenciamento de recursos em sistemas distribuídos como o Dask}
+\DFTODO{A necessidade de prever o consumo de memória para definir o tamanho do chunk em algoritmos que são memory-intensive}
 
-\DFTODO{Explicar sobre o quão comum é esse tipo de aplicação usar o Dask para paralelizar cargas de trabalho}
 
-\DFTODO{Explicar sobre os desafios para o gerenciamento de recursos. Aprofundar a motivação para explicar que alguns casos geram um grande consumo de memória e que, nesses casos, é necessário estimar o consumo de memória para definir o tamanho do chunk}
+\section{Objectives}
+\label{sec:intro-objectives}
 
-\DFTODO{Trazer o probleam base, dos problemas que um chunk definido de maneira não adequada pode trazer: o excesso de tentativa e erro, o uso subótimo dos recursos, o overhead do escalonador}
+\DFTODO{Desenvolver um método para estimar o consumo de memória com a menor quantidade de execuções possíveis}
+\DFTODO{Tornar o auto-chunking do Dask memory-aware para reduzir a tentativa e erro na alocação de recursos}
 
-\DFTODO{Trazer a motivação para o memory-aware chunking, explicando que é necessário considerar o consumo de memória para definir o tamanho do chunk ideal. Nesse ponto, citar que esse problema é particularmente relevante para algoritmos que consomem muita memória}
 
-\DFTODO{Trazer a motivação para a contribuição, explicando que o objetivo é criar um método para estimar o consumo de memória com poucas execuções. Esse método remove a necessidade de tentativa e erro e cria uma forma prática de definir o tamanho de chunk ideal}
+\section{Contributions}
+\label{sec:intro-contributions}
 
-\DFTODO{Trazer a estrutura da tese, explicando como os capítulos estão organizados}
+\DFTODO{Criação de um modelo preditivo para o consumo de memória}
+\DFTODO{Desenvolvimento de um método para estimar o consumo de memória com poucas execuções}

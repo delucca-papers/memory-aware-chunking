@@ -14,7 +14,7 @@
 % Remover antes da versão final
 \usepackage[
     draft,
-    %final,
+%final,
 ]{changes}
 \restoregeometry
 \geometry{
@@ -26,15 +26,14 @@
     marginparwidth=40mm,
 }
 
-
 \begin{document}
 
-\autor{Daniel De Lucca Fonseca}
-\titulo{Título da Dissertação ou Tese em Português}
-\title{The Dissertation or Thesis Title in English or Spanish}
-\orientador{Prof. Dr. Edson Borin}
-\mestrado
-\datadadefesa{22}{04}{2025}
+    \autor{Daniel De Lucca Fonseca}
+    \titulo{Título da Dissertação ou Tese em Português}
+    \title{The Dissertation or Thesis Title in English or Spanish}
+    \orientador{Prof. Dr. Edson Borin}
+    \mestrado
+    \datadadefesa{22}{04}{2025}
 
 % Para a versão final defina:
 %\avaliadorA{Prof. Dr. Primeiro Avaliador}{Instituição do primeiro avaliador}
@@ -49,32 +48,34 @@
 % Para incluir a ficha catalográfica em PDF na versão final, descomente e ajuste:
 %\fichacatalografica{arquivo.pdf}
 
-\paginasiniciais
+    \paginasiniciais
 
-\input{assets/macros}
-\input{sections/001-dedicatoria}
-\input{sections/002-epigrafe}
-\input{sections/003-agradecimentos}
-\input{sections/004-abstract}
-\input{sections/005-acronyms}
+    \input{assets/macros}
+    \input{sections/001-dedicatoria}
+    \input{sections/002-epigrafe}
+    \input{sections/003-agradecimentos}
+    \input{sections/004-abstract}
+    \input{sections/005-acronyms}
 
-\listoffigures
-\listoftables
+    \listoffigures
+    \listoftables
 
-\tableofcontents
+    \tableofcontents
 
-\fimdaspaginasiniciais
-
-
-\input{sections/007-introduction}
-\input{sections/008-fundamental-concepts}
-\input{sections/009-methods-and-materials}
-\input{sections/010-experimental-results}
-\input{sections/011-conclusion}
+    \fimdaspaginasiniciais
 
 
-\bibliographystyle{plain}
-\bibliography{bibliography}
+    \input{sections/007-introduction}
+    \input{sections/008-fundamental-concepts}
+    \input{sections/009-related-work}
+    \input{sections/010-measuring-memory-consumption-of-python-programs}
+    \input{sections/011-predicting-memory-consumption-from-input-shapes}
+    \input{sections/012-improving-data-parallelism-using-memory-aware-chunking}
+    \input{sections/013-conclusion}
+
+
+    \bibliographystyle{plain}
+    \bibliography{bibliography}
 
 % \appendix
 % \chapter{Anexo 1}
