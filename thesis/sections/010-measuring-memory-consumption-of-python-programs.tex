@@ -5,9 +5,89 @@
 \section{Introduction}
 \label{sec:mmc-introduction}
 
-\DFTODO{Explicar a importância de medir o consumo de memória de programas Python, especialmente para aplicações científicas e de análise de dados.}
-\DFTODO{Explicar os fatores que podem afetar a avaliação do consumo de memória, como a alocação de memória dinâmica e o gerenciamento de memória do Python.}
-\DFTODO{Explicar que a medição precisa foi crítica nos experimentos para evitar introduzir vieses, como o acúmulo de memória entre execuções.}
+Accurately measuring the memory consumption of Python programs is a fundamental aspect of performance analysis, especially in the context of scientific computing and data analysis workflows.
+Scientific applications often involve large-scale computations, high-dimensional datasets, and complex algorithms that necessitate the use of \ac{HPC} environments such as supercomputers and distributed systems.
+In these environments, resource allocation is a critical factor, directly impacting both computational efficiency and cost-effectiveness.
+Understanding the memory usage patterns of applications enables researchers and engineers to allocate appropriate resources, optimize computational workflows, and prevent system-level bottlenecks.
+
+In scientific workflows, the need for precise memory measurement extends beyond mere resource allocation.
+Memory profiling is instrumental in identifying inefficiencies, diagnosing performance issues, and ensuring the scalability of algorithms across diverse computational environments.
+Although this thesis primarily focuses on the execution of scientific workflows rather than their optimization, the accurate measurement of memory consumption remains pivotal.
+Without precise memory metrics, the evaluation of algorithmic performance and the reproducibility of experimental results can be significantly compromised.
+
+\subsection{Factors Affecting Memory Consumption Evaluation}
+
+The evaluation of memory consumption in Python applications is influenced by a multitude of factors spanning both the language's inherent characteristics and the underlying operating system's behavior.
+Python, as a high-level language, abstracts many low-level memory management operations, introducing complexities that can obscure the true memory footprint of an application.
+
+\begin{enumerate}
+    \item \textbf{Dynamic Memory Allocation}:
+    Python's memory model relies heavily on dynamic memory allocation, facilitated by its internal memory manager.
+    The interpreter frequently allocates and deallocates memory for objects, leveraging techniques such as reference counting and cyclic garbage collection.
+    These mechanisms introduce variability in memory usage, as memory may not be immediately released upon object deletion, leading to transient peaks in memory consumption.
+
+    \item \textbf{Garbage Collection}:
+    Python employs a \ac{GC} to manage memory, particularly for cyclic references that reference counting alone cannot handle.
+    The \ac{GC} operates in generational cycles, triggering collections based on thresholds related to object allocations and deallocations.
+    The timing of these collections can significantly affect memory profiling, as delayed garbage collection may artificially inflate memory usage metrics.
+
+    \item \textbf{Memory Fragmentation}:
+    Both Python's memory allocator (e.g., pymalloc~\cite{pymalloc}) and the underlying C libraries can cause memory fragmentation.
+    Fragmentation leads to inefficient memory utilization, where the allocated memory space cannot be fully utilized due to non-contiguous free blocks.
+    This phenomenon can result in higher apparent memory usage than the actual data footprint.
+
+    \item \textbf{Operating System Optimizations}:
+    Modern operating systems implement various memory management optimizations, such as virtual memory, \ac{COW}, and memory compression.
+    The virtual memory system abstracts physical memory, allowing processes to perceive a contiguous memory space.
+    \ac{COW} mechanisms, often triggered during process forking, can complicate memory measurements by deferring actual memory duplication until modification occurs.
+    Additionally, features like Linux's zswap~\cite{zswap} and zram~\cite{zram} compress memory pages to optimize RAM usage, further obscuring accurate memory accounting.
+
+    \item \textbf{Caching Mechanisms}:
+    Python and the operating system both employ caching strategies that can skew memory usage metrics.
+    For instance, Python maintains internal caches for frequently used objects (e.g., small integers and strings), while the OS uses disk and memory caches to optimize I/O operations.
+    These caches can persist across program executions, leading to inconsistent memory profiles unless explicitly cleared.
+
+    \item \textbf{Third-Party Libraries}:
+    Scientific applications often rely on third-party libraries (e.g., NumPy~\cite{numpy}, pandas~\cite{pandas}, TensorFlow~\cite{tensorflow}), which may implement their own memory management strategies.
+    These libraries, typically written in C or C++, interact directly with system memory, bypassing Python's garbage collector.
+    Consequently, memory usage attributed to Python may not fully represent the actual consumption, necessitating specialized profiling tools to capture native allocations.
+\end{enumerate}
+
+\subsection{The Criticality of Precise Memory Measurement in Experiments}
+
+Achieving precise memory measurement is a delicate and challenging task, particularly in experimental setups where even minor inconsistencies can introduce significant biases.
+Inaccurate memory profiling can lead to erroneous conclusions about an algorithm's efficiency, scalability, and resource requirements.
+
+One of the primary challenges is the accumulation of residual memory from previous executions.
+This issue is especially pronounced in interactive environments like Jupyter~\cite{jupyter} notebooks, where code cells can be executed multiple times without restarting the kernel.
+Each execution may leave behind allocated memory that is not immediately reclaimed, either due to lingering references or delayed garbage collection.
+This residual memory inflates subsequent memory usage measurements, creating misleading results.
+
+For example, consider a scenario where a data-intensive operation is repeatedly executed within a Jupyter~\cite{jupyter} notebook.
+Even if the data structures are explicitly deleted using \texttt{del}, Python's \ac{GC} might not immediately free the associated memory, particularly if references exist in the notebook's global namespace or within closures.
+Over time, this leads to cumulative memory bloat, distorting the true memory footprint of the operation.
+
+Beyond interactive environments, process-level memory accumulation can occur when running batch scripts or automated workflows.
+If multiple experiments are executed sequentially within the same process without proper memory isolation, residual allocations from earlier runs can affect subsequent measurements.
+Techniques such as spawning isolated subprocesses for each experiment can mitigate this issue, ensuring clean memory states between runs.
+
+Another critical consideration is the impact of measurement tools themselves.
+Profiling tools, whether external (e.g., psutil~\cite{psutil}, resource~\cite{importlib_resources}) or internal (e.g., tracemalloc~\cite{tracemalloc}), introduce overhead that can influence the very metrics they aim to capture.
+High-frequency sampling, for instance, increases \ac{CPU} and memory load, potentially skewing performance characteristics.
+Moreover, tools that rely on instrumentation may alter code execution paths, subtly affecting memory allocation patterns.
+
+To address these challenges, rigorous experimental protocols are essential.
+This includes:
+
+\begin{itemize}
+    \item Isolating experiments in separate processes or containers to prevent cross-contamination of memory states.
+    \item Resetting the environment (e.g., restarting the Python interpreter or Jupyter~\cite{jupyter} kernel) before each measurement to ensure a clean slate.
+    \item Controlling external factors, such as disabling OS-level caches or running benchmarks on dedicated, idle systems to minimize background noise.
+    \item Using hybrid measurement techniques, combining high-level process metrics with low-level memory tracing for comprehensive profiling.
+\end{itemize}
+
+In conclusion, precise memory measurement is not merely a technical detail but a cornerstone of robust experimental methodology.
+It underpins the reliability and validity of performance evaluations, guiding both theoretical insights and practical optimizations in scientific computing.
 
 
 \section{Approaches to Measure Memory Consumption}
