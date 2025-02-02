@@ -93,8 +93,106 @@ It underpins the reliability and validity of performance evaluations, guiding bo
 \section{Approaches to Measure Memory Consumption}
 \label{sec:mmc-approaches}
 
-\DFTODO{Explicar sobre as abordagens externas (psutil, resource e /proc)}
-\DFTODO{Explicar sobre as abordagens internas (tracemalloc)}
+When measuring memory consumption in Python programs, it is essential to distinguish between two broad categories of approaches: external measurement techniques and internal measurement techniques.
+This classification helps clarify the scope and effectiveness of different methods, as each group offers unique insights into memory usage from different perspectives.
+
+\begin{itemize}
+    \item \textbf{External Measurement Approaches}
+    involve monitoring memory usage from outside the Python runtime environment.
+    These techniques interact directly with the operating system to gather data about process memory consumption.
+    They are particularly effective for capturing the overall memory footprint of a program, including memory allocated by external libraries, system-level resources, and native code executed alongside Python.
+    Examples include tools like psutil~\cite{psutil}, the resource~\cite{importlib_resources} module, and accessing memory metrics from the Linux /proc~\cite{procfs} filesystem.
+
+    \item \textbf{Internal Measurement Approaches},
+    on the other hand, operate within the Python runtime itself.
+    These methods provide fine-grained visibility into Python-specific memory allocations, allowing developers to trace memory usage down to individual objects, code lines, or function calls.
+    They are invaluable for identifying memory leaks, inefficient data structures, and understanding memory behavior at a granular level.
+    The tracemalloc~\cite{tracemalloc} module is a prime example of an internal measurement approach.
+\end{itemize}
+
+The separation into these two categories is not arbitrary; it reflects the complementary nature of the information provided.
+External tools offer a high-level, system-wide view of memory consumption, which is crucial for understanding how a Python program interacts with the broader operating environment.
+In contrast, internal tools delve deep into Python’s memory management, offering detailed diagnostics that external tools cannot capture.
+
+Combining both external and internal measurement techniques often yields the most comprehensive understanding of a program’s memory behavior.
+External tools can detect overall memory growth trends and system resource usage, while internal tools can pinpoint the specific code responsible for memory allocation.
+This dual approach is especially useful in scientific computing workflows, where performance optimization requires both macro-level monitoring and micro-level diagnostics.
+
+\subsection{External Measurement Approaches}
+
+\subsubsection{psutil}
+
+The psutil~\cite{psutil} library is a cross-platform tool that allows Python programs to access system details and process information, including memory usage.
+It interacts with the operating system to retrieve real-time data about process memory, \ac{CPU} usage, and other system metrics.
+
+psutil~\cite{psutil} works by interfacing with system APIs, such as /proc~\cite{procfs} on Linux, the Windows \ac{API} on Windows systems, and system calls on \ac{macOS}.
+It can report key memory metrics like:
+
+\begin{itemize}
+    \item \textbf{\ac{RSS}}:
+    The portion of memory occupied by a process that is held in \ac{RAM}.
+
+    \item \textbf{\ac{VMS}}:
+    The total amount of virtual memory used by the process.
+
+    \item \textbf{Shared Memory}:
+    Memory shared with other processes.
+\end{itemize}
+
+psutil~\cite{psutil} provides a comprehensive overview of system-wide and process-specific resource usage, making it a versatile tool for performance monitoring.
+
+\subsubsection{resource Module}
+
+The resource~\cite{importlib_resources} module is part of Python's standard library and offers a lightweight method to track resource usage of the current process.
+It provides metrics such as maximum \ac{RSS}, which reflects the peak physical memory usage during the execution of the program.
+
+Unlike psutil~\cite{psutil}, which can monitor ongoing memory usage, resource is primarily used for capturing peak memory usage at specific checkpoints in the code.
+This makes it ideal for benchmarking and performance evaluations.
+
+\subsubsection{/proc Filesystem}
+
+On Linux systems, the /proc~\cite{procfs} virtual filesystem provides detailed information about processes, including memory usage.
+Accessing \texttt{/proc/[pid]/smaps} allows for fine-grained analysis of memory allocation.
+
+The smaps file breaks down memory usage into categories such as:
+
+\begin{itemize}
+    \item \textbf{Private and Shared Memory}:
+    Differentiates between private memory and memory shared with other processes.
+
+    \item \textbf{Anonymous Pages}:
+    Memory not backed by any file.
+
+    \item \textbf{Heap and Stack Segments}:
+    Detailed insights into dynamic memory allocations.
+\end{itemize}
+
+While powerful, this approach requires root access for detailed process information and involves parsing raw text files, which can add complexity.
+
+\subsection{Internal Measurement Approaches}
+
+\subsubsection{tracemalloc}
+
+tracemalloc~\cite{tracemalloc} is a built-in Python module designed for tracing memory allocations.
+It hooks into Python's memory allocator to record the size and source of each allocation, capturing stack traces for memory usage hotspots.
+
+Key features of tracemalloc~\cite{tracemalloc} include:
+
+\begin{itemize}
+    \item \textbf{Memory Snapshots}:
+    Capturing snapshots of memory usage at different points in the program's execution.
+
+    \item \textbf{Snapshot Comparisons}:
+    Analyzing changes in memory usage between snapshots.
+
+    \item \textbf{Tracking Allocation Sources}:
+    Identifying the specific lines of code responsible for memory usage.
+
+    \item \textbf{Filtering and Grouping}:
+    Aggregating memory statistics based on filenames, line numbers, or function calls.
+\end{itemize}
+
+While tracemalloc~\cite{tracemalloc} introduces some overhead, its granularity makes it invaluable for debugging memory-related issues within Python applications.
 
 
 \section{Materials and Methods}
