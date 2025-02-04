@@ -255,45 +255,6 @@ In addition to the internal monitoring mechanisms within each container, an exte
 This system was responsible for tracking the total memory usage of each Docker~\cite{docker} container in real-time, providing an independent verification layer for the memory metrics collected inside the container.
 This dual-layer monitoring strategy enhanced the robustness of our data, allowing for cross-validation of memory usage statistics and ensuring the highest level of measurement accuracy.
 
-\subsection{Experiment Execution Workflow}
-\label{subsec:mmc-experiment-execution-workflow}
-
-The experimental workflow was meticulously designed to systematically measure memory consumption under controlled conditions.
-The process began with the generation of random 3D matrices, each having varying shapes to simulate different data scenarios.
-For each unique shape, three distinct datasets were created to ensure variability and improve the robustness of the analysis.
-This diversity in data shapes and instances helped to better understand how memory consumption fluctuates under different input conditions.
-
-Once the datasets were generated, they were stored on disk to ensure consistency across all experimental runs.
-This step eliminated any variability that could arise from generating data on-the-fly, thereby maintaining uniform conditions for all algorithms tested.
-
-The algorithm execution phase involved launching dedicated Docker~\cite{docker} containers for each experiment.
-This approach ensured complete isolation, preventing resource interference from other processes and maintaining a clean execution environment.
-Each container was configured to mount the corresponding dataset from the disk, ensuring the data was readily accessible during runtime.
-The algorithms were designed to load the dataset into memory, perform the necessary computations, and terminate upon completion.
-This clear-cut process flow minimized background operations that could otherwise skew memory usage measurements.
-
-Throughout the execution, memory consumption was rigorously monitored using various measurement tools integrated within the container environment.
-This continuous monitoring allowed for real-time tracking of memory usage, capturing both peak usage and dynamic fluctuations over the course of the algorithm's execution.
-The collected data provided comprehensive insights into memory behavior, which was critical for subsequent analysis and performance evaluation.
-
-To summarize the workflow clearly, table~\ref{tab:mmc-experimental-workflow} outlines each step of the experimental process.
-
-\begin{table}[h]
-    \centering
-    \renewcommand{\arraystretch}{1.4}
-    \setlength{\tabcolsep}{10pt}
-    \begin{tabular}{|>{\raggedright\arraybackslash}p{3.5cm}|>{\raggedright\arraybackslash}p{7cm}|}
-        \hline
-        \textbf{Step}       & \textbf{Description}                                                                                                                       \\ \hline
-        Data Generation     & Random 3D matrices with varying shapes were generated, creating multiple datasets for each shape to ensure variability.                    \\ \hline
-        Data Storage        & The generated datasets were stored on disk to be accessed during each experiment.                                                          \\ \hline
-        Algorithm Execution & For each algorithm, a dedicated Docker container was launched.                                                                             \\ \hline
-        Memory Monitoring   & During execution, memory usage was continuously monitored using the specified tools to capture both peak and real-time memory consumption. \\ \hline
-    \end{tabular}
-    \caption{Experimental Workflow Summary}
-    \label{tab:mmc-experimental-workflow}
-\end{table}
-
 \subsection{Selected Algorithms for the Experiment}
 \label{subsec:mmc-selected-algorithms-for-the-experiment}
 
@@ -409,7 +370,7 @@ This table serves as a concise reference to compare the strengths and limitation
         /proc Filesystem~\cite{procfs}      & Directly queries the Linux kernel for detailed memory allocation data.                     \\ \hline
         External Docker Monitor             & Uses a custom script interfacing with the Docker API to track container-wide memory usage. \\ \hline
     \end{tabular}
-    \caption{Summary of Memory Measurement Tools}
+    \caption{Summary of memory measurement tools}
     \label{tab:mmc-memory-measurement-tools}
 \end{table}
 
@@ -432,9 +393,55 @@ The table includes the symbol used to represent each metric, along with a detail
         Peak Memory Usage      & \Mpeak          & Denotes the highest memory consumption observed during the experiment, measured in MBs. This metric is critical for assessing memory efficiency and determining the maximum resource requirements.                      \\ \hline
         Memory Usage over Time & \Mt             & Reflects the continuous tracking of memory consumption as a function of time throughout the experiment. This temporal profile helps identify memory spikes, leaks, and overall consumption patterns.                    \\ \hline
     \end{tabular}
-    \caption{Summary of Collected Metrics}
+    \caption{Summary of collected metrics for the memory consumption experiments}
     \label{tab:mmc-collected-metrics}
 \end{table}
+
+\subsection{Experiment Execution Workflow}
+\label{subsec:mmc-experiment-execution-workflow}
+
+The experimental workflow was meticulously designed to systematically measure memory consumption under controlled conditions.
+The process began with the generation of random 3D matrices, each having varying shapes to simulate different data scenarios.
+For each unique shape, three distinct datasets were created to ensure variability and improve the robustness of the analysis.
+This diversity in data shapes and instances helped to better understand how memory consumption fluctuates under different input conditions.
+
+Once the datasets were generated, they were stored on disk to ensure consistency across all experimental runs.
+This step eliminated any variability that could arise from generating data on-the-fly, thereby maintaining uniform conditions for all algorithms tested.
+
+The algorithm execution phase involved launching dedicated Docker~\cite{docker} containers for each experiment.
+This approach ensured complete isolation, preventing resource interference from other processes and maintaining a clean execution environment.
+Each container was configured to mount the corresponding dataset from the disk, ensuring the data was readily accessible during runtime.
+The algorithms were designed to load the dataset into memory, perform the necessary computations, and terminate upon completion.
+This clear-cut process flow minimized background operations that could otherwise skew memory usage measurements.
+
+Throughout the execution, memory consumption was rigorously monitored using various measurement tools integrated within the container environment.
+This continuous monitoring allowed for real-time tracking of memory usage, capturing both peak usage and dynamic fluctuations over the course of the algorithm's execution.
+The collected data provided comprehensive insights into memory behavior, which was critical for subsequent analysis and performance evaluation.
+
+To clearly summarize the workflow, Table~\ref{tab:mmc-experimental-workflow} outlines each step of the experimental process, while Figure~\ref{fig:mmc-experiment-workflow} provides a flowchart that visually illustrates it.
+
+\begin{table}[h]
+    \centering
+    \renewcommand{\arraystretch}{1.4}
+    \setlength{\tabcolsep}{10pt}
+    \begin{tabular}{|>{\raggedright\arraybackslash}p{3.5cm}|>{\raggedright\arraybackslash}p{7cm}|}
+        \hline
+        \textbf{Step}       & \textbf{Description}                                                                                                                       \\ \hline
+        Data Generation     & Random 3D matrices with varying shapes were generated, creating multiple datasets for each shape to ensure variability.                    \\ \hline
+        Data Storage        & The generated datasets were stored on disk to be accessed during each experiment.                                                          \\ \hline
+        Algorithm Execution & For each algorithm, a dedicated Docker container was launched.                                                                             \\ \hline
+        Memory Monitoring   & During execution, memory usage was continuously monitored using the specified tools to capture both peak and real-time memory consumption. \\ \hline
+    \end{tabular}
+    \caption{Summary of the memory consumption experiment workflow}
+    \label{tab:mmc-experimental-workflow}
+\end{table}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.8\textwidth]{./assets/images/04-experiment-flowchart}
+    \caption{Flowchart illustrating the memory consumption experiment workflow.}
+    \label{fig:mmc-experiment-workflow}
+\end{figure}
 
 \subsection{Evaluation Methodology}
 \label{subsec:mmc-evaluation-methodology}
@@ -461,7 +468,7 @@ Table~\ref{tab:mmc-evaluation-criteria} summarizes the evaluation criteria and v
         Cross-Validation with Docker API & Verifies the internal memory usage data by comparing it with external monitoring results obtained through the Docker API. This comparison helps ensure the consistency and reliability of the internal memory measurements.                          \\ \hline
         Memory Constraint Validation     & Re-executes experiments under constrained memory conditions, with limits set slightly below the previously recorded \Mpeak. This validation confirms whether the measured \Mpeak represents the minimum memory requirement for successful execution. \\ \hline
     \end{tabular}
-    \caption{Evaluation Criteria and Validation Techniques}
+    \caption{Evaluation criteria and validation techniques for the memory consumption experiments}
     \label{tab:mmc-evaluation-criteria}
 \end{table}
 
