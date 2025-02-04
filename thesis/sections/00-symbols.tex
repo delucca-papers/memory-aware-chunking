@@ -1,2 +1,18 @@
 \prefacesection{List of Symbols}
-\DFTODO{Checar se a lista de símbolos está funcionando}
+
+\newcommand{\T}{$T$}
+\newcommand{\Mpeak}{$M_{\text{peak}}$}
+\newcommand{\Mt}{$M(t)$}
+
+\begin{table}[h]
+    \centering
+    \begin{tabular}{|l|c|p{5cm}|}
+        \hline
+        \textbf{Metric}        & \textbf{Symbol} & \textbf{Description}                                                                                 \\ \hline
+        Execution Time         & \T              & Represents the total time, measured in seconds, taken for the execution of a task.                   \\ \hline
+        Peak Memory Usage      & \Mpeak          & Denotes the highest memory consumption observed during the execution of a task, measured in \ac{MB}. \\ \hline
+        Memory Usage over Time & \Mt             & Reflects the continuous tracking of memory consumption as a function of time throughout the task.    \\ \hline
+    \end{tabular}
+    \caption{Summary of Collected Metrics}
+    \label{tab:summary-of-symbols}
+\end{table}
